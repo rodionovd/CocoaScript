@@ -14,6 +14,8 @@
 @class MOBoxManager;
 
 #if DEBUG
+    // When this is set to 1, we add some extra book keeping objects to every box,
+    // to assist with debugging.
     #define MOCHA_DEBUG_CRASHES 1
 #endif
 
@@ -51,8 +53,19 @@
 @property (weak, readonly) MOBoxManager *manager;
 
 #if MOCHA_DEBUG_CRASHES
-@property (strong) NSString *representedObjectCanaryDesc;
-@property (assign) NSUInteger count;
+
+/**
+  A snapshot of the description of the object that the box is for, at
+  the time that it was first created.
+ */
+@property (readonly, strong) NSString *representedObjectCanaryDesc;
+
+/**
+  A global instance counter, helpful for tracking the box through
+  various bits of logging output.
+ */
+
+@property (readonly, assign) NSUInteger count;
 #endif
 
 @end
