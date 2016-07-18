@@ -14,7 +14,7 @@
 @class MOBoxManager;
 
 #if DEBUG
-    #define DEBUG_CRASHES 1
+    #define MOCHA_DEBUG_CRASHES 1
 #endif
 
 /*!
@@ -50,7 +50,7 @@
  */
 @property (weak, readonly) MOBoxManager *manager;
 
-#if DEBUG_CRASHES
+#if MOCHA_DEBUG_CRASHES
 @property (strong) NSString *representedObjectCanaryDesc;
 @property (assign) NSUInteger count;
 #endif

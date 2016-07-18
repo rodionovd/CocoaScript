@@ -14,9 +14,10 @@
 
 @implementation MOBox
 
-#if DEBUG_CRASHES
+#if MOCHA_DEBUG_CRASHES
 static NSUInteger initCount = 0;
 #endif
+
 
 
 - (id)initWithManager:(MOBoxManager *)manager object:(id)object jsObject:(JSObjectRef)jsObject {
@@ -25,7 +26,7 @@ static NSUInteger initCount = 0;
         NSAssert(manager != nil, @"valid manager");
         _manager = manager;
         _representedObject = object;
-#if DEBUG_CRASHES
+#if MOCHA_DEBUG_CRASHES
         _representedObjectCanaryDesc = [NSString stringWithFormat:@"box: %p\nobject: %p %@\njs object: %p\nboxed at: %@\n", self, object, object, jsObject, [NSDate date]];
         _count = initCount++;
 #endif
@@ -38,7 +39,7 @@ static NSUInteger initCount = 0;
 }
 
 - (void)disassociateObject {
-#if DEBUG_CRASHES
+#if MOCHA_DEBUG_CRASHES
     debug(@"dissassociated %p %ld", self, _count);
 #else
     debug(@"dissassociated %p", self);
@@ -53,7 +54,7 @@ static NSUInteger initCount = 0;
         _representedObject = nil;
         _manager = nil;
     } else {
-#if DEBUG_CRASHES
+#if MOCHA_DEBUG_CRASHES
         debug(@"shouldn't have been disassociated already %@", _representedObjectCanaryDesc);
 #else
         debug(@"shouldn't have been disassociated already %@", _representedObject);
@@ -62,13 +63,13 @@ static NSUInteger initCount = 0;
 }
 
 - (void)dealloc {
-#if DEBUG_CRASHES
+#if MOCHA_DEBUG_CRASHES
     debug(@"dealloced %p %ld", self, _count);
 #else
     debug(@"dealloced %p", self);
 #endif
     if (_manager || _JSObject) {
-#if DEBUG_CRASHES
+#if MOCHA_DEBUG_CRASHES
         debug(@"box should have been disassociated for %@", _representedObjectCanaryDesc);
 #else
         debug(@"box should have been disassociated for %@", _representedObject);

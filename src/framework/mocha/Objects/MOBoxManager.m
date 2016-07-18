@@ -10,6 +10,8 @@
 #import "MOBoxManagerBoxContext.h"
 #import "MOBox.h"
 
+#define MOCHA_DELIBERATELY_LEAK_JS_OBJECTS 1
+
 @implementation MOBoxManager {
     JSGlobalContextRef _context;
     NSMapTable *_index;
@@ -66,6 +68,15 @@
     NSAssert(![object isKindOfClass:[MOBox class]], @"shouldn't box a box");
     MOBoxManagerBoxContext* context = [[MOBoxManagerBoxContext alloc] initWithManager:self object:object];
     JSObjectRef jsObject = JSObjectMake(_context, jsClass, (__bridge void *)(context));
+
+#if MOCHA_DELIBERATELY_LEAK_JS_OBJECTS
+    // This is an ugly workaround for the long-running script crash
+    // we deliberately hold an extra reference to the JS object, which should prevent it from
+    // being garbage collected until the context itself is shut down.
+    // Far from ideal...
+    JSValueProtect(_context, jsObject);
+#endif
+
     return jsObject;
 }
 
