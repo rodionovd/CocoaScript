@@ -646,6 +646,7 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
     if (jsFunction == NULL) {
         return NULL;
     }
+
     return [self callJSFunction:jsFunction withArgumentsInArray:arguments];
 }
 

@@ -334,7 +334,8 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         
         str = [COSPreprocessor preprocessCode:str withBaseURL:base];
     }
-    
+    self.processedSource = str;
+
     [self pushAsCurrentCOScript];
     
     id resultObj = nil;
@@ -495,6 +496,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     if (_shouldPreprocess) {
         str = [COSPreprocessor preprocessCode:str];
     }
+    self.processedSource = str;
     
     [_mochaRuntime evalString:str];
 }

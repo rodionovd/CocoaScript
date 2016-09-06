@@ -29,6 +29,7 @@
 @property (retain) NSMutableDictionary *env;
 @property (assign) BOOL shouldPreprocess;
 @property (assign) BOOL shouldKeepAround;
+@property (strong) NSString* processedSource;
 
 - (instancetype)initWithName:(NSString*)name;
 - (void)cleanup;
