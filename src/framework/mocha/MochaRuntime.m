@@ -406,14 +406,29 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
         if (exception != NULL) {
             return NO;
         }
-        
-        obj = [self objectForJSValue:jsValue inContext:ctx unboxObjects:YES];
-        if (obj == nil) {
-            obj = [NSNull null];
-        }
-        
+
         NSString *key = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, name));
-        [dictionary setObject:obj forKey:key];
+        if (jsValue == hashValue) {
+
+            // if we spot a recursive link here, we have a decision to make about whether to:
+            // a) include a recursive link to the dictionary (which will work, but crash if anyone tries to iterate the dictionary)
+            // b) add a null entry, using the key that the recursive link had
+            // c) add an entry using the key and some sentinal value to indicate the error (eg the string "removed recursive link")
+            // d) skip it completely, and don't add a key
+            //
+            // Currently I've opted for (d).
+            debug(@"removed recursive link in hash object for key: %@", key);
+
+        } else {
+
+            obj = [self objectForJSValue:jsValue inContext:ctx unboxObjects:YES];
+            if (obj == nil) {
+                obj = [NSNull null];
+            }
+
+            [dictionary setObject:obj forKey:key];
+        }
+
     }
     
     JSPropertyNameArrayRelease(names);
