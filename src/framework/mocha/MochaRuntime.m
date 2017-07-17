@@ -404,7 +404,7 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
         JSValueRef jsValue = JSObjectGetProperty(ctx, hashValue, name, &exception);
         
         if (exception != NULL) {
-            return NO;
+            return nil;
         }
 
         NSString *key = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, name));
@@ -1682,7 +1682,7 @@ static JSValueRef MOJSPrototypeForOBJCInstance(JSContextRef ctx, id instance, NS
     }
     
     if (!propName) {
-        return NO;
+        return nil;
     }
     
     JSValueRef exception = nil;
