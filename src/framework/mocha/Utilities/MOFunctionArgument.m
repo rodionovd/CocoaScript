@@ -919,6 +919,10 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
 }
 
 + (NSInteger)structureFromJSObject:(JSObjectRef)object inContext:(JSContextRef)ctx inParentJSValueRef:(JSValueRef)parentValue cString:(char *)c storage:(void **)ptr {
+    if (!c) {
+        return 0;
+    }
+    
     id structureName = [MOFunctionArgument structureNameFromStructureTypeEncoding:[NSString stringWithUTF8String:c]];
     char *c0 = c;
     
