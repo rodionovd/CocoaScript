@@ -508,6 +508,60 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
     return result;
 }
 
++ (BOOL)isHighSierraOrHigher {
+    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+    return (version.minorVersion >= 13);
+}
+
++ (NSDictionary <NSString *, NSString *> *)memberStructs:(NSString *)symbolType {
+    NSMutableDictionary <NSString *, NSString *> *memberStructsDictionary = [NSMutableDictionary new];
+    
+    // First strip of the initial { and final } characters from the symbol type.
+    if (symbolType.length < 3) {
+        return @{};
+    }
+    
+    symbolType = [symbolType substringWithRange:NSMakeRange(1, symbolType.length - 2)];
+    // Create an array of strings seperated by the { character.
+    NSArray <NSString *> *memberStructs = [symbolType componentsSeparatedByString:@"{"];
+    
+    // If there is only one element in the array then there was no "{".
+    if (memberStructs.count == 1) {
+        return @{};
+    }
+    
+    // We don't want the first member in the array as it precedes the first "{"
+    for (int i = 1 ; i < memberStructs.count ; ++i) {
+        NSString *structName = memberStructs[i];
+        NSRange locationOfEndBracket = [structName rangeOfString:@"}"];
+        if (locationOfEndBracket.location == NSNotFound) {
+            NSLog(@"Mocha: No closing brace \"}\" after opening brace. Could not parse bridging support information");
+            return @{};
+        }
+        
+        structName = [structName substringWithRange:NSMakeRange(0, locationOfEndBracket.location)];
+        NSString *structNameReplacement = [self structureFullTypeEncodingFromStructureName:structName];
+        if (!structNameReplacement) {
+            NSLog(@"Mocha: No struct name replacement with full type encoding. Could not parse bridging support information");
+            return @{};
+        }
+        
+        memberStructsDictionary[structName] = [structNameReplacement substringWithRange:NSMakeRange(1, structNameReplacement.length - 2)];
+    }
+    return memberStructsDictionary.copy;
+}
+
++ (NSString *)expandSymbolStructType:(NSString *)symbolType {
+    if (self.isHighSierraOrHigher) {
+        NSDictionary <NSString *, NSString *> *memberStructReplacements = [self memberStructs:symbolType];
+        for (NSString *memberStructName in memberStructReplacements.allKeys) {
+            symbolType = [symbolType stringByReplacingOccurrencesOfString:memberStructName withString:memberStructReplacements[memberStructName]];
+        }
+        return symbolType;
+    }
+    return symbolType;
+}
+
 + (NSString *)structureFullTypeEncodingFromStructureTypeEncoding:(NSString *)encoding {
     NSString *structureName = [MOFunctionArgument structureNameFromStructureTypeEncoding:encoding];
     return [self structureFullTypeEncodingFromStructureName:structureName];
@@ -531,7 +585,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
     id type = ([symbol respondsToSelector:@selector(type)] ? [symbol type] : nil);
 #endif
     
-    return type;
+    return [self expandSymbolStructType:type];
 }
 
 + (NSString *)structureTypeEncodingDescription:(NSString *)structureTypeEncoding {
