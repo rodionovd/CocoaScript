@@ -1115,11 +1115,15 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
     if (symbolType.length < 3) {
         return memberStructsDictionary.copy;
     }
+    
+    NSAssert([symbolType hasPrefix:@"{"], @"Bridging support symbol is malformed. Missing \"{\". %@", symbolType);
+    NSAssert([symbolType hasSuffix:@"}"], @"Bridging support symbol is malformed. Missing \"{\". %@", symbolType);
+    
     symbolType = [symbolType substringWithRange:NSMakeRange(1, symbolType.length - 2)];
     
     // Create an array of strings seperated by the { character.
     NSArray <NSString *> *memberStructs = [symbolType componentsSeparatedByString:@"{"];
-    
+    CGRect
     NSEnumerator <NSString *> *enumerator = [memberStructs objectEnumerator];
     
     // Drop the first object as it precedes the first "{" so doesn't represent a struct type.
@@ -1138,7 +1142,10 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
             continue;
         }
         
-        memberStructsDictionary[structName] = [structNameReplacement substringWithRange:NSMakeRange(1, structNameReplacement.length - 2)];
+        // Only add the struct entry for the member if the replacement string value is long enough.
+        if (structNameReplacement.length > 2) {
+            memberStructsDictionary[structName] = [structNameReplacement substringWithRange:NSMakeRange(1, structNameReplacement.length - 2)];
+        }
     }
     return memberStructsDictionary.copy;
 }
