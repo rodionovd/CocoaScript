@@ -1123,7 +1123,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
     
     // Create an array of strings seperated by the { character.
     NSArray <NSString *> *memberStructs = [symbolType componentsSeparatedByString:@"{"];
-    CGRect
+
     NSEnumerator <NSString *> *enumerator = [memberStructs objectEnumerator];
     
     // Drop the first object as it precedes the first "{" so doesn't represent a struct type.
