@@ -1100,10 +1100,18 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
     return (version.minorVersion >= 13);
 }
 
+/**
+ This method is only called when running 10.13 or higher.
+ 
+ The method takes a symbol type string like '{CGRect="origin"{CGPoint}"size"{CGSize}}' and creates a dictionary
+ with keys = ["CGPoint", "CGSize"]. Whose values are: ['CGPoint="x"d"y"d', 'CGSize="width"d"height"d']
+ 
+ The method does this by looking up the type descriptions for each of the structs.
+ */
 + (NSDictionary <NSString *, NSString *> *)memberStructs:(NSString *)symbolType {
     NSMutableDictionary <NSString *, NSString *> *memberStructsDictionary = [NSMutableDictionary new];
     
-    // First strip of the initial { and final } characters from the symbol type after checking the string is long enough.
+    // First strip off the initial { and final } characters from the symbol type after checking the string is long enough.
     if (symbolType.length < 3) {
         return memberStructsDictionary.copy;
     }
