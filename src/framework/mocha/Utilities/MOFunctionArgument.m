@@ -531,7 +531,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
     id type = ([symbol respondsToSelector:@selector(type)] ? [symbol type] : nil);
 #endif
     
-    return type;
+    return [self expandSymbolStructType:type];
 }
 
 + (NSString *)structureTypeEncodingDescription:(NSString *)structureTypeEncoding {
@@ -1097,6 +1097,72 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
     }
     
     return c - c0 - 1;
+}
+
++ (BOOL)isHighSierraOrHigher {
+    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+    return (version.minorVersion >= 13);
+}
+
+/**
+ This method is only called when running 10.13 or higher.
+ 
+ The method takes a symbol type string like '{CGRect="origin"{CGPoint}"size"{CGSize}}' and creates a dictionary
+ with keys = ["CGPoint", "CGSize"]. Whose values are: ['CGPoint="x"d"y"d', 'CGSize="width"d"height"d']
+ 
+ The method does this by looking up the type descriptions for each of the structs.
+ */
++ (NSDictionary <NSString *, NSString *> *)memberStructs:(NSString *)symbolType {
+    NSMutableDictionary <NSString *, NSString *> *memberStructsDictionary = [NSMutableDictionary new];
+    
+    // First strip off the initial { and final } characters from the symbol type after checking the string is long enough.
+    if (symbolType.length < 3) {
+        return memberStructsDictionary.copy;
+    }
+    
+    NSAssert([symbolType hasPrefix:@"{"], @"Bridging support symbol is malformed. Missing \"{\". %@", symbolType);
+    NSAssert([symbolType hasSuffix:@"}"], @"Bridging support symbol is malformed. Missing \"{\". %@", symbolType);
+    
+    symbolType = [symbolType substringWithRange:NSMakeRange(1, symbolType.length - 2)];
+    
+    // Create an array of strings seperated by the { character.
+    NSArray <NSString *> *memberStructs = [symbolType componentsSeparatedByString:@"{"];
+
+    NSEnumerator <NSString *> *enumerator = [memberStructs objectEnumerator];
+    
+    // Drop the first object as it precedes the first "{" so doesn't represent a struct type.
+    (void)enumerator.nextObject;
+    
+    NSString *structName;
+    while ((structName = enumerator.nextObject)) {
+        NSRange locationOfEndBracket = [structName rangeOfString:@"}"];
+        if (locationOfEndBracket.location == NSNotFound) {
+            continue;
+        }
+        
+        structName = [structName substringWithRange:NSMakeRange(0, locationOfEndBracket.location)];
+        NSString *structNameReplacement = [self structureFullTypeEncodingFromStructureName:structName];
+        if (!structNameReplacement) {
+            continue;
+        }
+        
+        // Only add the struct entry for the member if the replacement string value is long enough.
+        if (structNameReplacement.length > 2) {
+            memberStructsDictionary[structName] = [structNameReplacement substringWithRange:NSMakeRange(1, structNameReplacement.length - 2)];
+        }
+    }
+    return memberStructsDictionary.copy;
+}
+
++ (NSString *)expandSymbolStructType:(NSString *)symbolType {
+    if (symbolType && self.isHighSierraOrHigher) {
+        NSDictionary <NSString *, NSString *> *memberStructReplacements = [self memberStructs:symbolType];
+        for (NSString *memberStructName in memberStructReplacements.allKeys) {
+            symbolType = [symbolType stringByReplacingOccurrencesOfString:memberStructName withString:memberStructReplacements[memberStructName]];
+        }
+        return symbolType;
+    }
+    return symbolType;
 }
 
 @end
