@@ -310,6 +310,10 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     [_mochaRuntime setObject:obj withName:name];
 }
 
+- (void)pushMethodWithTarget:(id)obj selector:(SEL)selector withName:(NSString *)name {
+    [_mochaRuntime setObject:[MOMethod methodWithTarget:obj selector:selector] withName:name];
+}
+
 - (void)deleteObjectWithName:(NSString*)name {
     [_mochaRuntime removeObjectWithName:name];
 }

@@ -37,6 +37,7 @@
 - (id)executeString:(NSString*) str;
 - (id)executeString:(NSString*)str baseURL:(NSURL*)base;
 - (void)pushObject:(id)obj withName:(NSString*)name;
+- (void)pushMethodWithTarget:(id)obj selector:(SEL)selector withName:(NSString*)name;
 - (void)deleteObjectWithName:(NSString*)name;
 - (void)print:(NSString*)s;
 
