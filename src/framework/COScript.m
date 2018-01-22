@@ -9,6 +9,7 @@
 #import "COScript.h"
 #import "COSListener.h"
 #import "COSPreprocessor.h"
+#import "COScript+Fiber.h"
 #import "COScript+Interval.h"
 
 #import <ScriptingBridge/ScriptingBridge.h>
@@ -96,7 +97,7 @@ void COScriptDebug(NSString* format, ...) {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    [self cleanupIntervals];
+    [self cleanupFibers];
     
 }
 
@@ -117,6 +118,16 @@ void COScriptDebug(NSString* format, ...) {
     [_mochaRuntime garbageCollect];
     
     debug(@"gc took %f seconds", [NSDate timeIntervalSinceReferenceDate] - start); (void)start;
+}
+
+- (BOOL)shouldKeepRunning {
+    if (_shouldKeepAround) {
+        return YES;
+    }
+    if (_activeFibers != nil) {
+        return [_activeFibers count] > 0;
+    }
+    return NO;
 }
 
 

@@ -21,7 +21,9 @@
     
     Mocha *_mochaRuntime;
     
-    NSMutableArray *_intervals;
+    // used in COScript+Fiber
+    NSMutableArray *_activeFibers;
+    int _nextFiberId;
 }
 
 @property (weak) id printController;
@@ -40,6 +42,7 @@
 - (void)pushMethodWithTarget:(id)obj selector:(SEL)selector withName:(NSString*)name;
 - (void)deleteObjectWithName:(NSString*)name;
 - (void)print:(NSString*)s;
+- (BOOL)shouldKeepRunning;
 
 - (JSGlobalContextRef)context;
 - (id)callFunctionNamed:(NSString*)name withArguments:(NSArray*)args;
