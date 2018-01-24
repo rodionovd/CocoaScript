@@ -32,16 +32,18 @@
 @property (assign) BOOL shouldPreprocess;
 @property (assign) BOOL shouldKeepAround;
 @property (strong) NSString* processedSource;
+@property (strong, nonatomic) NSDictionary* coreModuleMap;
+@property (strong, nonatomic) NSMutableDictionary* moduleCache;
 
-- (instancetype)initWithName:(NSString*)name;
+- (instancetype)initWithCoreModules:(NSDictionary*)coreModules;
 - (void)cleanup;
 - (void)garbageCollect;
 - (id)executeString:(NSString*) str;
 - (id)executeString:(NSString*)str baseURL:(NSURL*)base;
 - (void)pushObject:(id)obj withName:(NSString*)name;
-- (void)pushMethodWithTarget:(id)obj selector:(SEL)selector withName:(NSString*)name;
 - (void)deleteObjectWithName:(NSString*)name;
 - (void)print:(NSString*)s;
+- (id)require:(NSString *)module;
 - (BOOL)shouldKeepRunning;
 
 - (JSGlobalContextRef)context;

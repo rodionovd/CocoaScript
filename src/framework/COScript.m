@@ -73,23 +73,25 @@ void COScriptDebug(NSString* format, ...) {
 
 
 - (id)init {
-    return [self initWithName:@"Untitled"];
+    return [self initWithCoreModules:@{}];
 }
 
-- (instancetype)initWithName:(NSString*)name {
-	self = [super init];
-	if ((self != nil)) {
-        _mochaRuntime = [[Mocha alloc] initWithName:name];
+- (instancetype)initWithCoreModules:(NSDictionary*)coreModules {
+    self = [super init];
+    if ((self != nil)) {
+        _mochaRuntime = [[Mocha alloc] initWithName:@"Untitled"];
+        
+        self.coreModuleMap = coreModules;
+        _moduleCache = [NSMutableDictionary dictionary];
         
         [self setEnv:[NSMutableDictionary dictionary]];
         [self setShouldPreprocess:YES];
         
         [self addExtrasToRuntime];
-	}
+    }
     
-	return self;
+    return self;
 }
-
 
 - (void)dealloc {
 
@@ -143,6 +145,7 @@ void COScriptDebug(NSString* format, ...) {
     [_mochaRuntime evalString:@"var nil=null;\n"];
     [_mochaRuntime setValue:[MOMethod methodWithTarget:self selector:@selector(print:)] forKey:@"print"];
     [_mochaRuntime setValue:[MOMethod methodWithTarget:self selector:@selector(print:)] forKey:@"log"];
+    [_mochaRuntime setValue:[MOMethod methodWithTarget:self selector:@selector(require:)] forKey:@"require"];
     
     [_mochaRuntime loadFrameworkWithName:@"AppKit"];
     [_mochaRuntime loadFrameworkWithName:@"Foundation"];
@@ -321,12 +324,77 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     [_mochaRuntime setObject:obj withName:name];
 }
 
-- (void)pushMethodWithTarget:(id)obj selector:(SEL)selector withName:(NSString *)name {
-    [_mochaRuntime setObject:[MOMethod methodWithTarget:obj selector:selector] withName:name];
-}
-
 - (void)deleteObjectWithName:(NSString*)name {
     [_mochaRuntime removeObjectWithName:name];
+}
+
+- (id)require:(NSString *)module {
+    if (self.moduleCache[module]) {
+        return self.moduleCache[module];
+    }
+    
+    // store the current script URL so that we can put it back after requiring the module
+    NSURL* currentURL = [_env objectForKey:@"scriptURL"];
+    
+    // we never want to preprocess the modules - it shouldn't use Cocoascript syntax.
+    BOOL savedPreprocess = self.shouldPreprocess;
+    self.shouldPreprocess = NO;
+    
+    id result = nil;
+    
+    if ([module characterAtIndex:0] == '.') { // relative path
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSString* modulePath = module;
+        
+        // path/to/module/index.js
+        NSURL* moduleDirectoryURL = [NSURL URLWithString:[module stringByAppendingPathComponent:@"index.js"] relativeToURL:currentURL];
+        
+        if ([module.pathExtension isEqualToString:@""]) {
+            modulePath = [modulePath stringByAppendingPathExtension:@"js"];
+        }
+        
+        // path/to/module.js
+        NSURL* moduleURL = [NSURL URLWithString:modulePath relativeToURL:currentURL];
+        
+        if ([fileManager fileExistsAtPath:moduleURL.path]) {
+            result = [self executeModuleAtURL:moduleURL];
+        } else if ([fileManager fileExistsAtPath:moduleDirectoryURL.path]) {
+            result = [self executeModuleAtURL:moduleDirectoryURL];
+        } else {
+            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"Cannot find module %@ from package %@", module, currentURL.path] userInfo:nil];
+        }
+        
+    } else {
+        if (self.coreModuleMap[module]) {
+            result = [self executeModuleAtURL:self.coreModuleMap[module]];
+        } else {
+            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"%@ is not a core package", module] userInfo:nil];
+        }
+    }
+    
+    // go back to previous settings
+    self.shouldPreprocess = savedPreprocess;
+    [_env setObject:currentURL forKey:@"scriptURL"];
+    
+    // cache the module so it keeps it state if required again
+    [self.moduleCache setObject:result forKey:module];
+    
+    return result;
+}
+
+- (id)executeModuleAtURL:(NSURL*)scriptURL {
+    id result = nil;
+    if (scriptURL) {
+        NSError* error;
+        NSString* script = [NSString stringWithContentsOfURL:scriptURL encoding:NSUTF8StringEncoding error:&error];
+        if (script) {
+            NSString* module = [NSString stringWithFormat:@"(function() { var module = { exports : {} }; var exports = module.exports; %@ ; return module.exports; })()", script];
+            result = [self executeString:module baseURL:scriptURL];
+        } else if (error) {
+            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"Cannot find module %@", scriptURL.path] userInfo:nil];
+        }
+    }
+    return result;
 }
 
 
@@ -339,6 +407,10 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     
     if (!JSTalkPluginList && JSTalkShouldLoadJSTPlugins) {
         [COScript loadPlugins];
+    }
+    
+    if (base) {
+        [_env setObject:base forKey:@"scriptURL"];
     }
     
     if (!base && [[_env objectForKey:@"scriptURL"] isKindOfClass:[NSURL class]]) {
