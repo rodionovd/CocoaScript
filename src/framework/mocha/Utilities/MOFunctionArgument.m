@@ -1120,12 +1120,12 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
         return memberStructsDictionary.copy;
     }
     
-    NSAssert([symbolType hasPrefix:@"{"], @"Bridging support symbol is malformed. Missing \"{\". %@", symbolType);
+    NSAssert([symbolType hasPrefix:@"{"] || [symbolType hasPrefix:@"^{"], @"Bridging support symbol is malformed. Missing \"{\" or \"^{\". %@", symbolType);
     NSAssert([symbolType hasSuffix:@"}"], @"Bridging support symbol is malformed. Missing \"{\". %@", symbolType);
     
-    symbolType = [symbolType substringWithRange:NSMakeRange(1, symbolType.length - 2)];
+    symbolType = [symbolType substringWithRange:NSMakeRange([symbolType hasPrefix:@"^{"] ? 2 : 1, symbolType.length - 2)];
     
-    // Create an array of strings seperated by the { character.
+    // Create an array of strings separated by the { character.
     NSArray <NSString *> *memberStructs = [symbolType componentsSeparatedByString:@"{"];
 
     NSEnumerator <NSString *> *enumerator = [memberStructs objectEnumerator];
