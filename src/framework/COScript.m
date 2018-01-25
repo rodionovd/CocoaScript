@@ -108,6 +108,7 @@ void COScriptDebug(NSString* format, ...) {
     [self deleteObjectWithName:@"coscript"];
     [self deleteObjectWithName:@"print"];
     [self deleteObjectWithName:@"log"];
+    [self deleteObjectWithName:@"require"];
     
     [_mochaRuntime shutdown];
     _mochaRuntime = nil;
