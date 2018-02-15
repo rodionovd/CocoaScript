@@ -21,7 +21,7 @@
 }
 
 - (void)cleanupFibers {
-    for (COSFiber *fiber in _activeFibers) {
+    for (COSFiber *fiber in [_activeFibers copy]) {
         [fiber cleanup];
     }
 
