@@ -25,6 +25,7 @@ extern char ***_NSGetArgv(void);
 
 static BOOL JSTalkShouldLoadJSTPlugins = YES;
 static NSMutableArray *JSTalkPluginList;
+static NSMutableDictionary* coreModuleScriptCache; // we are keeping the core modules' script in memory as they are required very often
 
 static id<CODebugController> CODebugController = nil;
 
@@ -82,7 +83,10 @@ void COScriptDebug(NSString* format, ...) {
         _mochaRuntime = [[Mocha alloc] initWithName:@"Untitled"];
         
         self.coreModuleMap = coreModules;
-        _moduleCache = [NSMutableDictionary dictionary];
+        if (!coreModuleScriptCache) {
+            coreModuleScriptCache = [NSMutableDictionary dictionary];
+        }
+        self.moduleCache = [NSMutableDictionary dictionary];
         
         [self setEnv:[NSMutableDictionary dictionary]];
         [self setShouldPreprocess:YES];
@@ -150,6 +154,11 @@ void COScriptDebug(NSString* format, ...) {
     
     [_mochaRuntime loadFrameworkWithName:@"AppKit"];
     [_mochaRuntime loadFrameworkWithName:@"Foundation"];
+    
+    // if there is a console module, use it to polyfill the console global
+    if ([self.coreModuleMap objectForKey:@"console"]) {
+        [self pushObject:[self executeString:@"(function() { var Console = require('console'); var console = Console(); return console; })()"] withName:@"console"];
+    }
 }
 
 + (void)loadExtraAtPath:(NSString*)fullPath {
@@ -364,10 +373,15 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         } else {
             @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"Cannot find module %@ from package %@", module, currentURL.path] userInfo:nil];
         }
-        
     } else {
         if (self.coreModuleMap[module]) {
+            // we set `isRequiringCore` in the environment so that if a core module is requiring other file,
+            // we know that it's still a core module and should be cached as such
+            [_env setObject:@"true" forKey:@"isRequiringCore"];
+            
             result = [self executeModuleAtURL:self.coreModuleMap[module]];
+            
+            [_env setObject:@"false" forKey:@"isRequiringCore"];
         } else {
             @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"%@ is not a core package", module] userInfo:nil];
         }
@@ -375,7 +389,9 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     
     // go back to previous settings
     self.shouldPreprocess = savedPreprocess;
-    [_env setObject:currentURL forKey:@"scriptURL"];
+    if (currentURL) {
+        [_env setObject:currentURL forKey:@"scriptURL"];
+    }
     
     // cache the module so it keeps it state if required again
     [self.moduleCache setObject:result forKey:module];
@@ -387,7 +403,16 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     id result = nil;
     if (scriptURL) {
         NSError* error;
-        NSString* script = [NSString stringWithContentsOfURL:scriptURL encoding:NSUTF8StringEncoding error:&error];
+        NSString* script;
+        if (coreModuleScriptCache[scriptURL]) {
+            script = coreModuleScriptCache[scriptURL];
+        } else {
+            script = [NSString stringWithContentsOfURL:scriptURL encoding:NSUTF8StringEncoding error:&error];
+            if ([[_env objectForKey:@"isRequiringCore"] isEqualToString:@"true"]) {
+                // cache the core module's so that we don't need to read it from disk again
+                [coreModuleScriptCache setObject:script forKey:scriptURL];
+            }
+        }
         if (script) {
             NSString* module = [NSString stringWithFormat:@"(function() { var module = { exports : {} }; var exports = module.exports; %@ ; return module.exports; })()", script];
             result = [self executeString:module baseURL:scriptURL];
@@ -400,7 +425,6 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 
 
 - (id)executeString:(NSString*)str {
-    
     return [self executeString:str baseURL:nil];
 }
 
