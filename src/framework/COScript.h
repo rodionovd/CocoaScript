@@ -35,7 +35,7 @@
 @property (strong, nonatomic) NSDictionary* coreModuleMap;
 @property (strong, nonatomic) NSMutableDictionary* moduleCache;
 
-- (instancetype)initWithCoreModules:(NSDictionary*)coreModules;
+- (instancetype)initWithCoreModules:(NSDictionary*)coreModules andName:(NSString*)name;
 - (void)cleanup;
 - (void)garbageCollect;
 - (id)executeString:(NSString*) str;
