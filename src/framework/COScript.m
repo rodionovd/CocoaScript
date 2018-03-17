@@ -74,13 +74,13 @@ void COScriptDebug(NSString* format, ...) {
 
 
 - (id)init {
-    return [self initWithCoreModules:@{}];
+    return [self initWithCoreModules:@{} andName:nil];
 }
 
-- (instancetype)initWithCoreModules:(NSDictionary*)coreModules {
+- (instancetype)initWithCoreModules:(NSDictionary*)coreModules andName:(NSString*)name {
     self = [super init];
     if ((self != nil)) {
-        _mochaRuntime = [[Mocha alloc] initWithName:@"Untitled"];
+        _mochaRuntime = [[Mocha alloc] initWithName:name ? name : @"Untitled"];
         
         self.coreModuleMap = coreModules;
         if (!coreModuleScriptCache) {
