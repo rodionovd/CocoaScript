@@ -157,7 +157,7 @@ void COScriptDebug(NSString* format, ...) {
     
     // if there is a console module, use it to polyfill the console global
     if ([self.coreModuleMap objectForKey:@"console"]) {
-        [self pushObject:[self executeString:@"(function() { var Console = require('console'); var console = Console(); return console; })()"] withName:@"console"];
+        [self pushObject:[self executeString:@"(function() { var Console = require('console'); var console = Console(); return NSDictionary.dictionaryWithDictionary(console).mutableCopy(); })()"] withName:@"console"];
     }
 }
 
