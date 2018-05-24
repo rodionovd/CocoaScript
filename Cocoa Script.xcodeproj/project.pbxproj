@@ -11,6 +11,8 @@
 		031EFEF81FD5909D000B5798 /* COSFiber.h in Headers */ = {isa = PBXBuildFile; fileRef = 031EFEF41FD5864C000B5798 /* COSFiber.h */; };
 		031EFEF91FD590B6000B5798 /* COSFiber.m in Sources */ = {isa = PBXBuildFile; fileRef = 031EFEF51FD5864C000B5798 /* COSFiber.m */; };
 		031EFEFA1FD590C0000B5798 /* COScript+Fiber.m in Sources */ = {isa = PBXBuildFile; fileRef = 031EFEF21FD57DC6000B5798 /* COScript+Fiber.m */; };
+		0334150220B5E3550052CD7C /* MOJSBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 033414FF20B5D4220052CD7C /* MOJSBlock.h */; };
+		0334150320B5E3640052CD7C /* MOJSBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0334150020B5D4220052CD7C /* MOJSBlock.m */; };
 		220D93E71C92E69C001EF05C /* JSTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D8CD181A2E2F0039A0A5 /* JSTTextView.m */; };
 		220D93E81C92E75A001EF05C /* JSTTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D8CC181A2E2F0039A0A5 /* JSTTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		229C1FF61C21B38D004C5B3B /* MOBoxManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 229C1FF41C21B38D004C5B3B /* MOBoxManager.h */; };
@@ -411,6 +413,8 @@
 		031EFEF21FD57DC6000B5798 /* COScript+Fiber.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "COScript+Fiber.m"; path = "src/framework/COScript+Fiber.m"; sourceTree = "<group>"; };
 		031EFEF41FD5864C000B5798 /* COSFiber.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = COSFiber.h; path = src/framework/COSFiber.h; sourceTree = "<group>"; };
 		031EFEF51FD5864C000B5798 /* COSFiber.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = COSFiber.m; path = src/framework/COSFiber.m; sourceTree = "<group>"; };
+		033414FF20B5D4220052CD7C /* MOJSBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MOJSBlock.h; path = src/framework/mocha/Utilities/MOJSBlock.h; sourceTree = SOURCE_ROOT; };
+		0334150020B5D4220052CD7C /* MOJSBlock.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MOJSBlock.m; path = src/framework/mocha/Utilities/MOJSBlock.m; sourceTree = SOURCE_ROOT; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FBA07B3F13500E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		229C1FF41C21B38D004C5B3B /* MOBoxManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOBoxManager.h; path = src/framework/mocha/Objects/MOBoxManager.h; sourceTree = SOURCE_ROOT; };
@@ -1205,6 +1209,8 @@
 				CC66D86F181A2AF30039A0A5 /* MOMapTable.m */,
 				CC66D870181A2AF30039A0A5 /* MOUtilities.h */,
 				CC66D871181A2AF30039A0A5 /* MOUtilities.m */,
+				033414FF20B5D4220052CD7C /* MOJSBlock.h */,
+				0334150020B5D4220052CD7C /* MOJSBlock.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1229,6 +1235,7 @@
 			files = (
 				CC66D81E181A2A710039A0A5 /* COScript.h in Headers */,
 				CC66D89C181A2B0A0039A0A5 /* MOAllocator.h in Headers */,
+				0334150220B5E3550052CD7C /* MOJSBlock.h in Headers */,
 				031EFEF81FD5909D000B5798 /* COSFiber.h in Headers */,
 				031EFEF71FD59089000B5798 /* COScript+Fiber.h in Headers */,
 				CC66D80E181A2A470039A0A5 /* TDWhitespaceState.h in Headers */,
@@ -1528,6 +1535,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0334150320B5E3640052CD7C /* MOJSBlock.m in Sources */,
 				031EFEFA1FD590C0000B5798 /* COScript+Fiber.m in Sources */,
 				031EFEF91FD590B6000B5798 /* COSFiber.m in Sources */,
 				CC66D83D181A2A9B0039A0A5 /* COSOpenCLProgram.m in Sources */,

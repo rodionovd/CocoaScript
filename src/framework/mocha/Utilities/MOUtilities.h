@@ -36,4 +36,5 @@ NSString * MOSelectorToPropertyName(SEL selector);
 
 NSString * MOPropertyNameToSetterName(NSString *propertyName);
 
+NSUInteger MOGetFunctionLength(MOJavaScriptObject *function);
 id MOGetBlockForJavaScriptFunction(MOJavaScriptObject *function, NSUInteger *argCount);
