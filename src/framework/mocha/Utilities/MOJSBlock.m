@@ -28,7 +28,8 @@ struct BlockDescriptor
 {
     unsigned long reserved;
     unsigned long size;
-    void* _Nullable rest[1];
+    const char *signature;
+    const char *layout;
 };
 
 struct Block
@@ -36,16 +37,20 @@ struct Block
     void *isa;
     int flags;
     int reserved;
-    void *invoke;
+    void (*invoke)(void *, ...);
     struct BlockDescriptor *descriptor;
 };
 
 enum {
+    BLOCK_DEALLOCATING =      (0x0001),
+    BLOCK_REFCOUNT_MASK =     (0xfffe),
+    BLOCK_NEEDS_FREE =        (1 << 24),
     BLOCK_HAS_COPY_DISPOSE =  (1 << 25),
     BLOCK_HAS_CTOR =          (1 << 26), // helpers have C++ code
+    BLOCK_IS_GC =             (1 << 27),
     BLOCK_IS_GLOBAL =         (1 << 28),
-    BLOCK_HAS_STRET =         (1 << 29), // IFF BLOCK_HAS_SIGNATURE
-    BLOCK_HAS_SIGNATURE =     (1 << 30),
+    BLOCK_USE_STRET =         (1 << 29), // undefined if !BLOCK_HAS_SIGNATURE
+    BLOCK_HAS_SIGNATURE  =    (1 << 30)
 };
 
 // MARK: - Invocation
@@ -200,19 +205,6 @@ INVOKE_BLOCK_RETURNING(id);
     struct BlockDescriptor *_descriptor;
 }
 
-+ (const char*)signatureForBlock:(id)blockObj {
-    struct Block *block = (__bridge void * )blockObj;
-    struct BlockDescriptor *descriptor = block->descriptor;
-    
-    assert(block->flags & BLOCK_HAS_SIGNATURE);
-    
-    int index = 0;
-    if(block->flags & BLOCK_HAS_COPY_DISPOSE)
-        index += 2;
-    
-    return descriptor->rest[index];
-}
-
 + (instancetype)blockWithSignature:(NSString*)signature function:(MOJavaScriptObject *)function runtime:(Mocha*)runtime {
     return [[self alloc] initWithSignature:signature.UTF8String function:function runtime:runtime];
 }
@@ -224,19 +216,19 @@ INVOKE_BLOCK_RETURNING(id);
         _flags = BLOCK_HAS_SIGNATURE | BLOCK_IS_GLOBAL;
         _descriptor = calloc(1, sizeof(struct BlockDescriptor));
         _descriptor->size = class_getInstanceSize([self class]);
-        _descriptor->rest[0] = (void *) signature;
+        _descriptor->signature = signature;
         _signature = [NSMethodSignature signatureWithObjCTypes:signature];
         
         const char* type = _signature.methodReturnType;
         switch (type[0]) {
-                INVOKE_CASE('d', double);
-                INVOKE_CASE('i', int);
-                INVOKE_CASE('I', uint);
-                INVOKE_CASE('q', NSInteger);
-                INVOKE_CASE('Q', NSUInteger);
-                INVOKE_CASE('c', char);
-                INVOKE_CASE('B', bool);
-                INVOKE_CASE('@', id);
+            INVOKE_CASE('d', double);
+            INVOKE_CASE('i', int);
+            INVOKE_CASE('I', uint);
+            INVOKE_CASE('q', NSInteger);
+            INVOKE_CASE('Q', NSUInteger);
+            INVOKE_CASE('c', char);
+            INVOKE_CASE('B', bool);
+            INVOKE_CASE('@', id);
                 
 //            case '{':
 //                if (strcmp(type, "{CGRect={CGPoint=dd}{CGSize=dd}}") == 0) {

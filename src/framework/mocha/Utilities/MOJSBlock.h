@@ -19,7 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic, readonly) NSMethodSignature* signature;
 @property (weak, nonatomic, readonly) Mocha* runtime;
 
-+ (const char*)signatureForBlock:(id)block;
 - (instancetype)initWithSignature:(const char*)signature function:(MOJavaScriptObject *)function runtime:(Mocha*) runtime;
 @end
 

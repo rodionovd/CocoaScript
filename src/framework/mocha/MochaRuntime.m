@@ -409,7 +409,6 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
         }
 
         NSString *key = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, name));
-        JSStringRelease(name);
         if (jsValue == hashValue) {
 
             // if we spot a recursive link here, we have a decision to make about whether to:
