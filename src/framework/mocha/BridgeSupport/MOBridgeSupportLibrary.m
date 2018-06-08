@@ -67,7 +67,11 @@
 }
 
 - (void)setSymbol:(MOBridgeSupportSymbol *)symbol forName:(NSString *)name {
-    [_symbols setObject:symbol forKey:name];
+    if ([_symbols objectForKey:name]) {
+        NSLog(@"Duplicate declaration for %@", name);
+    } else {
+        [_symbols setObject:symbol forKey:name];
+    }
 }
 
 - (void)removeSymbolForName:(NSString *)name {

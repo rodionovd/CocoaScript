@@ -725,7 +725,7 @@ MOFunctionArgument * MOFunctionArgumentForTypeEncoding(NSString *typeEncoding) {
     return argument;
 }
 
-NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
+NSArray<MOFunctionArgument *> * MOParseObjCMethodEncoding(const char *typeEncoding) {
     NSMutableArray *argumentEncodings = [NSMutableArray array];
     char *argsParser = (char *)typeEncoding;
     
@@ -927,16 +927,20 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName) {
 
 typedef id (^MOJavaScriptClosureBlock)(id obj, ...);
 
+NSUInteger MOGetFunctionLength(MOJavaScriptObject *function) {
+    JSObjectRef jsFunction = [function JSObject];
+    JSContextRef ctx = [function JSContext];
+    JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
+    JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);
+    JSStringRelease(lengthString);
+
+    return (NSUInteger)JSValueToNumber(ctx, value, NULL);
+}
+
 id MOGetBlockForJavaScriptFunction(MOJavaScriptObject *function, NSUInteger *argCount) {
 
     if (argCount != NULL) {
-        JSObjectRef jsFunction = [function JSObject];
-        JSContextRef ctx = [function JSContext];
-        JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
-        JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);
-        JSStringRelease(lengthString);
-        
-        *argCount = (NSUInteger)JSValueToNumber(ctx, value, NULL);
+        *argCount = MOGetFunctionLength(function);
     }
     
     MOJavaScriptClosureBlock newBlock = (id)^(id obj, ...) {

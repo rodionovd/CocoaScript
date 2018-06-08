@@ -20,6 +20,7 @@
 #import "MOUtilities.h"
 #import "MOFunctionArgument.h"
 #import "MOAllocator.h"
+#import "MOJSBlock.h"
 
 #import "MOObjCRuntime.h"
 
@@ -978,6 +979,13 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
     return symbols;
 }
 
+#pragma mark -
+#pragma mark Blocks
+
+- (MOJSBlock *)createBlock:(NSString*)signature function:(MOJavaScriptObject *)function {
+    return [MOJSBlock blockWithSignature:signature function:function runtime:self];
+}
+
 @end
 
 
@@ -1036,7 +1044,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     // ObjC class
     //
     Class objCClass = NSClassFromString(propertyName);
-    if (objCClass && ![propertyName isEqualToString:@"Object"] && ![propertyName isEqualToString:@"Function"]) {
+    if (objCClass && ![propertyName isEqualToString:@"Object"] && ![propertyName isEqualToString:@"Function"] && ![propertyName isEqualToString:@"Proxy"]) {
         JSValueRef ret = [runtime JSValueForObject:objCClass];
 
         if (!objc_getAssociatedObject(objCClass, &MOAlreadyProtectedKey)) {
