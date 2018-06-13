@@ -172,11 +172,11 @@ static NSString *COSUTTypeTable = @"R.table";
     [_q inDatabase:^(COSDatabase *db) {
         NSString *query = @"select data, uti, uniqueID from R where name = ? and parentID = ?";
         
-        if (!_tableID) {
+        if (!self->_tableID) {
             query = @"select data, uti, uniqueID from R where name = ? and parentID is null";
         }
         
-        COSResultSet *rs = [db executeQuery:query, key, _tableID];
+        COSResultSet *rs = [db executeQuery:query, key, self->_tableID];
         
         if ([rs next]) {
             
@@ -248,21 +248,21 @@ static NSString *COSUTTypeTable = @"R.table";
         
         NSString *delete = @"delete from R where name = ? and parentID = ?";
         
-        if (!_tableID) {
+        if (!self->_tableID) {
             delete = @"delete from R where name = ? and parentID is null";
         }
         
-        [db executeUpdate:delete, key, _tableID];
+        [db executeUpdate:delete, key, self->_tableID];
         
         if (obj) {
             NSString *sql = @"insert into R (uniqueID, name, data, uti, parentID) values (?, ?, ?, ?, ?)";
-            if (![db executeUpdate:sql, uuid, key, obj, uti, _tableID]) {
-                NSLog(@"Could not set value '%@' for '%@' in table '%@'", obj, key, _tablePath ? _tablePath : [NSNull null]);
+            if (![db executeUpdate:sql, uuid, key, obj, uti, self->_tableID]) {
+                NSLog(@"Could not set value '%@' for '%@' in table '%@'", obj, key, self->_tablePath ? self->_tablePath : [NSNull null]);
             }
         }
         
-        if ([_tablePath length]) {
-            assert(_tableID);
+        if ([self->_tablePath length]) {
+            assert(self->_tableID);
         }
         
     }];
@@ -276,11 +276,11 @@ static NSString *COSUTTypeTable = @"R.table";
         
         NSString *query = @"select name from R where uti = ? and parentID = ?";
         
-        if (!_tablePath) {
+        if (!self->_tablePath) {
             query = @"select name, uniqueID from R where uti = ? and parentID is null";
         }
         
-        COSResultSet *rs = [db executeQuery:query, COSUTTypeTable, _tableID];
+        COSResultSet *rs = [db executeQuery:query, COSUTTypeTable, self->_tableID];
         while ([rs next]) {
             
             COSR *sub = [self subTableWithName:[rs stringForColumn:@"name"]];
@@ -302,11 +302,11 @@ static NSString *COSUTTypeTable = @"R.table";
         
         NSString *query = @"select name from R where parentID = ?";
         
-        if (!_tablePath) {
+        if (!self->_tablePath) {
             query = @"select name from R where parentID is null";
         }
         
-        COSResultSet *rs = [db executeQuery:query, _tableID];
+        COSResultSet *rs = [db executeQuery:query, self->_tableID];
         while ([rs next]) {
             [keyNames addObject:[rs stringForColumn:@"name"]];
         }
