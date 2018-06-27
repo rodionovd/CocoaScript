@@ -323,9 +323,7 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
                     // Auto-unbox closures
                     return [object block];
                 }
-                else {
-                    return object;
-                }
+                return object;
             }
             else {
                 return private;
@@ -983,7 +981,7 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 #pragma mark Blocks
 
 - (MOJSBlock *)createBlock:(NSString*)signature function:(MOJavaScriptObject *)function {
-    return [MOJSBlock blockWithSignature:signature function:function runtime:self];
+    return [[MOJSBlock blockWithSignature:signature function:function] copy];
 }
 
 @end

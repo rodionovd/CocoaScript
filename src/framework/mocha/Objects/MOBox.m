@@ -52,6 +52,9 @@ static NSUInteger initCount = 0;
 
     if (_manager) {
         _representedObject = nil;
+#if MOCHA_DEBUG_CRASHES
+        _representedObjectCanaryDesc = nil;
+#endif
         _manager = nil;
     } else {
 #if MOCHA_DEBUG_CRASHES

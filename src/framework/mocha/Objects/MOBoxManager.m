@@ -21,8 +21,10 @@
     NSAssert([NSThread isMainThread], @"should be main thread");
     self = [super init];
     if (self) {
-        // we want to use NSMapTableObjectPointerPersonality for the keys, since we are associating boxes with specific objects
-        // and not with the underlying values of them (if two objects are equal according to isEqual:, we still want a box for both)
+        // we want to use NSMapTableObjectPointerPersonality for the keys,
+        // since we are associating boxes with specific objects
+        // and not with the underlying values of them
+        // (eg. if two objects are equal according to isEqual:, we still want a box for both)
         _index = [[NSMapTable alloc] initWithKeyOptions:NSMapTableObjectPointerPersonality | NSMapTableStrongMemory valueOptions:NSMapTableStrongMemory capacity:0];
         _context = context;
         JSGlobalContextRetain(context);
@@ -39,14 +41,13 @@
     NSAssert([NSThread isMainThread], @"should be main thread");
 
     // break any retain cycles between the boxed objects and the things that they are boxing
-    NSEnumerator* enumerator = [_index objectEnumerator];
-    MOBox* box = nil;
-    while (box = [enumerator nextObject]) {
+    for (MOBox* box in [_index objectEnumerator]) {
         debug(@"cleaned %p %ld", box, box.count);
         [box disassociateObject];
     }
 
     // throw away the index, which will release any boxes still in it, which in turn should release the objects they were boxing
+    [_index removeAllObjects];
     _index = nil;
 
     // throw the context away, which should clean up any remaining JS objects
