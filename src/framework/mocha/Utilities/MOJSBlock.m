@@ -16,8 +16,6 @@
 #import "MOUtilities.h"
 #import "MOUndefined.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
 /**
  Internal block structures.
  
@@ -62,7 +60,7 @@ enum {
  We return the result as another JSValueRef.
  */
 
-static JSValueRef jsInvoke(Mocha* runtime, MOJavaScriptObject* function, NSMethodSignature* signature, va_list args) {
+static JSValueRef jsInvoke(MOJavaScriptObject* function, NSMethodSignature* signature, va_list args) {
     
     NSUInteger count = [signature numberOfArguments] - 1;
     NSMutableArray *arguments = [[NSMutableArray alloc] init];
@@ -115,6 +113,9 @@ static JSValueRef jsInvoke(Mocha* runtime, MOJavaScriptObject* function, NSMetho
         }
     }
     
+    JSContextRef ctx = [function JSContext];
+    Mocha *runtime = [Mocha runtimeWithContext:ctx];
+    
     JSValueRef value = [runtime callJSFunction:[function JSObject] withArgumentsInArray:arguments];
     
     if (value == NULL) {
@@ -128,15 +129,16 @@ static JSValueRef jsInvoke(Mocha* runtime, MOJavaScriptObject* function, NSMetho
  Helpers to convert the return value to the correct type.
  */
 
-static double return_double(Mocha* runtime, JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
-static int return_int(Mocha* runtime, JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
-static uint return_uint(Mocha* runtime, JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
-static NSInteger return_NSInteger(Mocha* runtime, JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
-static NSUInteger return_NSUInteger(Mocha* runtime, JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
-static char return_char(Mocha* runtime, JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
-static bool return_bool(Mocha* runtime, JSContextRef ctx, JSValueRef value) { return JSValueToBoolean
+static double return_double(JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
+static int return_int(JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
+static uint return_uint(JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
+static NSInteger return_NSInteger(JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
+static NSUInteger return_NSUInteger(JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
+static char return_char(JSContextRef ctx, JSValueRef value) { return JSValueToNumber(ctx, value, NULL); }
+static bool return_bool(JSContextRef ctx, JSValueRef value) { return JSValueToBoolean
 (ctx, value); }
-static id return_id(Mocha* runtime, JSContextRef ctx, JSValueRef value) {
+static id return_id(JSContextRef ctx, JSValueRef value) {
+    Mocha *runtime = [Mocha runtimeWithContext:ctx];
     return [runtime objectForJSValue:value];
 }
 //static CGRect return_CGRect(Mocha* runtime, JSContextRef ctx, JSValueRef value) { return value.toRect; }
@@ -163,11 +165,9 @@ static id return_id(Mocha* runtime, JSContextRef ctx, JSValueRef value) {
 static void void_invoke(MOJSBlock* block, ...) {
     va_list args;
     va_start(args, block);
-    NSLog(@"%@", block);
     NSMethodSignature* signature = block.signature;
-    Mocha* runtime = block.runtime;
     MOJavaScriptObject* function = block.function;
-    jsInvoke(runtime, function, signature, args);
+    jsInvoke(function, signature, args);
     va_end(args);
 }
 
@@ -175,9 +175,9 @@ static void void_invoke(MOJSBlock* block, ...) {
 static _type_ _type_ ## _invoke(MOJSBlock* block, ...) { \
 va_list args; \
 va_start(args, block); \
-JSValueRef jsResult = jsInvoke(block.runtime, block.function, block.signature, args); \
+JSValueRef jsResult = jsInvoke(block.function, block.signature, args); \
 va_end(args); \
-return return_ ## _type_(block.runtime, [block.function JSContext], jsResult); \
+return return_ ## _type_([block.function JSContext], jsResult); \
 }
 
 INVOKE_BLOCK_RETURNING(double);
@@ -205,12 +205,12 @@ INVOKE_BLOCK_RETURNING(id);
     struct BlockDescriptor *_descriptor;
 }
 
-+ (instancetype)blockWithSignature:(NSString*)signature function:(MOJavaScriptObject *)function runtime:(Mocha*)runtime {
-    return [[self alloc] initWithSignature:signature.UTF8String function:function runtime:runtime];
++ (instancetype)blockWithSignature:(NSString*)signature function:(MOJavaScriptObject *)function {
+    return [[self alloc] initWithSignature:signature.UTF8String function:function];
 }
 
 
-- (instancetype)initWithSignature:(const char*)signature function:(MOJavaScriptObject *)function runtime:(Mocha*)runtime {
+- (instancetype)initWithSignature:(const char*)signature function:(MOJavaScriptObject *)function {
     self = [super init];
     if (self) {
         _flags = BLOCK_HAS_SIGNATURE | BLOCK_IS_GLOBAL;
@@ -252,7 +252,6 @@ INVOKE_BLOCK_RETURNING(id);
         }
         
         _function = function;
-        _runtime = runtime;
     }
     
     return self;
@@ -267,5 +266,3 @@ INVOKE_BLOCK_RETURNING(id);
 }
 
 @end
-
-NS_ASSUME_NONNULL_END
