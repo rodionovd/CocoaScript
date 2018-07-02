@@ -27,12 +27,7 @@
     
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (void)cleanup {
-    
     [super cleanup];
     
     _jsfunc = nil;
