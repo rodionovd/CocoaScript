@@ -189,7 +189,9 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 - (id)initWithName:(NSString *)name {
     self = [super init];
     if (self) {
+        // we create a JSContextGroup here to work around a JSCore bug: https://bugs.webkit.org/show_bug.cgi?id=24615
         _ctxGroup = JSContextGroupCreate();
+
         JSGlobalContextRef ctx = JSGlobalContextCreateInGroup(_ctxGroup, MochaClass);
         if (name) {
             JSStringRef jsName = JSStringCreateWithCFString((__bridge CFStringRef)name);
