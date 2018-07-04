@@ -98,22 +98,26 @@ void COScriptDebug(NSString* format, ...) {
 }
 
 - (void)dealloc {
-
     debug(@"%s:%d", __FUNCTION__, __LINE__);
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    [self cleanupFibers];
-    
 }
 
 - (void)cleanup {
+    // clean up fibers to shut everything down nicely
+    [self cleanupFibers];
+    
+    // clean up the global object that we injected in the runtime
     [self deleteObjectWithName:@"jstalk"];
     [self deleteObjectWithName:@"coscript"];
     [self deleteObjectWithName:@"print"];
     [self deleteObjectWithName:@"log"];
     [self deleteObjectWithName:@"require"];
+    if ([self.coreModuleMap objectForKey:@"console"]) {
+        [self deleteObjectWithName:@"console"];
+    }
     
+    // clean up mocha
     [_mochaRuntime shutdown];
     _mochaRuntime = nil;
 }
@@ -154,10 +158,10 @@ void COScriptDebug(NSString* format, ...) {
     
     [_mochaRuntime loadFrameworkWithName:@"AppKit"];
     [_mochaRuntime loadFrameworkWithName:@"Foundation"];
-    
+
     // if there is a console module, use it to polyfill the console global
     if ([self.coreModuleMap objectForKey:@"console"]) {
-        [self pushObject:[self executeString:@"(function() { var Console = require('console'); var console = Console(); return NSDictionary.dictionaryWithDictionary(console).mutableCopy(); })()"] withName:@"console"];
+        [self pushObject:[self executeString:@"(function() { var Console = require('console'); var console = Console(); var keys = Object.keys(console); var dict = NSMutableDictionary.dictionaryWithCapacity(keys.length); keys.forEach(function(k) {dict[k] = console[k]}); return dict; })()"] withName:@"console"];
     }
 }
 

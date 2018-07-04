@@ -76,6 +76,7 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 
 @implementation Mocha {
     JSGlobalContextRef _ctx;
+    JSContextGroupRef _ctxGroup;
     BOOL _ownsContext;
     NSMutableDictionary *_exportedObjects;
     MOBoxManager *_boxManager;
@@ -182,37 +183,22 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 }
 
 - (id)init {
-    return [self initWithGlobalContext:NULL name:nil];
+    return [self initWithName:nil];
 }
 
 - (id)initWithName:(NSString *)name {
-    return [self initWithGlobalContext:NULL name:name];
-}
+    self = [super init];
+    if (self) {
+        // we create a JSContextGroup here to work around a JSCore bug: https://bugs.webkit.org/show_bug.cgi?id=24615
+        _ctxGroup = JSContextGroupCreate();
 
-
-- (id)initWithGlobalContext:(JSGlobalContextRef)ctx name:(NSString*)name {
-    if (ctx == NULL) {
-        ctx = JSGlobalContextCreate(MochaClass);
+        JSGlobalContextRef ctx = JSGlobalContextCreateInGroup(_ctxGroup, MochaClass);
         if (name) {
             JSStringRef jsName = JSStringCreateWithCFString((__bridge CFStringRef)name);
             JSGlobalContextSetName(ctx, jsName);
             JSStringRelease(jsName);
         }
         _ownsContext = YES;
-    }
-    else {
-        JSGlobalContextRetain(ctx);
-        _ownsContext = NO;
-
-        // Create the global "Mocha" object
-        JSObjectRef o = JSObjectMake(ctx, MochaClass, NULL);
-        JSStringRef jsName = JSStringCreateWithUTF8CString("Mocha");
-        JSObjectSetProperty(ctx, JSContextGetGlobalObject(ctx), jsName, o, kJSPropertyAttributeDontDelete, NULL);
-        JSStringRelease(jsName);
-    }
-
-    self = [super init];
-    if (self) {
         _ctx = ctx;
         _exportedObjects = [[NSMutableDictionary alloc] init];
         _boxManager = [[MOBoxManager alloc] initWithContext:ctx];
@@ -220,13 +206,13 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
                                  @"/System/Library/Frameworks",
                                  @"/Library/Frameworks",
                                  nil];
-
+        
         // Add the runtime as a property of the context
         [self setObject:self withName:@"__mocha__" attributes:(kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete)];
-
+        
         // Load builtins
         [self installBuiltins];
-
+        
         // Load base frameworks
 #if !TARGET_OS_IPHONE
         [self loadFrameworkWithName:@"Foundation"];
@@ -245,6 +231,10 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
     if (_ctx) {
         debug(@"releasing _ctx");
         JSGlobalContextRelease(_ctx);
+    }
+    
+    if (_ctxGroup) {
+        JSContextGroupRelease(_ctxGroup);
     }
 }
 
@@ -929,6 +919,8 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 
     JSGlobalContextRelease(_ctx);
     _ctx = nil;
+    JSContextGroupRelease(_ctxGroup);
+    _ctxGroup = nil;
 }
 
 - (void)print:(id)o {
