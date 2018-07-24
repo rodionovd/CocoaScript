@@ -447,7 +447,6 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     }
     
     if ([self shouldPreprocess]) {
-        
         str = [COSPreprocessor preprocessCode:str withBaseURL:base];
     }
     self.processedSource = str;
@@ -465,19 +464,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         }
     }
     @catch (NSException *e) {
-        
-        NSDictionary *d = [e userInfo];
-        if ([d objectForKey:@"line"]) {
-            if ([_errorController respondsToSelector:@selector(coscript:hadError:onLineNumber:atSourceURL:)]) {
-                [_errorController coscript:self hadError:[e reason] onLineNumber:[[d objectForKey:@"line"] integerValue] atSourceURL:base];
-            }
-        }
-        
-        NSLog(@"Exception: %@", [e userInfo]);
         [self printException:e];
-    }
-    @finally {
-        //
     }
     
     [self popAsCurrentCOScript];
@@ -486,7 +473,6 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 }
 
 - (BOOL)hasFunctionNamed:(NSString*)name {
-    
     JSValueRef exception = nil;
     JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([name UTF8String]);
     JSValueRef jsFunctionValue = JSObjectGetProperty([_mochaRuntime context], JSContextGetGlobalObject([_mochaRuntime context]), jsFunctionName, &exception);
@@ -497,7 +483,6 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 }
 
 - (id)callFunctionNamed:(NSString*)name withArguments:(NSArray*)args {
-    
     id returnValue = nil;
     
     @try {
@@ -511,7 +496,6 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         }
     }
     @catch (NSException * e) {
-        NSLog(@"Exception: %@", e);
         [self printException:e];
     }
     
@@ -531,8 +515,6 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         r = [_mochaRuntime callJSFunction:jsFunction withArgumentsInArray:arguments];
     }
     @catch (NSException * e) {
-        NSLog(@"Exception: %@", e);
-        NSLog(@"Info: %@", [e userInfo]);
         [self printException:e];
     }
     
@@ -546,15 +528,11 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 }
 
 - (void)unprotect:(id)o {
-    
-    
-    
     JSValueRef value = [_mochaRuntime JSValueForObject:o];
     
     assert(value);
     
     if (value) {
-        
         JSObjectRef jsObject = JSValueToObject([_mochaRuntime context], value, NULL);
         id private = (__bridge id)JSObjectGetPrivate(jsObject);
         
@@ -566,17 +544,12 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 }
 
 - (void)protect:(id)o {
-    
-    
     JSValueRef value = [_mochaRuntime JSValueForObject:o];
-    
     
     assert(value);
     
     if (value) {
-        
         JSObjectRef jsObject = JSValueToObject([_mochaRuntime context], value, NULL);
-        
         
         debug(@"COS protecting %@ / v: %p o: %p", o, value, jsObject);
         
@@ -618,7 +591,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 }
 
 - (void)printException:(NSException*)e {
-    
+    // TODO: review this and print something nice
     NSMutableString *s = [NSMutableString string];
     
     [s appendFormat:@"%@\n", e];
@@ -629,15 +602,19 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         [s appendFormat:@"%@: %@\n", o, [d objectForKey:o]];
     }
     
-    [self print:s];
+    [self print:@{
+                  @"command": _printController,
+                  @"payload": @[e],
+                  @"stringValue": s,
+                  @"level": @"error"
+                  }];
 }
 
-- (void)print:(NSString*)s {
+- (void)print:(id)s {
     
-    if (_printController && [_printController respondsToSelector:@selector(print:)]) {
+    if (_printController) {
         [_printController print:s];
-    }
-    else {
+    } else {
         if (![s isKindOfClass:[NSString class]]) {
             s = [s description];
         }

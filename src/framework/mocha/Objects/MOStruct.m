@@ -47,6 +47,7 @@
         }
     }
 }
+
 - (NSString *)descriptionWithIndent:(NSUInteger)indent {
     NSMutableString *indentString = [NSMutableString string];
     for (NSUInteger i=0; i<indent; i++) {
@@ -58,9 +59,9 @@
         NSString *key = [_memberNames objectAtIndex:i];
         
         [items appendString:indentString];
-        [items appendString:@"    "];
+        [items appendString:@"    \""];
         [items appendString:key];
-        [items appendString:@" = "];
+        [items appendString:@": "];
         
         id value = [_memberValues objectForKey:key];
         if ([value isKindOfClass:[MOStruct class]]) {

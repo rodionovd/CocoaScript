@@ -18,6 +18,7 @@
 #import "MOJavaScriptObject.h"
 #import "MOPointer.h"
 #import "MOUtilities.h"
+#import "MOJSTypeChecker.h"
 #import "MOFunctionArgument.h"
 #import "MOAllocator.h"
 #import "MOJSBlock.h"
@@ -272,82 +273,73 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 
 + (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx unboxObjects:(BOOL)unboxObjects {
 
-    if (value == NULL || JSValueIsUndefined(ctx, value)) {
+    if (value == NULL) {
         return [MOUndefined undefined];
     }
-
-    if (JSValueIsNull(ctx, value)) {
-        return nil;
-    }
-
-    if (JSValueIsString(ctx, value)) {
-        JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, NULL);
-        NSString *resultString = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, resultStringJS));
-        JSStringRelease(resultStringJS);
-        return resultString;
-    }
-
-    if (JSValueIsNumber(ctx, value)) {
-        double v = JSValueToNumber(ctx, value, NULL);
-        return [NSNumber numberWithDouble:v];
-    }
-
-    if (JSValueIsBoolean(ctx, value)) {
-        bool v = JSValueToBoolean(ctx, value);
-        return [NSNumber numberWithBool:v];
-    }
-
-    if (!JSValueIsObject(ctx, value)) {
-        return nil;
-    }
-
-    JSObjectRef jsObject = JSValueToObject(ctx, value, NULL);
-    id private = (__bridge id)JSObjectGetPrivate(jsObject);
-
-    if (private != nil) {
-        if ([private isKindOfClass:[MOBox class]]) {
-            if (unboxObjects == YES) {
-                // Boxed ObjC object
-                id object = [private representedObject];
-                if ([object isKindOfClass:[MOClosure class]]) {
-                    // Auto-unbox closures
-                    return [object block];
+    
+    JSType type = JSValueGetType(ctx, value);
+    
+    switch (type) {
+        case kJSTypeUndefined:
+            return [MOUndefined undefined];
+        case kJSTypeNull:
+            return nil;
+        case kJSTypeString: {
+            JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, NULL);
+            NSString *resultString = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, resultStringJS));
+            JSStringRelease(resultStringJS);
+            return resultString;
+        }
+        case kJSTypeNumber: {
+            double v = JSValueToNumber(ctx, value, NULL);
+            return [NSNumber numberWithDouble:v];
+        }
+        case kJSTypeBoolean: {
+            bool v = JSValueToBoolean(ctx, value);
+            return [NSNumber numberWithBool:v];
+        }
+        case kJSTypeObject: {
+            JSObjectRef jsObject = JSValueToObject(ctx, value, NULL);
+            id private = (__bridge id)JSObjectGetPrivate(jsObject);
+            
+            if (private != nil) {
+                if ([private isKindOfClass:[MOBox class]] && unboxObjects == YES) {
+                    // Boxed ObjC object
+                    id object = [private representedObject];
+                    if ([object isKindOfClass:[MOClosure class]]) {
+                        // Auto-unbox closures
+                        return [object block];
+                    }
+                    return object;
                 }
-                return object;
-            }
-            else {
                 return private;
             }
-        }
-        else {
-            return private;
-        }
-    }
-    else {
-        BOOL isFunction = JSObjectIsFunction(ctx, jsObject);
-        if (isFunction) {
-            // Function
-            return [MOJavaScriptObject objectWithJSObject:jsObject context:ctx];
-        }
+            
+            BOOL isFunction = JSObjectIsFunction(ctx, jsObject);
+            if (isFunction) {
+                // Function
+                return [MOJavaScriptObject objectWithJSObject:jsObject context:ctx];
+            }
+            
+            BOOL isError = MOJSValueIsError(ctx, jsObject);
+            if (isError) {
+                // Error
+                return [Mocha exceptionWithJSException:jsObject context:ctx];
+            }
+            
+            BOOL isArray = MOJSValueIsArray(ctx, jsObject);
+            if (isArray) {
+                // Array
+                return [self arrayForJSArray:jsObject inContext:ctx];
+            }
 
-        // Normal JS object
-        JSStringRef scriptJS = JSStringCreateWithUTF8CString("return arguments[0].constructor == Array.prototype.constructor");
-        JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
-        JSValueRef result = JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef *)&jsObject, NULL);
-        JSStringRelease(scriptJS);
-
-        BOOL isArray = JSValueToBoolean(ctx, result);
-        if (isArray) {
-            // Array
-            return [self arrayForJSArray:jsObject inContext:ctx];
-        }
-        else {
             // Object
             return [self dictionaryForJSHash:jsObject inContext:ctx];
         }
+            
+        default:
+            return nil;
     }
-
-    return nil;
 }
 
 + (NSArray *)arrayForJSArray:(JSObjectRef)arrayValue inContext:(JSContextRef)ctx {
@@ -729,11 +721,11 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
         // Iterate over all properties of the exception
         JSObjectRef jsObject = JSValueToObject(ctx, exception, NULL);
         JSPropertyNameArrayRef jsNames = JSObjectCopyPropertyNames(ctx, jsObject);
-        size_t count = JSPropertyNameArrayGetCount(jsNames);
+        size_t count = JSPropertyNameArrayGetCount(jsNames) + 1;
 
         NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:count];
 
-        for (size_t i = 0; i < count; i++) {
+        for (size_t i = 0; i < count - 1; i++) {
             JSStringRef jsName = JSPropertyNameArrayGetNameAtIndex(jsNames, i);
             NSString *name = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, jsName));
 
@@ -744,8 +736,17 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 
             [userInfo setObject:value forKey:name];
         }
-
+        
         JSPropertyNameArrayRelease(jsNames);
+        
+        // handle stack manually because it's not iteratable
+        JSStringRef jsName = JSStringCreateWithUTF8CString("stack");
+        
+        JSValueRef jsValueRef = JSObjectGetProperty(ctx, jsObject, jsName, NULL);
+        JSStringRef valueJS = JSValueToStringCopy(ctx, jsValueRef, NULL);
+        NSString *value = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, valueJS));
+        JSStringRelease(valueJS);
+        [userInfo setObject:value forKey:@"stack"];
 
         NSException *mochaException = [NSException exceptionWithName:MOJavaScriptException reason:error userInfo:userInfo];
         return mochaException;

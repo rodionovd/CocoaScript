@@ -12,6 +12,9 @@
 @class Mocha;
 @class COScript;
 
+@protocol COPrintController
+- (void)print:(id)s;
+@end
 
 @protocol CODebugController
 - (void)output:(NSString*)format args:(va_list)args;
@@ -26,8 +29,7 @@
     int _nextFiberId;
 }
 
-@property (weak) id printController;
-@property (weak) id errorController;
+@property (weak) id<COPrintController> printController;
 @property (retain) NSMutableDictionary *env;
 @property (assign) BOOL shouldPreprocess;
 @property (assign) BOOL shouldKeepAround;
@@ -42,7 +44,7 @@
 - (id)executeString:(NSString*)str baseURL:(NSURL*)base;
 - (void)pushObject:(id)obj withName:(NSString*)name;
 - (void)deleteObjectWithName:(NSString*)name;
-- (void)print:(NSString*)s;
+- (void)print:(id)s;
 - (id)require:(NSString *)module;
 - (BOOL)shouldKeepRunning;
 
