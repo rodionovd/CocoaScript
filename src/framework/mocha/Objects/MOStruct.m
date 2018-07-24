@@ -59,7 +59,7 @@
         NSString *key = [_memberNames objectAtIndex:i];
         
         [items appendString:indentString];
-        [items appendString:@"    \""];
+        [items appendString:@"    "];
         [items appendString:key];
         [items appendString:@": "];
         
