@@ -15,5 +15,6 @@
 - (void)addFiber:(COSFiber*)fiber;
 - (void)cleanupFibers;
 - (void)removeFiber:(COSFiber*)fiber;
+- (COSFiber *)createFiber;
 @end
 

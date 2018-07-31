@@ -43,7 +43,7 @@
     [_activeFibers removeObject:fiber];
 }
 
-- (id)createFiber {
+- (COSFiber *)createFiber {
     
     COSFiber *fiber = [COSFiber createWithCocoaScript:self];
     [self addFiber:fiber];
