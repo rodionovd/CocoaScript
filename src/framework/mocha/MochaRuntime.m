@@ -1003,10 +1003,18 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 #pragma mark -
 #pragma mark Global Object
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
+NSSet* JS_GLOBAL_OBJECTS;
+
 JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef *exception) {
+    
+    if (JS_GLOBAL_OBJECTS == nil) {
+        JS_GLOBAL_OBJECTS = [NSSet setWithObjects: @"Infinity", @"NaN", @"undefined", @"null", @"eval", @"isFinite", @"isNaN", @"parseFloat", @"parseInt", @"decodeURI", @"encodeURI", @"decodeURIComponents", @"encodeURIComponents", @"Object", @"Function", @"Boolean", @"Symbol", @"Error", @"EvalError", @"InternalError", @"RangeError", @"ReferenceError", @"SyntaxError", @"TypeError", @"URIError", @"Number", @"Math", @"Date", @"String", @"RegExp", @"Array", @"Int8Array", @"Uint8Array", @"Uint8ClampedArray", @"Int16Array", @"Uint16Array", @"Int32Array", @"Uint32Array", @"Float32Array", @"Float64Array", @"Map", @"Set", @"WeakMap", @"WeapSet", @"SIMD", @"ArrayBuffer", @"DataView", @"JSON", @"Promise", @"GeneratorFunction", @"AsyncFunction", @"Refect", @"Proxy", @"Intl", @"WebAssembly", nil];
+    }
+    
     NSString *propertyName = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS));
 
-    if ([propertyName isEqualToString:@"__mocha__"]) {
+    if ([propertyName isEqualToString:@"__mocha__"] || [JS_GLOBAL_OBJECTS containsObject: propertyName]) {
         return NULL;
     }
 
@@ -1035,7 +1043,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     // ObjC class
     //
     Class objCClass = NSClassFromString(propertyName);
-    if (objCClass && ![propertyName isEqualToString:@"Object"] && ![propertyName isEqualToString:@"Function"] && ![propertyName isEqualToString:@"Proxy"]) {
+    if (objCClass) {
         JSValueRef ret = [runtime JSValueForObject:objCClass];
 
         if (!objc_getAssociatedObject(objCClass, &MOAlreadyProtectedKey)) {
