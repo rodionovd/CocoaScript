@@ -1322,8 +1322,6 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
 static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef *exception) {
     NSString *propertyName = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, propertyNameJS));
 
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
-
     id object = objectForJSObject(objectJS);
     Class objectClass = [object class];
 
@@ -1332,7 +1330,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
         // String conversion
         if ([propertyName isEqualToString:@"toString"]) {
             MOMethod *function = [MOMethod methodWithTarget:object selector:@selector(description)];
-            return [runtime JSValueForObject:function];
+            return [[Mocha runtimeWithContext:ctx] JSValueForObject:function];
         }
 
         // Allocators
@@ -1359,7 +1357,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
                 }
                 if (implements) {
                     MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
-                    return [runtime JSValueForObject:function];
+                    return [[Mocha runtimeWithContext:ctx] JSValueForObject:function];
                 }
             }
         }
@@ -1368,7 +1366,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
         // Association object
         id value = objc_getAssociatedObject(object, (__bridge const void *)(propertyName));
         if (value != nil) {
-            return [runtime JSValueForObject:value];
+            return [[Mocha runtimeWithContext:ctx] JSValueForObject:value];
         }
 
         // Method
@@ -1396,7 +1394,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
             }
             if (implements) {
                 MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
-                return [runtime JSValueForObject:function];
+                return [[Mocha runtimeWithContext:ctx] JSValueForObject:function];
             }
         }
 
@@ -1427,7 +1425,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
             if ([scanner scanInteger:&integerValue]) {
                 id indexedValue = [object objectForIndexedSubscript:integerValue];
                 if (indexedValue != nil) {
-                    return [runtime JSValueForObject:indexedValue];
+                    return [[Mocha runtimeWithContext:ctx] JSValueForObject:indexedValue];
                 }
             }
         }
@@ -1436,7 +1434,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
         if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
             id subscriptValue = [object objectForKeyedSubscript:propertyName];
             if (subscriptValue != nil) {
-                return [runtime JSValueForObject:subscriptValue];
+                return [[Mocha runtimeWithContext:ctx] JSValueForObject:subscriptValue];
             }
             else {
                 return JSValueMakeNull(ctx);
@@ -1483,7 +1481,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
     @catch (NSException *e) {
         // Catch ObjC exceptions and propogate them up as JS exceptions
         if (exception != NULL) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [[Mocha runtimeWithContext:ctx] JSValueForObject:e];
         }
     }
 
@@ -1551,8 +1549,6 @@ static bool MOBoxedObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JS
 static bool MOBoxedObject_deleteProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef *exception) {
     NSString *propertyName = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, propertyNameJS));
 
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
-
     id object = objectForJSObject(objectJS);
 
     // Perform the lookup
@@ -1576,7 +1572,7 @@ static bool MOBoxedObject_deleteProperty(JSContextRef ctx, JSObjectRef objectJS,
     @catch (NSException *e) {
         // Catch ObjC exceptions and propogate them up as JS exceptions
         if (exception != NULL) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [[Mocha runtimeWithContext:ctx] JSValueForObject:e];
         }
     }
 
@@ -1602,7 +1598,6 @@ static JSValueRef MOBoxedObject_convertToType(JSContextRef ctx, JSObjectRef obje
 }
 
 static bool MOBoxedObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef *exception) {
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
     id representedObject = objectForJSObject(constructor);
 
     if (!JSValueIsObject(ctx, possibleInstance)) {
@@ -1624,7 +1619,7 @@ static bool MOBoxedObject_hasInstance(JSContextRef ctx, JSObjectRef constructor,
     @catch (NSException *e) {
         // Catch ObjC exceptions and propogate them up as JS exceptions
         if (exception != nil) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [[Mocha runtimeWithContext:ctx] JSValueForObject:e];
         }
     }
 
@@ -1644,7 +1639,6 @@ static JSObjectRef MOConstructor_callAsConstructor(JSContextRef ctx, JSObjectRef
 #pragma mark Mocha Functions
 
 static JSValueRef MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functionJS, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception) {
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
     id function = objectForJSObject(functionJS);
     JSValueRef value = NULL;
 
@@ -1670,7 +1664,7 @@ static JSValueRef MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functi
 
         // Catch ObjC exceptions and propogate them up as JS exceptions
         if (exception != nil) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [[Mocha runtimeWithContext:ctx] JSValueForObject:e];
         }
     }
 

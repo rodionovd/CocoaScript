@@ -723,16 +723,16 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
         return NO;
     }
     
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
-    
     switch (typeEncoding) {
         case _C_ID:
         case _C_CLASS: {
+            Mocha *runtime = [Mocha runtimeWithContext:ctx];
             id __autoreleasing object = [runtime objectForJSValue:value];
             *(void**)ptr = (__bridge void *)object;
             return YES;
         }
         case _C_PTR: {
+            Mocha *runtime = [Mocha runtimeWithContext:ctx];
             id __autoreleasing object = [runtime objectForJSValue:value];
             if ([object isKindOfClass:[MOPointerValue class]]) {
                 *(void**)ptr = [object pointerValue];
@@ -826,16 +826,16 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
         return NO;
     }
     
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
-    
     switch (typeEncoding) {
         case _C_ID:    
         case _C_CLASS: {
+            Mocha *runtime = [Mocha runtimeWithContext:ctx];
             id __autoreleasing object = (__bridge id)(*(void**)ptr);
             *value = [runtime JSValueForObject:object];
             return YES;
         }
         case _C_PTR: {
+            Mocha *runtime = [Mocha runtimeWithContext:ctx];
             void* pointer = *(void**)ptr;
             MOPointerValue *object = [[MOPointerValue alloc] initWithPointerValue:pointer typeEncoding:fullTypeEncoding];
             *value = [runtime JSValueForObject:object];
