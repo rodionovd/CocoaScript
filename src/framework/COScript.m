@@ -356,19 +356,20 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     
     id result = nil;
     
-    if ([module characterAtIndex:0] == '.') { // relative path
+    if ([module characterAtIndex:0] == '.' || [module characterAtIndex:0] == '/') { // relative or absolute path
         NSFileManager *fileManager = [NSFileManager defaultManager];
+        BOOL isRelative = [module characterAtIndex:0] == '.';
         NSString* modulePath = module;
         
-        // path/to/module/index.js
-        NSURL* moduleDirectoryURL = [NSURL URLWithString:[module stringByAppendingPathComponent:@"index.js"] relativeToURL:currentURL];
+        // /path/to/module/index.js
+        NSURL* moduleDirectoryURL = isRelative ? [NSURL URLWithString:[module stringByAppendingPathComponent:@"index.js"] relativeToURL:currentURL] : [NSURL fileURLWithPath:[module stringByAppendingPathComponent:@"index.js"]];
         
         if ([module.pathExtension isEqualToString:@""]) {
             modulePath = [modulePath stringByAppendingPathExtension:@"js"];
         }
         
-        // path/to/module.js
-        NSURL* moduleURL = [NSURL URLWithString:modulePath relativeToURL:currentURL];
+        // /path/to/module.js
+        NSURL* moduleURL = isRelative ? [NSURL URLWithString:modulePath relativeToURL:currentURL] : [NSURL fileURLWithPath:modulePath];
         
         if ([fileManager fileExistsAtPath:moduleURL.path]) {
             result = [self executeModuleAtURL:moduleURL];
