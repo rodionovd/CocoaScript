@@ -16,11 +16,13 @@ typedef void (^JSTTextViewDragHandler)(NSTextView *draggedObject, NSString *drag
     NSDictionary            *_keywords;
     
     NSString                *_lastAutoInsert;
+    NSSet                   *_ignoredSymbols;
 }
 
 
 @property (retain) NSDictionary *keywords;
 @property (retain) NSString *lastAutoInsert;
+@property (retain) NSSet *ignoredSymbols;
 @property (copy) JSTTextViewDragHandler numberDragHandler; // will be called continuously as a number is dragged
 
 - (void)parseCode:(id)sender;

@@ -15,6 +15,10 @@
 
 static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 
+@protocol NSAppearanceChocolate
+@property (nonatomic, readonly) BOOL isDark_bc;
+@end
+
 @interface JSTTextView ()
 
 @property (assign) NSRange currentlyHighlightedRange;
@@ -32,6 +36,7 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 
 @synthesize keywords=_keywords;
 @synthesize lastAutoInsert=_lastAutoInsert;
+@synthesize ignoredSymbols=_ignoredSymbols;
 
 
 - (id)initWithFrame:(NSRect)frameRect textContainer:(NSTextContainer *)container {
@@ -65,6 +70,38 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
     
 }
 
+- (NSDictionary<NSString*, NSColor*>*)colors {
+    // isDark_bc is declared in NSAppearance+Chocolat
+    BOOL isDarkMode = ((id<NSAppearanceChocolate>) [NSApplication sharedApplication].effectiveAppearance).isDark_bc;
+    if (isDarkMode) {
+        return @{
+                 @"keyword.control": [NSColor colorWithRed:0.81 green:0.43 blue:0.92 alpha:1],
+                 @"storage": [NSColor colorWithRed:0.81 green:0.43 blue:0.92 alpha:1],
+                 @"constant": [NSColor colorWithRed:0.98 green:0.78 blue:0.25 alpha:1.0],
+                 @"support.class": [NSColor colorWithRed:0.98 green:0.78 blue:0.25 alpha:1.0],
+                 @"support.function": [NSColor colorWithRed:0.40 green:0.83 blue:1.00 alpha:1.0],
+                 @"none": [NSColor colorWithRed:1 green:1 blue:1 alpha:0.85],
+                 @"string": [NSColor colorWithRed:0.57 green:0.87 blue:0.25 alpha:1.0],
+                 @"constant.numeric": [NSColor colorWithRed:0.98 green:0.78 blue:0.25 alpha:1.0],
+                 @"comment": [NSColor colorWithRed:1 green:1 blue:1 alpha:0.5],
+                 @"source.js keyword.operators": [NSColor colorWithRed:0.40 green:0.83 blue:1.00 alpha:1.0]
+                 };
+    }
+    
+    return @{
+             @"keyword.control": [NSColor colorWithRed:0.54 green:0.09 blue:0.66 alpha:1.0],
+             @"storage": [NSColor colorWithRed:0.54 green:0.09 blue:0.66 alpha:1.0],
+             @"constant": [NSColor colorWithRed:0.73 green:0.53 blue:0.00 alpha:1.0],
+             @"support.class": [NSColor colorWithRed:0.73 green:0.53 blue:0.00 alpha:1.0],
+             @"support.function": [NSColor colorWithRed:0.15 green:0.58 blue:0.75 alpha:1.0],
+             @"none": [NSColor colorWithRed:0 green:0 blue:0 alpha:0.85],
+             @"string": [NSColor colorWithRed:0.32 green:0.62 blue:0.00 alpha:1.0],
+             @"constant.numeric": [NSColor colorWithRed:0.73 green:0.53 blue:0.00 alpha:1.0],
+             @"comment": [NSColor colorWithRed:0 green:0 blue:0 alpha:0.5],
+             @"source.js keyword.operators": [NSColor colorWithRed:0.15 green:0.58 blue:0.75 alpha:1.0]
+             };
+}
+
 
 - (void)setupLineViewAndStuff {
     
@@ -76,33 +113,44 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
     
     [[self textStorage] setDelegate:self];
     
-    /*
-     var s = "break case catch continue default delete do else finally for function if in instanceof new return switch this throw try typeof var void while with abstract boolean byte char class const debugger double enum export extends final float goto implements import int interface long native package private protected public short static super synchronized throws transient volatile null true false nil id CGFloat NSInteger NSUInteger bool BOOL"
-     
-     words = s.split(" ")
-     var i = 0;
-     list = ""
-     while (i < words.length) {
-     list = list + '@"' + words[i] + '", ';
-     i++
-     }
-     
-     print("NSArray *blueWords = [NSArray arrayWithObjects:" + list + " nil];")
-     */
+    NSArray *controlKeywords = [NSArray arrayWithObjects:@"catch", @"finally", @"throw", @"try", @"break", @"continue", @"goto", @"do", @"while", @"return", @"case", @"default", @"switch", @"else", @"if", @"with", @"package", @"class", @"for", @"await", @"yield", @"async", nil];
     
-    NSArray *blueWords = [NSArray arrayWithObjects:@"break", @"case", @"catch", @"continue", @"default", @"delete", @"do", @"else", @"finally", @"for", @"function", @"if", @"in", @"instanceof", @"new", @"return", @"switch", @"this", @"throw", @"try", @"typeof", @"var", @"void", @"while", @"with", @"abstract", @"boolean", @"byte", @"char", @"class", @"const", @"debugger", @"double", @"enum", @"export", @"extends", @"final", @"float", @"goto", @"implements", @"import", @"int", @"interface", @"long", @"native", @"package", @"private", @"protected", @"public", @"short", @"static", @"super", @"synchronized", @"throws", @"transient", @"volatile", @"null", @"true", @"false", @"nil", @"id", @"CGFloat", @"NSInteger", @"NSUInteger", @"bool", @"BOOL", nil];
+    NSArray *jsKeywords = [NSArray arrayWithObjects:@"delete", @"in", @"of", @"instanceof", @"new", @"typeof", @"void", @"package", nil];
+    
+    NSArray *storageKeywords = [NSArray arrayWithObjects:@"var", @"let", @"const", @"function", nil];
+    
+    NSArray *constants = [NSArray arrayWithObjects:@"null", @"nil", @"undefined", @"this", @"NaN", @"Infinity", @"arguments", @"context", @"true", @"false", nil];
+    
+    NSArray *globalObjects = [NSArray arrayWithObjects:@"Array", @"Date", @"Map", @"Boolean", @"Number", @"Object", @"Proxy", @"Reflect", @"RegExp", @"Set", @"String", @"Symbol", @"WeakMap", @"WeakSet", @"EvalError", @"InternalError", @"RangeError", @"ReferenceError", @"SyntaxError", @"TypeError", @"URIError", @"Error", @"Math", @"console", @"JSON", @"Promise", nil];
+    
+    NSArray *globalFunctions = [NSArray arrayWithObjects:@"clearInterval", @"clearTimeout", @"decodeURI", @"decodeURIComponent", @"encodeURI", @"encodeURIComponent", @"escape", @"eval", @"isFinite", @"isNaN", @"parseFloat", @"parseInt", @"require", @"setInterval", @"setTimeout", @"super", @"unescape", @"uneval", nil];
 
-    
     NSMutableDictionary *keywords = [NSMutableDictionary dictionary];
     
-    for (NSString *word in blueWords) {
-        [keywords setObject:[NSColor blueColor] forKey:word];
+    for (NSString *word in controlKeywords) {
+        [keywords setObject:@"keyword.control" forKey:word];
+    }
+    for (NSString *word in jsKeywords) {
+        [keywords setObject:@"keyword.control" forKey:word];
+    }
+    for (NSString *word in storageKeywords) {
+        [keywords setObject:@"storage" forKey:word];
+    }
+    for (NSString *word in constants) {
+        [keywords setObject:@"constant" forKey:word];
+    }
+    for (NSString *word in globalObjects) {
+        [keywords setObject:@"support.class" forKey:word];
+    }
+    for (NSString *word in globalFunctions) {
+        [keywords setObject:@"support.function" forKey:word];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidChangeSelection:) name:NSTextViewDidChangeSelectionNotification object:self];
 
     
     self.keywords = keywords;
+    self.ignoredSymbols = [NSSet setWithArray:@[@"{", @"}", @"(", @")", @",", @";"]];
     
 	self.numberRanges = [NSMutableDictionary new];
     
@@ -128,25 +176,30 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
     [self.numberRanges removeAllObjects];
     NSUInteger sourceLoc = 0;
     
+    NSDictionary *colors = [self colors];
+    
     while ((tok = [tokenizer nextToken]) != eof) {
         
         NSUInteger strLen = [[tok stringValue] length];
         NSRange tokenRange = NSMakeRange(sourceLoc, strLen);
-        NSColor *fontColor = [NSColor blackColor];
+        NSColor *fontColor = colors[@"none"];
         
         if ([tok isQuotedString]) {
-            fontColor = [NSColor darkGrayColor];
+            fontColor = colors[@"string"];
         }
         else if ([tok isNumber]) {
-            fontColor = [NSColor blueColor];
+            fontColor = colors[@"constant.numeric"];
             [self setNumberString:[tok stringValue] forRange:tokenRange];
         }
         else if ([tok isComment]) {
-            fontColor = [NSColor redColor];
+            fontColor = colors[@"comment"];
         }
         else if ([tok isWord]) {
-            NSColor *c = [_keywords objectForKey:[tok stringValue]];
-            fontColor = c ? c : fontColor;
+            NSString *c = [_keywords objectForKey:[tok stringValue]];
+            fontColor = c && colors[c] ? colors[c] : fontColor;
+        }
+        else if ([tok isSymbol] && ![_ignoredSymbols containsObject:[tok stringValue]]) {
+            fontColor = colors[@"source.js keyword.operators"];
         }
         
         
