@@ -15,12 +15,8 @@
 
 static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 
-@protocol NSAppearanceChocolate
-@property (nonatomic, readonly) BOOL isDark_bc;
-@end
-
 @interface JSTTextView ()
-
+@property JSTTextViewTheme _theme;
 @property (assign) NSRange currentlyHighlightedRange;
 @property (assign) NSRange initialNumberRange;
 @property (assign) NSRange initialDragCommandRange;
@@ -67,12 +63,21 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
+}
+
+- (JSTTextViewTheme) theme {
+    return self._theme;
+}
+
+- (void) setTheme:(JSTTextViewTheme)newTheme {
+    if (self.theme != newTheme) {
+        self._theme = newTheme;
+        [self parseCode:self];
+    }
 }
 
 - (NSDictionary<NSString*, NSColor*>*)colors {
-    // isDark_bc is declared in NSAppearance+Chocolat
-    BOOL isDarkMode = ((id<NSAppearanceChocolate>) [NSApplication sharedApplication].effectiveAppearance).isDark_bc;
+    BOOL isDarkMode = self.theme == JSTTextViewThemeDark;
     if (isDarkMode) {
         return @{
                  @"keyword.control": [NSColor colorWithRed:0.81 green:0.43 blue:0.92 alpha:1],
