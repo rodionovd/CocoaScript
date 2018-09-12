@@ -41,10 +41,10 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 	self = [super initWithFrame:frameRect textContainer:container];
     
 	if (self != nil) {
-        [self performSelector:@selector(setupLineViewAndStuff) withObject:nil afterDelay:0];
+        [self initThemes];
+        [self setupLineViewAndStuff];
         [self setSmartInsertDeleteEnabled:NO];
         [self setAutomaticQuoteSubstitutionEnabled:NO];
-        [self initThemes];
     }
     
     return self;
@@ -54,11 +54,10 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
     
     self = [super initWithCoder:aDecoder];
 	if (self != nil) {
-        // what's the right way to do this?
-        [self performSelector:@selector(setupLineViewAndStuff) withObject:nil afterDelay:0];
+        [self initThemes];
+        [self setupLineViewAndStuff];
         [self setSmartInsertDeleteEnabled:NO];
         [self setAutomaticQuoteSubstitutionEnabled:NO];
-        [self initThemes];
     }
     
     return self;
@@ -253,7 +252,90 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 }
 
 - (void)insertTab:(id)sender {
-    [self insertText:@"    "];
+    NSRange selectedRange = self.selectedRange;
+    NSString* padding = @"  ";
+    if (selectedRange.location == NSNotFound) {
+        return [self insertText:padding];
+    }
+    
+    // if we have some selected lines, then indent them all
+    NSString *content = self.string;
+    
+    NSRange lineRange = [content lineRangeForRange:selectedRange];
+
+    NSString *toProcess = [content substringWithRange:lineRange];
+    NSArray *lines = [toProcess componentsSeparatedByString:@"\n"];
+    NSMutableArray *modLines = [NSMutableArray arrayWithCapacity:lines.count];
+    NSUInteger paddingLength = padding.length;
+    
+    __block NSUInteger totalShift = 0;
+    [lines enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+        NSString *line = obj;
+        if (line.length)
+            totalShift += paddingLength;
+        [modLines addObject:[padding stringByAppendingString:line]];
+    }];
+    if ([modLines.lastObject isEqualToString:padding])
+    {
+        [modLines removeLastObject];
+        [modLines addObject:@""];
+    }
+    NSString *processed = [modLines componentsJoinedByString:@"\n"];
+    [self insertText:processed replacementRange:lineRange];
+    
+    selectedRange.location += paddingLength;
+    selectedRange.length +=
+    (totalShift > paddingLength) ? totalShift - paddingLength : 0;
+    self.selectedRange = selectedRange;
+}
+
+- (void)insertBacktab:(id)sender {
+    NSString *content = self.string;
+    NSRange selectedRange = self.selectedRange;
+    NSRange lineRange = [content lineRangeForRange:selectedRange];
+    
+    // Get the lines to unindent.
+    NSString *toProcess = [content substringWithRange:lineRange];
+    NSArray *lines = [toProcess componentsSeparatedByString:@"\n"];
+    
+    // This will hold the modified lines.
+    NSMutableArray *modLines = [NSMutableArray arrayWithCapacity:lines.count];
+    
+    // Unindent the lines one by one, and put them in the new array.
+    __block NSUInteger firstShift = 0;      // Indentation of the first line.
+    __block NSUInteger totalShift = 0;      // Indents removed in total.
+    [lines enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+        NSString *line = obj;
+        NSUInteger lineLength = line.length;
+        NSUInteger shift = 0;
+        
+        for (shift = 0; shift < 2; shift++)
+        {
+            if (shift >= lineLength)
+                break;
+            unichar c = [line characterAtIndex:shift];
+            if (c == '\t')
+                shift++;
+            if (c != ' ')
+                break;
+        }
+        if (index == 0)
+            firstShift += shift;
+        totalShift += shift;
+        if (shift && shift < lineLength)
+            line = [line substringFromIndex:shift];
+        [modLines addObject:line];
+    }];
+    
+    // Join the processed lines, and replace the original with them.
+    NSString *processed = [modLines componentsJoinedByString:@"\n"];
+    [self insertText:processed replacementRange:lineRange];
+    
+    // Modify the selection range so that the same text (minus removed spaces)
+    // are selected.
+    selectedRange.location -= firstShift;
+    selectedRange.length -= totalShift - firstShift;
+    self.selectedRange = selectedRange;
 }
 
 - (void)autoInsertText:(NSString*)text {
