@@ -24,8 +24,7 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 @property (strong) NSNumber *initialNumber;
 @property (strong) NSMutableDictionary *numberRanges;
 @property (assign) BOOL parsingInResponseToEdit;
-@property (strong) NSDictionary *lightCodeHighlightingColors;
-@property (strong) NSDictionary *darkCodeHighlightingColors;
+@property (strong) NSDictionary *codeHighlightingColors;
 @end
 
 
@@ -64,29 +63,31 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 }
 
 - (void)initThemes {
-    self.darkCodeHighlightingColors = @{
-         @"keyword.control": [NSColor colorWithRed:0.81 green:0.43 blue:0.92 alpha:1],
-         @"storage": [NSColor colorWithRed:0.81 green:0.43 blue:0.92 alpha:1],
-         @"constant": [NSColor colorWithRed:0.98 green:0.78 blue:0.25 alpha:1.0],
-         @"support.class": [NSColor colorWithRed:0.98 green:0.78 blue:0.25 alpha:1.0],
-         @"support.function": [NSColor colorWithRed:0.40 green:0.83 blue:1.00 alpha:1.0],
-         @"none": [NSColor colorWithRed:1 green:1 blue:1 alpha:0.85],
-         @"string": [NSColor colorWithRed:0.57 green:0.87 blue:0.25 alpha:1.0],
-         @"constant.numeric": [NSColor colorWithRed:0.98 green:0.78 blue:0.25 alpha:1.0],
-         @"comment": [NSColor colorWithRed:1 green:1 blue:1 alpha:0.5],
-         @"source.js keyword.operators": [NSColor colorWithRed:0.40 green:0.83 blue:1.00 alpha:1.0]
-    };
-    self.lightCodeHighlightingColors = @{
-        @"keyword.control": [NSColor colorWithRed:0.54 green:0.09 blue:0.66 alpha:1.0],
-        @"storage": [NSColor colorWithRed:0.54 green:0.09 blue:0.66 alpha:1.0],
-        @"constant": [NSColor colorWithRed:0.73 green:0.53 blue:0.00 alpha:1.0],
-        @"support.class": [NSColor colorWithRed:0.73 green:0.53 blue:0.00 alpha:1.0],
-        @"support.function": [NSColor colorWithRed:0.15 green:0.58 blue:0.75 alpha:1.0],
-        @"none": [NSColor colorWithRed:0 green:0 blue:0 alpha:0.85],
-        @"string": [NSColor colorWithRed:0.32 green:0.62 blue:0.00 alpha:1.0],
-        @"constant.numeric": [NSColor colorWithRed:0.73 green:0.53 blue:0.00 alpha:1.0],
-        @"comment": [NSColor colorWithRed:0 green:0 blue:0 alpha:0.5],
-        @"source.js keyword.operators": [NSColor colorWithRed:0.15 green:0.58 blue:0.75 alpha:1.0]
+    self.codeHighlightingColors = @{
+         @(JSTTextViewThemeDark): @{
+             @"keyword.control": [NSColor colorWithRed:0.81 green:0.43 blue:0.92 alpha:1],
+             @"storage": [NSColor colorWithRed:0.81 green:0.43 blue:0.92 alpha:1],
+             @"constant": [NSColor colorWithRed:0.98 green:0.78 blue:0.25 alpha:1.0],
+             @"support.class": [NSColor colorWithRed:0.98 green:0.78 blue:0.25 alpha:1.0],
+             @"support.function": [NSColor colorWithRed:0.40 green:0.83 blue:1.00 alpha:1.0],
+             @"none": [NSColor colorWithRed:1 green:1 blue:1 alpha:0.85],
+             @"string": [NSColor colorWithRed:0.57 green:0.87 blue:0.25 alpha:1.0],
+             @"constant.numeric": [NSColor colorWithRed:0.98 green:0.78 blue:0.25 alpha:1.0],
+             @"comment": [NSColor colorWithRed:1 green:1 blue:1 alpha:0.5],
+             @"source.js keyword.operators": [NSColor colorWithRed:0.40 green:0.83 blue:1.00 alpha:1.0]
+        },
+        @(JSTTextViewThemeLight): @{
+             @"keyword.control": [NSColor colorWithRed:0.54 green:0.09 blue:0.66 alpha:1.0],
+             @"storage": [NSColor colorWithRed:0.54 green:0.09 blue:0.66 alpha:1.0],
+             @"constant": [NSColor colorWithRed:0.73 green:0.53 blue:0.00 alpha:1.0],
+             @"support.class": [NSColor colorWithRed:0.73 green:0.53 blue:0.00 alpha:1.0],
+             @"support.function": [NSColor colorWithRed:0.15 green:0.58 blue:0.75 alpha:1.0],
+             @"none": [NSColor colorWithRed:0 green:0 blue:0 alpha:0.85],
+             @"string": [NSColor colorWithRed:0.32 green:0.62 blue:0.00 alpha:1.0],
+             @"constant.numeric": [NSColor colorWithRed:0.73 green:0.53 blue:0.00 alpha:1.0],
+             @"comment": [NSColor colorWithRed:0 green:0 blue:0 alpha:0.5],
+             @"source.js keyword.operators": [NSColor colorWithRed:0.15 green:0.58 blue:0.75 alpha:1.0]
+        }
     };
 }
 
@@ -95,6 +96,9 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 }
 
 - (JSTTextViewTheme) theme {
+    if (!self._theme) {
+        return JSTTextViewThemeDefault;
+    }
     return self._theme;
 }
 
@@ -103,15 +107,6 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
         self._theme = newTheme;
         [self parseCode:self];
     }
-}
-
-- (NSDictionary<NSString*, NSColor*>*)colors {
-    BOOL isDarkMode = self.theme == JSTTextViewThemeDark;
-    if (isDarkMode) {
-        return self.darkCodeHighlightingColors;
-    }
-    
-    return self.lightCodeHighlightingColors;
 }
 
 
@@ -188,7 +183,7 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
     [self.numberRanges removeAllObjects];
     NSUInteger sourceLoc = 0;
     
-    NSDictionary *colors = [self colors];
+    NSDictionary *colors = self.codeHighlightingColors[@(self.theme)];
     
     while ((tok = [tokenizer nextToken]) != eof) {
         
