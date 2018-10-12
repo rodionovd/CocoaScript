@@ -123,7 +123,7 @@ JSValueRef _MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t a
         NSUInteger argIndex = i + 2;
         const char * argType = [methodSignature getArgumentTypeAtIndex:argIndex];
         
-        debug(@"argIndex: %ld", argIndex);
+//        debug(@"argIndex: %ld", argIndex);
         
         // MOBox
         if ([object isKindOfClass:[MOBox class]]) {
@@ -296,7 +296,7 @@ JSValueRef _MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount
     
     // FIXME: Check to see if function is nil or not."
     
-    debug(@"function: %@", function);
+//    debug(@"function: %@", function);
     
     // Determine the metadata for the function call
     if ([function isKindOfClass:[MOMethod class]]) {

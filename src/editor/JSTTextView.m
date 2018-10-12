@@ -448,7 +448,7 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 
 - (BOOL)xrespondsToSelector:(SEL)aSelector {
     
-    debug(@"%@: %@?", [self class], NSStringFromSelector(aSelector));
+//    debug(@"%@: %@?", [self class], NSStringFromSelector(aSelector));
     
     return [super respondsToSelector:aSelector];
     

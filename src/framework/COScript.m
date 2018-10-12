@@ -98,7 +98,7 @@ void COScriptDebug(NSString* format, ...) {
 }
 
 - (void)dealloc {
-    debug(@"%s:%d", __FUNCTION__, __LINE__);
+//    debug(@"%s:%d", __FUNCTION__, __LINE__);
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -124,11 +124,11 @@ void COScriptDebug(NSString* format, ...) {
 
 - (void)garbageCollect {
     
-    NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
+//    NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
     
     [_mochaRuntime garbageCollect];
     
-    debug(@"gc took %f seconds", [NSDate timeIntervalSinceReferenceDate] - start); (void)start;
+//    debug(@"gc took %f seconds", [NSDate timeIntervalSinceReferenceDate] - start); (void)start;
 }
 
 - (BOOL)shouldKeepRunning {
@@ -539,7 +539,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         
         assert([private representedObject] == o);
         
-        debug(@"COS unprotecting %@", o);
+//        debug(@"COS unprotecting %@", o);
         JSValueUnprotect([_mochaRuntime context], value);
     }
 }
@@ -552,7 +552,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     if (value) {
         JSObjectRef jsObject = JSValueToObject([_mochaRuntime context], value, NULL);
         
-        debug(@"COS protecting %@ / v: %p o: %p", o, value, jsObject);
+//        debug(@"COS protecting %@ / v: %p o: %p", o, value, jsObject);
         
         id private = (__bridge id)JSObjectGetPrivate(jsObject);
         
@@ -635,7 +635,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         conn = [NSConnection connectionWithRegisteredName:port host:nil];
         tries++;
         if (!conn) {
-            debug(@"Sleeping, waiting for %@ to open", port);
+//            debug(@"Sleeping, waiting for %@ to open", port);
             sleep(1);
         }
     }
