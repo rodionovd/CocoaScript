@@ -22,7 +22,7 @@
  * 
  * @param jsObject The JavaScript object reference
  * 
- * @param context The JavaScript context reference
+ * @param ctx The JavaScript context reference
  * 
  * @result An MOJavaScriptObject object
  */
