@@ -24,6 +24,7 @@
 		22FBD9951C47EA55004CF31E /* MOBoxManagerBoxContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 22FBD9931C47EA55004CF31E /* MOBoxManagerBoxContext.h */; };
 		22FBD9961C47EA55004CF31E /* MOBoxManagerBoxContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 22FBD9941C47EA55004CF31E /* MOBoxManagerBoxContext.m */; };
 		22FBD9971C47EA55004CF31E /* MOBoxManagerBoxContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 22FBD9941C47EA55004CF31E /* MOBoxManagerBoxContext.m */; };
+		27E6E3D9217B49A4004BD850 /* CocoaScript.h in Headers */ = {isa = PBXBuildFile; fileRef = 27E6E3D6217B4934004BD850 /* CocoaScript.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		384830E21832D48500B34168 /* COSTarget.h in Headers */ = {isa = PBXBuildFile; fileRef = 384830E01832D48500B34168 /* COSTarget.h */; };
 		384830E31832D48500B34168 /* COSTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 384830E11832D48500B34168 /* COSTarget.m */; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
@@ -427,6 +428,7 @@
 		22E281E41A8BB99D006650D2 /* test.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = test.js; sourceTree = "<group>"; };
 		22FBD9931C47EA55004CF31E /* MOBoxManagerBoxContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOBoxManagerBoxContext.h; path = src/framework/mocha/Objects/MOBoxManagerBoxContext.h; sourceTree = SOURCE_ROOT; };
 		22FBD9941C47EA55004CF31E /* MOBoxManagerBoxContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MOBoxManagerBoxContext.m; path = src/framework/mocha/Objects/MOBoxManagerBoxContext.m; sourceTree = SOURCE_ROOT; };
+		27E6E3D6217B4934004BD850 /* CocoaScript.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CocoaScript.h; path = src/framework/CocoaScript.h; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		384830E01832D48500B34168 /* COSTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSTarget.h; path = src/framework/COSTarget.h; sourceTree = "<group>"; };
@@ -868,6 +870,7 @@
 		CC0EC3380F2274730094F69D /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				27E6E3D6217B4934004BD850 /* CocoaScript.h */,
 				CC07AF491982C2FB001CCA93 /* Markdown */,
 				CCD38338195A454F00C436B9 /* fmdb */,
 				CCF056151849A20A000C56F7 /* Spelunking */,
@@ -1263,6 +1266,7 @@
 				CC66D8A6181A2B0A0039A0A5 /* MOInstanceVariableDescription.h in Headers */,
 				CC66D84C181A2AB10039A0A5 /* MOBridgeSupportParser.h in Headers */,
 				CC66D848181A2AB10039A0A5 /* MOBridgeSupportController.h in Headers */,
+				27E6E3D9217B49A4004BD850 /* CocoaScript.h in Headers */,
 				CC66D756181A2A210039A0A5 /* NoodleLineNumberMarker.h in Headers */,
 				CC66D810181A2A470039A0A5 /* TDWord.h in Headers */,
 				CC66D754181A2A210039A0A5 /* MarkerLineNumberView.h in Headers */,
