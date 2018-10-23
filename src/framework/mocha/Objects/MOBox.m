@@ -32,21 +32,21 @@ static NSUInteger initCount = 0;
 #endif
         _JSObject = jsObject;
         JSObjectSetPrivate(jsObject, (__bridge void*)self);
-        debug(@"set private for %p to %p (%@)", jsObject, self, [_representedObject className]);
+//        debug(@"set private for %p to %p (%@)", jsObject, self, [_representedObject className]);
     }
     
     return self;
 }
 
 - (void)disassociateObject {
-#if MOCHA_DEBUG_CRASHES
-    debug(@"dissassociated %p %ld", self, _count);
-#else
-    debug(@"dissassociated %p", self);
-#endif
+//#if MOCHA_DEBUG_CRASHES
+//    debug(@"dissassociated %p %ld", self, _count);
+//#else
+//    debug(@"dissassociated %p", self);
+//#endif
     if (_JSObject) {
         JSObjectSetPrivate(_JSObject, nil);
-        debug(@"cleared private for %p", _JSObject);
+//        debug(@"cleared private for %p", _JSObject);
         _JSObject = nil;
     }
 
@@ -66,17 +66,17 @@ static NSUInteger initCount = 0;
 }
 
 - (void)dealloc {
-#if MOCHA_DEBUG_CRASHES
-    debug(@"dealloced %p %ld", self, _count);
-#else
-    debug(@"dealloced %p", self);
-#endif
+//#if MOCHA_DEBUG_CRASHES
+//    debug(@"dealloced %p %ld", self, _count);
+//#else
+//    debug(@"dealloced %p", self);
+//#endif
     if (_manager || _JSObject) {
-#if MOCHA_DEBUG_CRASHES
-        debug(@"box should have been disassociated for %@", _representedObjectCanaryDesc);
-#else
-        debug(@"box should have been disassociated for %@", _representedObject);
-#endif
+//#if MOCHA_DEBUG_CRASHES
+//        debug(@"box should have been disassociated for %@", _representedObjectCanaryDesc);
+//#else
+//        debug(@"box should have been disassociated for %@", _representedObject);
+//#endif
         [self disassociateObject];
     }
 }

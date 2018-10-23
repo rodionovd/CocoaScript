@@ -22,7 +22,7 @@
 
 - (void)dealloc {
     if (_JSObject != NULL) {
-        debug(@"%s:%d Unprotecting %p %p", __FUNCTION__, __LINE__, _JSObject, _JSContext);
+//        debug(@"%s:%d Unprotecting %p %p", __FUNCTION__, __LINE__, _JSObject, _JSContext);
         JSValueUnprotect(_JSContext, _JSObject);
     }
     
@@ -38,14 +38,14 @@
 
 - (void)setJSObject:(JSObjectRef)JSObject JSContext:(JSContextRef)JSContext {
     if (_JSObject != NULL) {
-        debug(@"%s:%d Unprotecting %p (s)", __FUNCTION__, __LINE__, _JSObject);
+//        debug(@"%s:%d Unprotecting %p (s)", __FUNCTION__, __LINE__, _JSObject);
         JSValueUnprotect(_JSContext, _JSObject);
     }
     
     _JSObject = JSObject;
     _JSContext = JSGlobalContextRetain((JSGlobalContextRef)JSContext);
     if (_JSObject != NULL) {
-        debug(@"%s:%d Protecting %p %p (s)", __FUNCTION__, __LINE__, _JSObject, _JSContext);
+//        debug(@"%s:%d Protecting %p %p (s)", __FUNCTION__, __LINE__, _JSObject, _JSContext);
         JSValueProtect(_JSContext, _JSObject);
     }
 }
