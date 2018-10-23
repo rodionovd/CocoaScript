@@ -34,7 +34,7 @@
 }
 
 - (void)dealloc {
-    debug(@"dealloced manager");
+//    debug(@"dealloced manager");
 }
 
 - (void)cleanup {
@@ -42,12 +42,13 @@
 
     // break any retain cycles between the boxed objects and the things that they are boxing
     for (MOBox* box in [_index objectEnumerator]) {
-        debug(@"cleaned %p %ld", box, box.count);
+//        debug(@"cleaned %p %ld", box, box.count);
         [box disassociateObject];
     }
 
     // throw away the index, which will release any boxes still in it, which in turn should release the objects they were boxing
     [_index removeAllObjects];
+    
     _index = nil;
 
     // throw the context away, which should clean up any remaining JS objects
@@ -57,7 +58,7 @@
 }
 
 - (MOBox*)boxForObject:(id)object {
-    debug(@"added box for %p %@", object, [object className]);
+//    debug(@"added box for %p %@", object, [object className]);
     NSAssert([NSThread isMainThread], @"should be main thread");
     NSAssert(![object isKindOfClass:[MOBox class]], @"shouldn't box a box");
     MOBox* box = [_index objectForKey:object];
@@ -82,7 +83,7 @@
 }
 
 - (void)removeBoxForObject:(id)object {
-    debug(@"removing box for %p %@", object, object);
+//    debug(@"removing box for %p %@", object, object);
     NSAssert([NSThread isMainThread], @"should be main thread");
     MOBox* box = [_index objectForKey:object];
     if (box) {

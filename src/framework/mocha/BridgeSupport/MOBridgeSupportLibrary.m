@@ -68,7 +68,7 @@
 
 - (void)setSymbol:(MOBridgeSupportSymbol *)symbol forName:(NSString *)name {
     if ([_symbols objectForKey:name]) {
-        NSLog(@"Duplicate declaration for %@", name);
+        NSLog(@"[CocoaScript] Duplicate declaration for %@", name);
     } else {
         [_symbols setObject:symbol forKey:name];
     }
