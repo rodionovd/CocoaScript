@@ -20,6 +20,10 @@
 - (void)output:(NSString*)format args:(va_list)args;
 @end
 
+@protocol COFlowDelegate
+- (void)didClearEventStack:(COScript*)coscript;
+@end
+
 @interface COScript : NSObject {
     
     Mocha *_mochaRuntime;
@@ -64,6 +68,9 @@
 + (COScript*)currentCOScript;
 
 + (id)setDebugController:(id<CODebugController>)debugController;
++ (id)setFlowDelegate:(id<COFlowDelegate>)flowDelegate;
+
+- (void)fiberWasCleared;
 
 @end
 

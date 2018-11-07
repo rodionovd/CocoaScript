@@ -41,6 +41,8 @@
     }
     
     [_activeFibers removeObject:fiber];
+    
+    [self fiberWasCleared];
 }
 
 - (COSFiber *)createFiber {

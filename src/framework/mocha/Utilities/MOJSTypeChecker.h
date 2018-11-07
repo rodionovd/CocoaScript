@@ -5,4 +5,3 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 
 bool MOJSValueIsError(JSContextRef ctx, JSValueRef value);
-bool MOJSValueIsArray(JSContextRef ctx, JSValueRef value);

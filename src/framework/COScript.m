@@ -28,6 +28,7 @@ static NSMutableArray *JSTalkPluginList;
 static NSMutableDictionary* coreModuleScriptCache; // we are keeping the core modules' script in memory as they are required very often
 
 static id<CODebugController> CODebugController = nil;
+static id<COFlowDelegate> COFlowDelegate = nil;
 
 @interface Mocha (Private)
 - (JSValueRef)setObject:(id)object withName:(NSString *)name;
@@ -58,6 +59,12 @@ void COScriptDebug(NSString* format, ...) {
     id oldController = CODebugController;
     CODebugController = debugController;
     return oldController;
+}
+
++ (id)setFlowDelegate:(id<COFlowDelegate>)flowDelegate {
+    id oldDelegate = COFlowDelegate;
+    COFlowDelegate = flowDelegate;
+    return oldDelegate;
 }
 
 + (void)listen {
@@ -120,6 +127,14 @@ void COScriptDebug(NSString* format, ...) {
     // clean up mocha
     [_mochaRuntime shutdown];
     _mochaRuntime = nil;
+}
+
+- (void)fiberWasCleared {
+    if (COFlowDelegate != nil) {
+        if (![self shouldKeepRunning]) {
+            [COFlowDelegate didClearEventStack:self];
+        }
+    }
 }
 
 - (void)garbageCollect {
@@ -508,8 +523,6 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 
 - (id)callJSFunction:(JSObjectRef)jsFunction withArgumentsInArray:(NSArray *)arguments {
     [self pushAsCurrentCOScript];
-    
-    //[self garbageCollect];
     
     JSValueRef r = nil;
     @try {
