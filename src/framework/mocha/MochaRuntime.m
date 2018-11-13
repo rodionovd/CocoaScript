@@ -327,7 +327,7 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
                 return [Mocha exceptionWithJSException:jsObject context:ctx];
             }
             
-            BOOL isArray = MOJSValueIsArray(ctx, jsObject);
+            BOOL isArray = JSValueIsArray(ctx, jsObject);
             if (isArray) {
                 // Array
                 return [self arrayForJSArray:jsObject inContext:ctx];
@@ -1021,7 +1021,6 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     Mocha *runtime = [Mocha runtimeWithContext:ctx];
 
     assert([runtime isKindOfClass:[Mocha class]]);
-
 
     //
     // Exported objects

@@ -28,10 +28,9 @@
         [_coscript callJSFunction:[_cleanUpJSfunc JSObject] withArgumentsInArray:@[]];
     }
     
-    [_coscript removeFiber:self];
-    
     _cleanUpJSfunc = nil;
-    _coscript = nil;
+    
+    [_coscript removeFiber:self];
 }
 
 @end
