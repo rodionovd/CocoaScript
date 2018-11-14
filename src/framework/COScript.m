@@ -123,6 +123,14 @@ void COScriptDebug(NSString* format, ...) {
     if ([self.coreModuleMap objectForKey:@"console"]) {
         [self deleteObjectWithName:@"console"];
     }
+    if ([self.coreModuleMap objectForKey:@"timers"]) {
+        [self deleteObjectWithName:@"setTimeout"];
+        [self deleteObjectWithName:@"clearTimeout"];
+        [self deleteObjectWithName:@"setInterval"];
+        [self deleteObjectWithName:@"clearInterval"];
+        [self deleteObjectWithName:@"setImmediate"];
+        [self deleteObjectWithName:@"clearImmediate"];
+    }
     
     // clean up mocha
     [_mochaRuntime shutdown];
@@ -177,6 +185,16 @@ void COScriptDebug(NSString* format, ...) {
     // if there is a console module, use it to polyfill the console global
     if ([self.coreModuleMap objectForKey:@"console"]) {
         [self pushObject:[self executeString:@"(function() { var Console = require('console'); var console = Console(); var keys = Object.keys(console); var dict = NSMutableDictionary.dictionaryWithCapacity(keys.length); keys.forEach(function(k) {dict[k] = console[k]}); return dict; })()"] withName:@"console"];
+    }
+    
+    // if there is a timers module, use it to polyfill the setTimeout globals
+    if ([self.coreModuleMap objectForKey:@"timers"]) {
+        [self pushObject:[self executeString:@"(function() { return require('timers').setTimeout; })()"] withName:@"setTimeout"];
+        [self pushObject:[self executeString:@"(function() { return require('timers').clearTimeout; })()"] withName:@"clearTimeout"];
+        [self pushObject:[self executeString:@"(function() { return require('timers').setInterval; })()"] withName:@"setInterval"];
+        [self pushObject:[self executeString:@"(function() { return require('timers').clearInterval; })()"] withName:@"clearInterval"];
+        [self pushObject:[self executeString:@"(function() { return require('timers').setImmediate; })()"] withName:@"setImmediate"];
+        [self pushObject:[self executeString:@"(function() { return require('timers').clearImmediate; })()"] withName:@"clearImmediate"];
     }
 }
 
