@@ -13,7 +13,6 @@
 		031EFEFA1FD590C0000B5798 /* COScript+Fiber.m in Sources */ = {isa = PBXBuildFile; fileRef = 031EFEF21FD57DC6000B5798 /* COScript+Fiber.m */; };
 		0334150220B5E3550052CD7C /* MOJSBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 033414FF20B5D4220052CD7C /* MOJSBlock.h */; };
 		0334150320B5E3640052CD7C /* MOJSBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0334150020B5D4220052CD7C /* MOJSBlock.m */; };
-		03F86D8D20F8F10D009AEB24 /* MOJSTypeChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F86D8C20F8F10D009AEB24 /* MOJSTypeChecker.m */; };
 		03F86D8E20F8F1BF009AEB24 /* MOJSTypeChecker.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F86D8B20F8F10D009AEB24 /* MOJSTypeChecker.h */; };
 		03F86D8F20F8F1F9009AEB24 /* MOJSTypeChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F86D8C20F8F10D009AEB24 /* MOJSTypeChecker.m */; };
 		220D93E71C92E69C001EF05C /* JSTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D8CD181A2E2F0039A0A5 /* JSTTextView.m */; };
@@ -234,7 +233,7 @@
 		CC66D8BB181A2B0A0039A0A5 /* MOProtocolDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D897181A2B0A0039A0A5 /* MOProtocolDescription.m */; };
 		CC66D8BC181A2B0A0039A0A5 /* MOStruct.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D898181A2B0A0039A0A5 /* MOStruct.h */; };
 		CC66D8BD181A2B0A0039A0A5 /* MOStruct.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D899181A2B0A0039A0A5 /* MOStruct.m */; };
-		CC66D8BE181A2B0A0039A0A5 /* MOUndefined.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D89A181A2B0A0039A0A5 /* MOUndefined.h */; };
+		CC66D8BE181A2B0A0039A0A5 /* MOUndefined.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D89A181A2B0A0039A0A5 /* MOUndefined.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC66D8BF181A2B0A0039A0A5 /* MOUndefined.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D89B181A2B0A0039A0A5 /* MOUndefined.m */; };
 		CC66D8CF181A2E2F0039A0A5 /* JSTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D8C1181A2E2F0039A0A5 /* JSTAppDelegate.m */; };
 		CC66D8D0181A2E2F0039A0A5 /* JSTDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D8C3181A2E2F0039A0A5 /* JSTDocument.m */; };
@@ -1243,6 +1242,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC66D8BE181A2B0A0039A0A5 /* MOUndefined.h in Headers */,
 				CC66D81E181A2A710039A0A5 /* COScript.h in Headers */,
 				CC66D89C181A2B0A0039A0A5 /* MOAllocator.h in Headers */,
 				CC66D8A8181A2B0A0039A0A5 /* MOJavaScriptObject.h in Headers */,
@@ -1320,7 +1320,6 @@
 				CC66D8B7181A2B0A0039A0A5 /* MOPropertyDescription.h in Headers */,
 				CCD38356195A458D00C436B9 /* COSR.h in Headers */,
 				CC66D75A181A2A210039A0A5 /* TETextUtils.h in Headers */,
-				CC66D8BE181A2B0A0039A0A5 /* MOUndefined.h in Headers */,
 				CC66D7C9181A2A470039A0A5 /* TDCommentState.h in Headers */,
 				CC66D7CD181A2A470039A0A5 /* TDEmpty.h in Headers */,
 				CC66D8A3181A2B0A0039A0A5 /* MOClosure.h in Headers */,
@@ -1528,7 +1527,6 @@
 				CC66D8D0181A2E2F0039A0A5 /* JSTDocument.m in Sources */,
 				CC66D8CF181A2E2F0039A0A5 /* JSTAppDelegate.m in Sources */,
 				CC66D8D1181A2E2F0039A0A5 /* JSTDocumentController.m in Sources */,
-				03F86D8D20F8F10D009AEB24 /* MOJSTypeChecker.m in Sources */,
 				CC66D8D5181A2E2F0039A0A5 /* JSTTextView.m in Sources */,
 				CC66D8D2181A2E2F0039A0A5 /* JSTFileWatcher.m in Sources */,
 				CC66D8D6181A2E2F0039A0A5 /* main.m in Sources */,
