@@ -910,9 +910,11 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
                 // for some reason, in some case, the string can be nil. Sight.
                 // https://sketchplugins.com/d/1175-cfarray-to-nsarray/9
                 // Better throw an Error than crash Sketch
+                CFRelease(name);
                 return NO;
             }
             JSStringRef  jsName = JSStringCreateWithCFString(name);
+            CFRelease(name);
             *value = JSValueMakeString(ctx, jsName);
             JSStringRelease(jsName);
             
