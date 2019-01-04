@@ -1640,6 +1640,7 @@ static JSObjectRef MOConstructor_callAsConstructor(JSContextRef ctx, JSObjectRef
 static JSValueRef MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functionJS, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception) {
     id function = objectForJSObject(functionJS);
     JSValueRef value = NULL;
+    JSValueRef error = NULL;
 
     //    if ([function isKindOfClass:[MOMethod class]]) {
 //
@@ -1656,15 +1657,24 @@ static JSValueRef MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functi
 
     // Perform the invocation
     @try {
-        value = MOFunctionInvoke(function, ctx, argumentCount, arguments, exception);
+        value = MOFunctionInvoke(function, ctx, argumentCount, arguments, &error);
     }
     @catch (NSException *e) {
         debug(@"caught exception whilst invoking function %@: %@", function, e);
-
-        // Catch ObjC exceptions and propogate them up as JS exceptions
-        if (exception != nil) {
-            *exception = [[Mocha runtimeWithContext:ctx] JSValueForObject:e];
-        }
+        
+        error = [[Mocha runtimeWithContext:ctx] JSValueForObject:e];
+    }
+    
+    // Catch ObjC exceptions and propogate them up as JS exceptions
+    if (error != NULL) {
+        JSStringRef errorMessage = JSStringCreateWithUTF8CString("An Obj-C exception occured.");
+        JSValueRef argument = JSValueMakeString(ctx, errorMessage);
+        *exception = JSObjectMakeError(ctx, 1, &argument, NULL);
+        JSStringRelease(errorMessage);
+        
+        JSStringRef propertyName = JSStringCreateWithUTF8CString("nativeException");
+        JSObjectSetProperty(ctx, (JSObjectRef)*exception, propertyName, error, kJSPropertyAttributeNone, NULL);
+        JSStringRelease(propertyName);
     }
 
     return value;
