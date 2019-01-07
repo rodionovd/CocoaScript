@@ -912,7 +912,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
                 // Better throw an Error than crash Sketch
                 return NO;
             }
-            JSStringRef  jsName = JSStringCreateWithCFString(name);
+            JSStringRef jsName = JSStringCreateWithCFString(name);
             CFRelease(name);
             *value = JSValueMakeString(ctx, jsName);
             JSStringRelease(jsName);

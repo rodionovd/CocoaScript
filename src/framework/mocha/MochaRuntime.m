@@ -1667,7 +1667,7 @@ static JSValueRef MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functi
     
     // Catch ObjC exceptions and propogate them up as JS exceptions
     if (error != NULL) {
-        JSStringRef errorMessage = JSStringCreateWithUTF8CString("An Obj-C exception occured.");
+        JSStringRef errorMessage = JSStringCreateWithUTF8CString("An Obj-C exception occurred.");
         JSValueRef argument = JSValueMakeString(ctx, errorMessage);
         *exception = JSObjectMakeError(ctx, 1, &argument, NULL);
         JSStringRelease(errorMessage);
