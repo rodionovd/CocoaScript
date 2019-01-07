@@ -905,9 +905,15 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
                 return YES;
             }
             
-            // Convert to NSString and then to JavaScript string
-            NSString *name = [NSString stringWithUTF8String:charPtr];
-            JSStringRef    jsName = JSStringCreateWithCFString((__bridge CFStringRef)name);
+            CFStringRef name = CFStringCreateWithCString(NULL, charPtr, kCFStringEncodingUTF8);
+            if (name == NULL) {
+                // for some reason, in some case, the string can be nil. Sigh.
+                // https://sketchplugins.com/d/1175-cfarray-to-nsarray/9
+                // Better throw an Error than crash Sketch
+                return NO;
+            }
+            JSStringRef jsName = JSStringCreateWithCFString(name);
+            CFRelease(name);
             *value = JSValueMakeString(ctx, jsName);
             JSStringRelease(jsName);
             
