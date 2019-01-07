@@ -907,7 +907,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
             
             CFStringRef name = CFStringCreateWithCString(NULL, charPtr, kCFStringEncodingUTF8);
             if (name == NULL) {
-                // for some reason, in some case, the string can be nil. Sight.
+                // for some reason, in some case, the string can be nil. Sigh.
                 // https://sketchplugins.com/d/1175-cfarray-to-nsarray/9
                 // Better throw an Error than crash Sketch
                 return NO;
