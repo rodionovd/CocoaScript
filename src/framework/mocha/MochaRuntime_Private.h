@@ -34,7 +34,7 @@
 - (id)objectForJSValue:(JSValueRef)value unboxObjects:(BOOL)unboxObjects;
 
 // JSObject <-> id
-- (JSObjectRef)boxedJSObjectForObject:(id)object;
+- (JSObjectRef)boxedJSObjectForObject:(id)object shouldCreateBox:(BOOL)shouldCreateBox;
 - (id)unboxedObjectForJSObject:(JSObjectRef)jsObject;
 
 // Object storage
