@@ -41,7 +41,7 @@
 - (void)dealloc {
     for (NSString *name in _memberNames) {
         id memberValue = [_memberValues objectForKey:name];
-        JSValueRef memberJS = [_runtime JSValueForObject:memberValue];
+        JSValueRef memberJS = [_runtime JSValueForObject:memberValue shouldCreateBox:NO];
         if (memberJS) {
             JSValueUnprotect(_runtime.context, memberJS);
         }

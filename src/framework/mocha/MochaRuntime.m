@@ -418,8 +418,12 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 }
 
 - (JSValueRef)JSValueForObject:(id)object {
-    JSValueRef value = NULL;
+    return [self JSValueForObject:object shouldCreateBox:YES];
+}
 
+- (JSValueRef)JSValueForObject:(id)object shouldCreateBox:(BOOL)shouldCreateBox {
+    JSValueRef value = NULL;
+    
     if ([object isKindOfClass:[MOBox class]]) {
         value = [object JSObject];
     }
@@ -427,18 +431,18 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
         return [object JSObject];
     }
     /*else if ([object isKindOfClass:[NSString class]]) {
-        JSStringRef string = JSStringCreateWithCFString((CFStringRef)object);
-        value = JSValueMakeString(_ctx, string);
-        JSStringRelease(string);
-    }
-    else if ([object isKindOfClass:[NSNumber class]]) {
-        double doubleValue = [object doubleValue];
-        value = JSValueMakeNumber(_ctx, doubleValue);
-    }*/
+     JSStringRef string = JSStringCreateWithCFString((CFStringRef)object);
+     value = JSValueMakeString(_ctx, string);
+     JSStringRelease(string);
+     }
+     else if ([object isKindOfClass:[NSNumber class]]) {
+     double doubleValue = [object doubleValue];
+     value = JSValueMakeNumber(_ctx, doubleValue);
+     }*/
     else if ([object isKindOfClass:NSClassFromString(@"NSBlock")]) {
         // Auto-box blocks inside of a closure object
         MOClosure *closure = [MOClosure closureWithBlock:object];
-        value = [self boxedJSObjectForObject:closure];
+        value = [self boxedJSObjectForObject:closure shouldCreateBox:shouldCreateBox];
     }
     else if (object == nil/* || [object isKindOfClass:[NSNull class]]*/) {
         value = JSValueMakeNull(_ctx);
@@ -446,11 +450,11 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
     else if (object == [MOUndefined undefined]) {
         value = JSValueMakeUndefined(_ctx);
     }
-
+    
     if (value == NULL) {
-        value = [self boxedJSObjectForObject:object];
+        value = [self boxedJSObjectForObject:object shouldCreateBox:shouldCreateBox];
     }
-
+    
     return value;
 }
 
@@ -462,7 +466,7 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
     return [Mocha objectForJSValue:value inContext:_ctx unboxObjects:unboxObjects];
 }
 
-- (JSObjectRef)boxedJSObjectForObject:(id)object {
+- (JSObjectRef)boxedJSObjectForObject:(id)object shouldCreateBox:(BOOL)shouldCreateBox {
     if (object == nil) {
         return NULL;
     }
@@ -471,7 +475,7 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
     MOBox* box = [_boxManager boxForObject:object];
     if (box != nil) {
         jsObject = [box JSObject];
-    } else {
+    } else if (shouldCreateBox) {
         JSClassRef jsClass;
         if ([object isKindOfClass:[MOMethod class]]
             || [object isKindOfClass:[MOClosure class]]

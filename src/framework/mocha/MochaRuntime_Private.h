@@ -28,6 +28,7 @@
 + (NSDictionary *)dictionaryForJSHash:(JSObjectRef)hashValue inContext:(JSContextRef)ctx;
 
 - (JSValueRef)JSValueForObject:(id)object;
+- (JSValueRef)JSValueForObject:(id)object shouldCreateBox:(BOOL)shouldCreateBox;
 
 - (id)objectForJSValue:(JSValueRef)value;
 - (id)objectForJSValue:(JSValueRef)value unboxObjects:(BOOL)unboxObjects;

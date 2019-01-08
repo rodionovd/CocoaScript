@@ -347,6 +347,7 @@
 - (void)shutdown;
 
 - (JSValueRef)JSValueForObject:(id)object;
+- (JSValueRef)JSValueForObject:(id)object shouldCreateBox:(BOOL)shouldCreateBox;
 
 @end
 
