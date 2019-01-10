@@ -347,6 +347,8 @@
 - (void)shutdown;
 
 - (JSValueRef)JSValueForObject:(id)object;
+// we probably always want to create a box for the object if it doesn't
+// exist yet but in some cases (like when deallocating) we don't
 - (JSValueRef)JSValueForObject:(id)object shouldCreateBox:(BOOL)shouldCreateBox;
 
 @end
