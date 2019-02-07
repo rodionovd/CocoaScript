@@ -113,14 +113,18 @@ static JSValueRef jsInvoke(MOJavaScriptObject* function, NSMethodSignature* sign
         }
     }
     
-    JSContextRef ctx = [function JSContext];
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
+    __block JSValueRef value = NULL;
     
-    JSValueRef value = [runtime callJSFunction:[function JSObject] withArgumentsInArray:arguments];
-    
-    if (value == NULL) {
-        [NSException raise:@"CallbackError" format:@"Error while calling the callback"];
-    }
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        JSContextRef ctx = [function JSContext];
+        Mocha *runtime = [Mocha runtimeWithContext:ctx];
+        
+        value = [runtime callJSFunction:[function JSObject] withArgumentsInArray:arguments];
+        
+        if (value == NULL) {
+            [NSException raise:@"CallbackError" format:@"Error while calling the callback"];
+        }
+    });
     
     return value;
 }
