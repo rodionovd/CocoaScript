@@ -115,6 +115,9 @@ static JSValueRef jsInvoke(MOJavaScriptObject* function, NSMethodSignature* sign
     
     __block JSValueRef value = NULL;
     
+    // Mocha expects all JS functions to be executed on the main thread.
+    // So when creating a block, the JS function still needs to be executed on
+    // the main thread, regardless of where the block is executed.
     dispatch_sync(dispatch_get_main_queue(), ^{
         JSContextRef ctx = [function JSContext];
         Mocha *runtime = [Mocha runtimeWithContext:ctx];
