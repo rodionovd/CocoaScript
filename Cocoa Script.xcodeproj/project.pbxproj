@@ -13,6 +13,9 @@
 		031EFEFA1FD590C0000B5798 /* COScript+Fiber.m in Sources */ = {isa = PBXBuildFile; fileRef = 031EFEF21FD57DC6000B5798 /* COScript+Fiber.m */; };
 		0334150220B5E3550052CD7C /* MOJSBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 033414FF20B5D4220052CD7C /* MOJSBlock.h */; };
 		0334150320B5E3640052CD7C /* MOJSBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0334150020B5D4220052CD7C /* MOJSBlock.m */; };
+		0394498A221760EE00C5B5FD /* COCacheBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 03944988221760EE00C5B5FD /* COCacheBox.m */; };
+		0394498B221760FD00C5B5FD /* COCacheBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 03944989221760EE00C5B5FD /* COCacheBox.h */; };
+		0394498C2217610600C5B5FD /* COCacheBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 03944988221760EE00C5B5FD /* COCacheBox.m */; };
 		03F86D8E20F8F1BF009AEB24 /* MOJSTypeChecker.h in Headers */ = {isa = PBXBuildFile; fileRef = 03F86D8B20F8F10D009AEB24 /* MOJSTypeChecker.h */; };
 		03F86D8F20F8F1F9009AEB24 /* MOJSTypeChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F86D8C20F8F10D009AEB24 /* MOJSTypeChecker.m */; };
 		220D93E71C92E69C001EF05C /* JSTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D8CD181A2E2F0039A0A5 /* JSTTextView.m */; };
@@ -418,6 +421,8 @@
 		031EFEF51FD5864C000B5798 /* COSFiber.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = COSFiber.m; path = src/framework/COSFiber.m; sourceTree = "<group>"; };
 		033414FF20B5D4220052CD7C /* MOJSBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MOJSBlock.h; path = src/framework/mocha/Utilities/MOJSBlock.h; sourceTree = SOURCE_ROOT; };
 		0334150020B5D4220052CD7C /* MOJSBlock.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MOJSBlock.m; path = src/framework/mocha/Utilities/MOJSBlock.m; sourceTree = SOURCE_ROOT; };
+		03944988221760EE00C5B5FD /* COCacheBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COCacheBox.m; path = src/framework/COCacheBox.m; sourceTree = "<group>"; };
+		03944989221760EE00C5B5FD /* COCacheBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COCacheBox.h; path = src/framework/COCacheBox.h; sourceTree = "<group>"; };
 		03F86D8B20F8F10D009AEB24 /* MOJSTypeChecker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MOJSTypeChecker.h; path = src/framework/mocha/Utilities/MOJSTypeChecker.h; sourceTree = SOURCE_ROOT; };
 		03F86D8C20F8F10D009AEB24 /* MOJSTypeChecker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MOJSTypeChecker.m; path = src/framework/mocha/Utilities/MOJSTypeChecker.m; sourceTree = SOURCE_ROOT; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -880,6 +885,8 @@
 				CC1C7D200F48BB2C007A2941 /* todparsekit */,
 				CC66D816181A2A710039A0A5 /* COScript.h */,
 				CC66D817181A2A710039A0A5 /* COScript.m */,
+				03944989221760EE00C5B5FD /* COCacheBox.h */,
+				03944988221760EE00C5B5FD /* COCacheBox.m */,
 				CC66D818181A2A710039A0A5 /* COSExtras.h */,
 				CC66D819181A2A710039A0A5 /* COSExtras.m */,
 				CC66D81A181A2A710039A0A5 /* COSListener.h */,
@@ -1247,6 +1254,7 @@
 				CC66D89C181A2B0A0039A0A5 /* MOAllocator.h in Headers */,
 				CC66D8A8181A2B0A0039A0A5 /* MOJavaScriptObject.h in Headers */,
 				03F86D8E20F8F1BF009AEB24 /* MOJSTypeChecker.h in Headers */,
+				0394498B221760FD00C5B5FD /* COCacheBox.h in Headers */,
 				0334150220B5E3550052CD7C /* MOJSBlock.h in Headers */,
 				031EFEF81FD5909D000B5798 /* COSFiber.h in Headers */,
 				031EFEF71FD59089000B5798 /* COScript+Fiber.h in Headers */,
@@ -1529,6 +1537,7 @@
 				CC66D8D1181A2E2F0039A0A5 /* JSTDocumentController.m in Sources */,
 				CC66D8D5181A2E2F0039A0A5 /* JSTTextView.m in Sources */,
 				CC66D8D2181A2E2F0039A0A5 /* JSTFileWatcher.m in Sources */,
+				0394498A221760EE00C5B5FD /* COCacheBox.m in Sources */,
 				CC66D8D6181A2E2F0039A0A5 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1546,6 +1555,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0394498C2217610600C5B5FD /* COCacheBox.m in Sources */,
 				03F86D8F20F8F1F9009AEB24 /* MOJSTypeChecker.m in Sources */,
 				0334150320B5E3640052CD7C /* MOJSBlock.m in Sources */,
 				031EFEFA1FD590C0000B5798 /* COScript+Fiber.m in Sources */,
