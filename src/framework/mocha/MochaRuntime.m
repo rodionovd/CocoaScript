@@ -522,20 +522,28 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
     return [self setObject:object withName:name attributes:(kJSPropertyAttributeNone)];
 }
 
+- (JSValueRef)setJSValue:(JSValueRef)jsValue withName:(NSString *)name {
+    return [self setJSValue:jsValue withName:name attributes:(kJSPropertyAttributeNone)];
+}
+
 - (JSValueRef)setObject:(id)object withName:(NSString *)name attributes:(JSPropertyAttributes)attributes {
     JSValueRef jsValue = [self JSValueForObject:object];
 
+    return [self setJSValue:jsValue withName:name attributes:attributes];
+}
+
+- (JSValueRef)setJSValue:(JSValueRef)jsValue withName:(NSString *)name attributes:(JSPropertyAttributes)attributes {
     // Set
     JSValueRef exception = NULL;
     JSStringRef jsName = JSStringCreateWithUTF8CString([name UTF8String]);
     JSObjectSetProperty(_ctx, JSContextGetGlobalObject(_ctx), jsName, jsValue, attributes, &exception);
     JSStringRelease(jsName);
-
+    
     if (exception != NULL) {
         [self throwJSException:exception];
         return NULL;
     }
-
+    
     return jsValue;
 }
 
@@ -750,7 +758,10 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
         JSStringRef valueJS = JSValueToStringCopy(ctx, jsValueRef, NULL);
         NSString *value = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, valueJS));
         JSStringRelease(valueJS);
-        [userInfo setObject:value forKey:@"stack"];
+        // the stack can be infinite so let's keek only the first 10 calls
+        // which should be enough to identify the crash anyway
+        NSArray *stacks = [value componentsSeparatedByString: @"\n"];
+        [userInfo setObject:[[stacks subarrayWithRange:NSMakeRange(0, MIN(10, stacks.count))] componentsJoinedByString:@"\n"] forKey:@"stack"];
 
         NSException *mochaException = [NSException exceptionWithName:MOJavaScriptException reason:error userInfo:userInfo];
         return mochaException;
@@ -1258,10 +1269,6 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
     if (value != nil) {
         return YES;
     }
-
-
-
-
 
     // Method
     SEL selector = MOSelectorFromPropertyName(propertyName);

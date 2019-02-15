@@ -79,6 +79,19 @@
  */
 - (id)evalString:(NSString *)string atURL:(NSURL*)url;
 
+/*!
+ * @method evalString:
+ * @abstract Evalutates the specified JavaScript expression, returning the result
+ *
+ * @param string
+ * The JavaScript expression to evaluate
+ *
+ * @param url
+ * The location of the script - used for error reporting and interactive debugging.
+ *
+ * @result An object, or nil
+ */
+- (JSValueRef)evalJSString:(NSString *)string scriptPath:(NSString *)scriptPath;
 
 /*!
  * @method callFunctionWithName:

@@ -40,7 +40,9 @@
 // Object storage
 - (id)objectWithName:(NSString *)name;
 - (JSValueRef)setObject:(id)object withName:(NSString *)name;
+- (JSValueRef)setJSValue:(JSValueRef)jsValue withName:(NSString *)name;
 - (JSValueRef)setObject:(id)object withName:(NSString *)name attributes:(JSPropertyAttributes)attributes;
+- (JSValueRef)setJSValue:(JSValueRef)jsValue withName:(NSString *)name attributes:(JSPropertyAttributes)attributes;
 - (BOOL)removeObjectWithName:(NSString *)name;
 
 // Evaluation

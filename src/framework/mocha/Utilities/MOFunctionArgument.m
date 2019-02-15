@@ -835,6 +835,11 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
             return YES;
         }
         case _C_PTR: {
+            // we make a special case if the type is actually already a JSValueRef
+            if (fullTypeEncoding != nil && [fullTypeEncoding containsString:@"OpaqueJSValue"]) {
+                *value = *(JSValueRef*)ptr;
+                return YES;
+            }
             Mocha *runtime = [Mocha runtimeWithContext:ctx];
             void* pointer = *(void**)ptr;
             MOPointerValue *object = [[MOPointerValue alloc] initWithPointerValue:pointer typeEncoding:fullTypeEncoding];

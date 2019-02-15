@@ -11,6 +11,7 @@
 #import "COSPreprocessor.h"
 #import "COScript+Fiber.h"
 #import "COScript+Interval.h"
+#import "COCacheBox.h"
 
 #import <ScriptingBridge/ScriptingBridge.h>
 #import "MochaRuntime.h"
@@ -32,6 +33,7 @@ static id<COFlowDelegate> COFlowDelegate = nil;
 
 @interface Mocha (Private)
 - (JSValueRef)setObject:(id)object withName:(NSString *)name;
+- (JSValueRef)setJSValue:(JSValueRef)jsValue withName:(NSString *)name;
 - (BOOL)removeObjectWithName:(NSString *)name;
 - (JSValueRef)callJSFunction:(JSObjectRef)jsFunction withArgumentsInArray:(NSArray *)arguments;
 - (id)objectForJSValue:(JSValueRef)value;
@@ -53,7 +55,9 @@ void COScriptDebug(NSString* format, ...) {
     va_end(args);
 }
 
-@implementation COScript
+@implementation COScript {
+    NSMutableDictionary<NSString*, COCacheBox*>* moduleCache;
+}
 
 + (id)setDebugController:(id)debugController {
     id oldController = CODebugController;
@@ -93,7 +97,7 @@ void COScriptDebug(NSString* format, ...) {
         if (!coreModuleScriptCache) {
             coreModuleScriptCache = [NSMutableDictionary dictionary];
         }
-        self.moduleCache = [NSMutableDictionary dictionary];
+        moduleCache = [NSMutableDictionary dictionary];
         
         [self setEnv:[NSMutableDictionary dictionary]];
         [self setShouldPreprocess:YES];
@@ -131,6 +135,10 @@ void COScriptDebug(NSString* format, ...) {
         [self deleteObjectWithName:@"setImmediate"];
         [self deleteObjectWithName:@"clearImmediate"];
     }
+    
+    [moduleCache enumerateKeysAndObjectsUsingBlock:^(NSString *key, COCacheBox *cacheBox, BOOL *stop) {
+        [cacheBox cleanup];
+    }];
     
     // clean up mocha
     [_mochaRuntime shutdown];
@@ -184,17 +192,17 @@ void COScriptDebug(NSString* format, ...) {
 
     // if there is a console module, use it to polyfill the console global
     if ([self.coreModuleMap objectForKey:@"console"]) {
-        [self pushObject:[self executeString:@"(function() { var Console = require('console'); var console = Console(); var keys = Object.keys(console); var dict = NSMutableDictionary.dictionaryWithCapacity(keys.length); keys.forEach(function(k) {dict[k] = console[k]}); return dict; })()"] withName:@"console"];
+        [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('console')(); })()"] withName:@"console"];
     }
     
     // if there is a timers module, use it to polyfill the setTimeout globals
     if ([self.coreModuleMap objectForKey:@"timers"]) {
-        [self pushObject:[self executeString:@"(function() { return require('timers').setTimeout; })()"] withName:@"setTimeout"];
-        [self pushObject:[self executeString:@"(function() { return require('timers').clearTimeout; })()"] withName:@"clearTimeout"];
-        [self pushObject:[self executeString:@"(function() { return require('timers').setInterval; })()"] withName:@"setInterval"];
-        [self pushObject:[self executeString:@"(function() { return require('timers').clearInterval; })()"] withName:@"clearInterval"];
-        [self pushObject:[self executeString:@"(function() { return require('timers').setImmediate; })()"] withName:@"setImmediate"];
-        [self pushObject:[self executeString:@"(function() { return require('timers').clearImmediate; })()"] withName:@"clearImmediate"];
+        [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('timers').setTimeout; })()"] withName:@"setTimeout"];
+        [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('timers').clearTimeout; })()"] withName:@"clearTimeout"];
+        [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('timers').setInterval; })()"] withName:@"setInterval"];
+        [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('timers').clearInterval; })()"] withName:@"clearInterval"];
+        [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('timers').setImmediate; })()"] withName:@"setImmediate"];
+        [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('timers').clearImmediate; })()"] withName:@"clearImmediate"];
     }
 }
 
@@ -371,15 +379,15 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     [_mochaRuntime setObject:obj withName:name];
 }
 
+- (void)pushJSValue:(JSValueRef)obj withName:(NSString*)name  {
+    [_mochaRuntime setJSValue:obj withName:name];
+}
+
 - (void)deleteObjectWithName:(NSString*)name {
     [_mochaRuntime removeObjectWithName:name];
 }
 
-- (id)require:(NSString *)module {
-    if (self.moduleCache[module]) {
-        return self.moduleCache[module];
-    }
-    
+- (JSValueRef)require:(NSString *)module {
     // store the current script URL so that we can put it back after requiring the module
     NSURL* currentURL = [_env objectForKey:@"scriptURL"];
     
@@ -387,7 +395,9 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     BOOL savedPreprocess = self.shouldPreprocess;
     self.shouldPreprocess = NO;
     
-    id result = nil;
+    NSString* cacheStorageKey = module;
+    
+    JSValueRef result = NULL;
     
     if ([module characterAtIndex:0] == '.' || [module characterAtIndex:0] == '/') { // relative or absolute path
         NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -397,6 +407,10 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         // /path/to/module/index.js
         NSURL* moduleDirectoryURL = isRelative ? [NSURL URLWithString:[module stringByAppendingPathComponent:@"index.js"] relativeToURL:currentURL] : [NSURL fileURLWithPath:[module stringByAppendingPathComponent:@"index.js"]];
         
+        if (moduleCache[moduleDirectoryURL.path]) {
+            return moduleCache[moduleDirectoryURL.path].jsValueRef;
+        }
+        
         if ([module.pathExtension isEqualToString:@""]) {
             modulePath = [modulePath stringByAppendingPathExtension:@"js"];
         }
@@ -404,14 +418,23 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         // /path/to/module.js
         NSURL* moduleURL = isRelative ? [NSURL URLWithString:modulePath relativeToURL:currentURL] : [NSURL fileURLWithPath:modulePath];
         
+        if (moduleCache[moduleURL.path]) {
+            return moduleCache[moduleURL.path].jsValueRef;
+        }
+        
         if ([fileManager fileExistsAtPath:moduleURL.path]) {
+            cacheStorageKey = moduleURL.path;
             result = [self executeModuleAtURL:moduleURL];
         } else if ([fileManager fileExistsAtPath:moduleDirectoryURL.path]) {
+            cacheStorageKey = moduleDirectoryURL.path;
             result = [self executeModuleAtURL:moduleDirectoryURL];
         } else {
             @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"Cannot find module %@ from package %@", module, currentURL.path] userInfo:nil];
         }
     } else {
+        if (moduleCache[module]) {
+            return moduleCache[module].jsValueRef;
+        }
         if (self.coreModuleMap[module]) {
             // we set `isRequiringCore` in the environment so that if a core module is requiring other file,
             // we know that it's still a core module and should be cached as such
@@ -432,28 +455,29 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     }
     
     // cache the module so it keeps it state if required again
-    [self.moduleCache setObject:result forKey:module];
+    COCacheBox* cacheBox = [[COCacheBox alloc] initWithJSValueRef:result inContext:_mochaRuntime.context];
+    [moduleCache setObject:cacheBox forKey:cacheStorageKey];
     
     return result;
 }
 
-- (id)executeModuleAtURL:(NSURL*)scriptURL {
-    id result = nil;
+- (JSValueRef)executeModuleAtURL:(NSURL*)scriptURL {
+    JSValueRef result = NULL;
     if (scriptURL) {
         NSError* error;
         NSString* script;
-        if (coreModuleScriptCache[scriptURL]) {
-            script = coreModuleScriptCache[scriptURL];
+        if (coreModuleScriptCache[scriptURL.path]) {
+            script = coreModuleScriptCache[scriptURL.path];
         } else {
             script = [NSString stringWithContentsOfURL:scriptURL encoding:NSUTF8StringEncoding error:&error];
             if ([[_env objectForKey:@"isRequiringCore"] isEqualToString:@"true"]) {
                 // cache the core module's so that we don't need to read it from disk again
-                [coreModuleScriptCache setObject:script forKey:scriptURL];
+                [coreModuleScriptCache setObject:script forKey:scriptURL.path];
             }
         }
         if (script) {
             NSString* module = [NSString stringWithFormat:@"(function() { var module = { exports : {} }; var exports = module.exports; %@ ; return module.exports; })()", script];
-            result = [self executeString:module baseURL:scriptURL];
+            result = [self executeStringAndReturnJSValue:module baseURL:scriptURL];
         } else if (error) {
             @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"Cannot find module %@", scriptURL.path] userInfo:nil];
         }
@@ -466,8 +490,11 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     return [self executeString:str baseURL:nil];
 }
 
-- (id)executeString:(NSString*)str baseURL:(NSURL*)base {
-    
+- (JSValueRef)executeStringAndReturnJSValue:(NSString*)str {
+    return [self executeStringAndReturnJSValue:str baseURL:nil];
+}
+
+- (JSValueRef)executeStringAndReturnJSValue:(NSString*)str baseURL:(NSURL*)base {
     if (!JSTalkPluginList && JSTalkShouldLoadJSTPlugins) {
         [COScript loadPlugins];
     }
@@ -484,24 +511,29 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         str = [COSPreprocessor preprocessCode:str withBaseURL:base];
     }
     self.processedSource = str;
-
+    
     [self pushAsCurrentCOScript];
     
-    id resultObj = nil;
+    JSValueRef resultObj = NULL;
     
     @try {
-
-        resultObj = [_mochaRuntime evalString:str atURL:base];
-
-        if (resultObj == [MOUndefined undefined]) {
-            resultObj = nil;
-        }
+        resultObj = [_mochaRuntime evalJSString:str scriptPath:[base path]];
     }
     @catch (NSException *e) {
         [self printException:e];
     }
     
     [self popAsCurrentCOScript];
+    
+    return resultObj;
+}
+
+- (id)executeString:(NSString*)str baseURL:(NSURL*)base {
+    id resultObj = [_mochaRuntime objectForJSValue:[self executeStringAndReturnJSValue:str baseURL:base]];
+
+    if (resultObj == [MOUndefined undefined]) {
+        resultObj = nil;
+    }
     
     return resultObj;
 }

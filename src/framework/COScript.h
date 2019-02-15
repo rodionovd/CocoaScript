@@ -39,7 +39,6 @@
 @property (assign) BOOL shouldKeepAround;
 @property (strong) NSString* processedSource;
 @property (strong, nonatomic) NSDictionary* coreModuleMap;
-@property (strong, nonatomic) NSMutableDictionary* moduleCache;
 
 - (instancetype)initWithCoreModules:(NSDictionary*)coreModules andName:(NSString*)name;
 - (void)cleanup;
@@ -47,9 +46,10 @@
 - (id)executeString:(NSString*) str;
 - (id)executeString:(NSString*)str baseURL:(NSURL*)base;
 - (void)pushObject:(id)obj withName:(NSString*)name;
+- (void)pushJSValue:(JSValueRef)obj withName:(NSString*)name;
 - (void)deleteObjectWithName:(NSString*)name;
 - (void)print:(id)s;
-- (id)require:(NSString *)module;
+- (JSValueRef)require:(NSString *)module;
 - (BOOL)shouldKeepRunning;
 
 - (JSGlobalContextRef)context;
