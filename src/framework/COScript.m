@@ -127,6 +127,9 @@ void COScriptDebug(NSString* format, ...) {
     if ([self.coreModuleMap objectForKey:@"console"]) {
         [self deleteObjectWithName:@"console"];
     }
+    if ([self.coreModuleMap objectForKey:@"buffer"]) {
+        [self deleteObjectWithName:@"Buffer"];
+    }
     if ([self.coreModuleMap objectForKey:@"timers"]) {
         [self deleteObjectWithName:@"setTimeout"];
         [self deleteObjectWithName:@"clearTimeout"];
@@ -193,6 +196,11 @@ void COScriptDebug(NSString* format, ...) {
     // if there is a console module, use it to polyfill the console global
     if ([self.coreModuleMap objectForKey:@"console"]) {
         [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('console')(); })()"] withName:@"console"];
+    }
+    
+    // if there is a buffer module, use it to polyfill the Buffer global
+    if ([self.coreModuleMap objectForKey:@"buffer"]) {
+        [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('buffer').Buffer; })()"] withName:@"Buffer"];
     }
     
     // if there is a timers module, use it to polyfill the setTimeout globals
