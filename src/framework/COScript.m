@@ -193,6 +193,9 @@ void COScriptDebug(NSString* format, ...) {
     [_mochaRuntime loadFrameworkWithName:@"AppKit"];
     [_mochaRuntime loadFrameworkWithName:@"Foundation"];
 
+    BOOL previousShouldPreprocess = self.shouldPreprocess;
+    self.shouldPreprocess = NO;
+    
     // if there is a console module, use it to polyfill the console global
     if ([self.coreModuleMap objectForKey:@"console"]) {
         [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('console')(); })()"] withName:@"console"];
@@ -212,6 +215,13 @@ void COScriptDebug(NSString* format, ...) {
         [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('timers').setImmediate; })()"] withName:@"setImmediate"];
         [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('timers').clearImmediate; })()"] withName:@"clearImmediate"];
     }
+    
+    // if there is a process module, use it to polyfill the process global
+    if ([self.coreModuleMap objectForKey:@"process"]) {
+        [self pushJSValue:[self executeStringAndReturnJSValue:@"(function() { return require('process'); })()"] withName:@"process"];
+    }
+    
+    self.shouldPreprocess = previousShouldPreprocess;
 }
 
 + (void)loadExtraAtPath:(NSString*)fullPath {
