@@ -758,7 +758,7 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
         JSStringRef valueJS = JSValueToStringCopy(ctx, jsValueRef, NULL);
         NSString *value = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, valueJS));
         JSStringRelease(valueJS);
-        // the stack can be infinite so let's keek only the first 10 calls
+        // the stack can be infinite so let's keep only the first 10 calls
         // which should be enough to identify the crash anyway
         NSArray *stacks = [value componentsSeparatedByString: @"\n"];
         [userInfo setObject:[[stacks subarrayWithRange:NSMakeRange(0, MIN(10, stacks.count))] componentsJoinedByString:@"\n"] forKey:@"stack"];
