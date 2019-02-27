@@ -6,6 +6,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/*
+ This class is used to retain the JSValueRefs that are created when requiring
+ a module. It is cleaned up when the COScript instance is cleaned up.
+ 
+ We can't put a JSValueRef in an NSDictionary directly so we need to wrap it in
+ this class.
+ */
 @interface COCacheBox : NSObject
 @property (assign, readonly) JSValueRef jsValueRef;
 
