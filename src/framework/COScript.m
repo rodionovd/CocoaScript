@@ -405,6 +405,56 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     [_mochaRuntime removeObjectWithName:name];
 }
 
+# pragma mark - require
+
+- (NSURL*)resolveModule:(NSString *)module currentURL:(NSURL*)currentURL {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isRelative = [module characterAtIndex:0] == '.';
+    NSString* modulePath = [module stringByStandardizingPath];
+    NSURL* moduleURL = isRelative ? [NSURL URLWithString:modulePath relativeToURL:currentURL] : [NSURL fileURLWithPath:modulePath];
+    BOOL isDir;
+    
+    if ([fileManager fileExistsAtPath:moduleURL.path isDirectory:&isDir]) {
+        if (!isDir) {
+            // if the module is a proper path to a file, just use it
+            return moduleURL;
+        }
+        // if it's a path to a directory, let's try to find a package.json
+        NSURL* packageJSONURL = [moduleURL URLByAppendingPathComponent:@"package.json"];
+        if ([fileManager fileExistsAtPath:packageJSONURL.path isDirectory:&isDir] && !isDir) {
+            NSString* jsonString = [[NSString alloc] initWithContentsOfFile:packageJSONURL.path encoding:NSUTF8StringEncoding error:nil];
+            NSData* jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *jsonError;
+            id packageJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:&jsonError];
+            if (packageJSON != nil) {
+                // we have a package.json, so let's find the `main` key
+                NSString* main = [packageJSON objectForKey:@"main"];
+                if (main) {
+                    return [self resolveModule:[moduleURL URLByAppendingPathComponent:main].path currentURL:currentURL];
+                }
+            }
+        }
+        
+        // default to index.js otherwise
+        NSURL* indexURL = [moduleURL URLByAppendingPathComponent:@"index.js"];
+        if ([fileManager fileExistsAtPath:indexURL.path isDirectory:&isDir] && !isDir) {
+            return indexURL;
+        }
+        
+        // couldn't find anything :(
+        return nil;
+    }
+    
+    // try by adding the js extension which can be ommited
+    NSURL* jsURL = [moduleURL URLByAppendingPathExtension:@"js"];
+    if ([fileManager fileExistsAtPath:jsURL.path isDirectory:&isDir] && !isDir) {
+        return jsURL;
+    }
+    
+    // unlucky :(
+    return nil;
+}
+
 - (JSValueRef)require:(NSString *)module {
     // store the current script URL so that we can put it back after requiring the module
     NSURL* currentURL = [_env objectForKey:@"scriptURL"];
@@ -417,38 +467,19 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     
     JSValueRef result = NULL;
     
-    if ([module characterAtIndex:0] == '.' || [module characterAtIndex:0] == '/') { // relative or absolute path
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        BOOL isRelative = [module characterAtIndex:0] == '.';
-        NSString* modulePath = module;
+    if ([module characterAtIndex:0] == '.' || [module characterAtIndex:0] == '/' || [module characterAtIndex:0] == '~') { // relative or absolute path
+        NSURL *moduleURL = [self resolveModule:module currentURL:currentURL];
         
-        // /path/to/module/index.js
-        NSURL* moduleDirectoryURL = isRelative ? [NSURL URLWithString:[module stringByAppendingPathComponent:@"index.js"] relativeToURL:currentURL] : [NSURL fileURLWithPath:[module stringByAppendingPathComponent:@"index.js"]];
-        
-        if (moduleCache[moduleDirectoryURL.path]) {
-            return moduleCache[moduleDirectoryURL.path].jsValueRef;
+        if (moduleURL == nil) {
+            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"Cannot find module %@ from package %@", module, currentURL.path] userInfo:nil];
         }
-        
-        if ([module.pathExtension isEqualToString:@""]) {
-            modulePath = [modulePath stringByAppendingPathExtension:@"js"];
-        }
-        
-        // /path/to/module.js
-        NSURL* moduleURL = isRelative ? [NSURL URLWithString:modulePath relativeToURL:currentURL] : [NSURL fileURLWithPath:modulePath];
         
         if (moduleCache[moduleURL.path]) {
             return moduleCache[moduleURL.path].jsValueRef;
         }
         
-        if ([fileManager fileExistsAtPath:moduleURL.path]) {
-            cacheStorageKey = moduleURL.path;
-            result = [self executeModuleAtURL:moduleURL];
-        } else if ([fileManager fileExistsAtPath:moduleDirectoryURL.path]) {
-            cacheStorageKey = moduleDirectoryURL.path;
-            result = [self executeModuleAtURL:moduleDirectoryURL];
-        } else {
-            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"Cannot find module %@ from package %@", module, currentURL.path] userInfo:nil];
-        }
+        cacheStorageKey = moduleURL.path;
+        result = [self executeModuleAtURL:moduleURL];
     } else {
         if (moduleCache[module]) {
             return moduleCache[module].jsValueRef;
@@ -494,7 +525,9 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
             }
         }
         if (script) {
-            NSString* module = [NSString stringWithFormat:@"(function() { var module = { exports : {} }; var exports = module.exports; %@ ; return module.exports; })()", script];
+            NSString* module = [scriptURL.pathExtension isEqual:@"json"]
+            ? [NSString stringWithFormat:@"(function() { return %@ })()", script]
+            : [NSString stringWithFormat:@"(function() { var module = { exports : {} }; var exports = module.exports; %@ ; return module.exports; })()", script];
             result = [self executeStringAndReturnJSValue:module baseURL:scriptURL];
         } else if (error) {
             @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"Cannot find module %@", scriptURL.path] userInfo:nil];
@@ -503,6 +536,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     return result;
 }
 
+# pragma mark - execute string
 
 - (id)executeString:(NSString*)str {
     return [self executeString:str baseURL:nil];
@@ -672,6 +706,8 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     [_mochaRuntime evalString:str];
 }
 
+# pragma mark - print
+
 - (void)printException:(NSException*)e {
     // TODO: review this and print something nice
     NSMutableString *s = [NSMutableString string];
@@ -705,6 +741,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     }
 }
 
+# pragma mark - proxy
 
 + (id)applicationOnPort:(NSString*)port {
     
