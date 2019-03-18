@@ -407,11 +407,25 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 
 # pragma mark - require
 
-- (NSURL*)resolveModule:(NSString *)module currentURL:(NSURL*)currentURL {
+// This aims to implement the require resolution algorithm from NodeJS.
+// Given a `module` string required by a given script at the `currentURL`
+// using `require('./path/to/module')`, this method returns a URL
+// corresponding to the `module`.
+// `module` could also be the name of a core module that we shipped with the app
+// (for example `util`), in which case, it will return the URL to that one
+// and set `isRequiringCore` to YES.
+- (NSURL*)resolveModule:(NSString*)module currentURL:(NSURL*)currentURL isRequiringCoreModule: (BOOL*)isRequiringCore {
+    if (![module hasPrefix: @"."] && ![module hasPrefix: @"/"] && ![module hasPrefix: @"~"]) {
+        *isRequiringCore = YES;
+        return self.coreModuleMap[module];
+    }
+    
+    *isRequiringCore = NO;
+    
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL isRelative = [module characterAtIndex:0] == '.';
-    NSString* modulePath = [module stringByStandardizingPath];
-    NSURL* moduleURL = isRelative ? [NSURL URLWithString:modulePath relativeToURL:currentURL] : [NSURL fileURLWithPath:modulePath];
+    BOOL isRelative = [module hasPrefix: @"."];
+    NSString *modulePath = [module stringByStandardizingPath];
+    NSURL *moduleURL = isRelative ? [NSURL URLWithString:modulePath relativeToURL:currentURL] : [NSURL fileURLWithPath:modulePath];
     BOOL isDir;
     
     if ([fileManager fileExistsAtPath:moduleURL.path isDirectory:&isDir]) {
@@ -420,23 +434,29 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
             return moduleURL;
         }
         // if it's a path to a directory, let's try to find a package.json
-        NSURL* packageJSONURL = [moduleURL URLByAppendingPathComponent:@"package.json"];
+        NSURL *packageJSONURL = [moduleURL URLByAppendingPathComponent:@"package.json"];
         if ([fileManager fileExistsAtPath:packageJSONURL.path isDirectory:&isDir] && !isDir) {
-            NSString* jsonString = [[NSString alloc] initWithContentsOfFile:packageJSONURL.path encoding:NSUTF8StringEncoding error:nil];
-            NSData* jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            NSString *jsonString = [[NSString alloc] initWithContentsOfFile:packageJSONURL.path encoding:NSUTF8StringEncoding error:nil];
+            NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
             NSError *jsonError;
             id packageJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:&jsonError];
             if (packageJSON != nil) {
                 // we have a package.json, so let's find the `main` key
-                NSString* main = [packageJSON objectForKey:@"main"];
+                NSString *main = [packageJSON objectForKey:@"main"];
                 if (main) {
-                    return [self resolveModule:[moduleURL URLByAppendingPathComponent:main].path currentURL:currentURL];
+                    // main is always a relative path, so let's transform it to one
+                    if ([module hasPrefix: @"/"]) {
+                        main = [@"." stringByAppendingString:main];
+                    } else if (![module hasPrefix: @"."]) {
+                        main = [@"./" stringByAppendingString:main];
+                    }
+                    return [self resolveModule:[moduleURL URLByAppendingPathComponent:main].path currentURL:currentURL isRequiringCoreModule:isRequiringCore];
                 }
             }
         }
         
         // default to index.js otherwise
-        NSURL* indexURL = [moduleURL URLByAppendingPathComponent:@"index.js"];
+        NSURL *indexURL = [moduleURL URLByAppendingPathComponent:@"index.js"];
         if ([fileManager fileExistsAtPath:indexURL.path isDirectory:&isDir] && !isDir) {
             return indexURL;
         }
@@ -446,7 +466,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     }
     
     // try by adding the js extension which can be ommited
-    NSURL* jsURL = [moduleURL URLByAppendingPathExtension:@"js"];
+    NSURL *jsURL = [moduleURL URLByAppendingPathExtension:@"js"];
     if ([fileManager fileExistsAtPath:jsURL.path isDirectory:&isDir] && !isDir) {
         return jsURL;
     }
@@ -457,44 +477,40 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 
 - (JSValueRef)require:(NSString *)module {
     // store the current script URL so that we can put it back after requiring the module
-    NSURL* currentURL = [_env objectForKey:@"scriptURL"];
+    NSURL *currentURL = [_env objectForKey:@"scriptURL"];
     
     // we never want to preprocess the modules - it shouldn't use Cocoascript syntax.
     BOOL savedPreprocess = self.shouldPreprocess;
     self.shouldPreprocess = NO;
     
-    NSString* cacheStorageKey = module;
-    
     JSValueRef result = NULL;
     
-    if ([module characterAtIndex:0] == '.' || [module characterAtIndex:0] == '/' || [module characterAtIndex:0] == '~') { // relative or absolute path
-        NSURL *moduleURL = [self resolveModule:module currentURL:currentURL];
-        
-        if (moduleURL == nil) {
-            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"Cannot find module %@ from package %@", module, currentURL.path] userInfo:nil];
-        }
-        
-        if (moduleCache[moduleURL.path]) {
-            return moduleCache[moduleURL.path].jsValueRef;
-        }
-        
-        cacheStorageKey = moduleURL.path;
-        result = [self executeModuleAtURL:moduleURL];
-    } else {
-        if (moduleCache[module]) {
-            return moduleCache[module].jsValueRef;
-        }
-        if (self.coreModuleMap[module]) {
-            // we set `isRequiringCore` in the environment so that if a core module is requiring other file,
-            // we know that it's still a core module and should be cached as such
-            [_env setObject:@"true" forKey:@"isRequiringCore"];
-            
-            result = [self executeModuleAtURL:self.coreModuleMap[module]];
-            
-            [_env setObject:@"false" forKey:@"isRequiringCore"];
-        } else {
-            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:[NSString stringWithFormat:@"%@ is not a core package", module] userInfo:nil];
-        }
+    BOOL isRequiringCore;
+    NSURL *moduleURL = [self resolveModule:module currentURL:currentURL isRequiringCoreModule:&isRequiringCore];
+    
+    if (moduleURL == nil) {
+        @throw [NSException
+                exceptionWithName:NSInvalidArgumentException
+                reason:isRequiringCore
+                    ? [NSString stringWithFormat:@"%@ is not a core package", module]
+                    : [NSString stringWithFormat:@"Cannot find module %@ from package %@", module, currentURL.path]
+                userInfo:nil];
+    }
+    
+    if (moduleCache[moduleURL.path]) {
+        return moduleCache[moduleURL.path].jsValueRef;
+    }
+    
+    if (isRequiringCore) {
+        // we set `isRequiringCore` in the environment so that if a core module is requiring other files,
+        // we know that it's still a core module and should be cached as such
+        [_env setObject:@"true" forKey:@"isRequiringCore"];
+    }
+    
+    result = [self executeModuleAtURL:moduleURL];
+    
+    if (isRequiringCore) {
+        [_env setObject:@"false" forKey:@"isRequiringCore"];
     }
     
     // go back to previous settings
@@ -504,8 +520,8 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     }
     
     // cache the module so it keeps it state if required again
-    COCacheBox* cacheBox = [[COCacheBox alloc] initWithJSValueRef:result inContext:_mochaRuntime.context];
-    [moduleCache setObject:cacheBox forKey:cacheStorageKey];
+    COCacheBox *cacheBox = [[COCacheBox alloc] initWithJSValueRef:result inContext:_mochaRuntime.context];
+    [moduleCache setObject:cacheBox forKey:moduleURL.path];
     
     return result;
 }
@@ -513,8 +529,8 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 - (JSValueRef)executeModuleAtURL:(NSURL*)scriptURL {
     JSValueRef result = NULL;
     if (scriptURL) {
-        NSError* error;
-        NSString* script;
+        NSError *error;
+        NSString *script;
         if (coreModuleScriptCache[scriptURL.path]) {
             script = coreModuleScriptCache[scriptURL.path];
         } else {
@@ -525,7 +541,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
             }
         }
         if (script) {
-            NSString* module = [scriptURL.pathExtension isEqual:@"json"]
+            NSString *module = [scriptURL.pathExtension isEqual:@"json"]
             ? [NSString stringWithFormat:@"(function() { return %@ })()", script]
             : [NSString stringWithFormat:@"(function() { var module = { exports : {} }; var exports = module.exports; %@ ; return module.exports; })()", script];
             result = [self executeStringAndReturnJSValue:module baseURL:scriptURL];
