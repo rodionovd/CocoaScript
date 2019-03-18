@@ -435,11 +435,10 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         }
         // if it's a path to a directory, let's try to find a package.json
         NSURL *packageJSONURL = [moduleURL URLByAppendingPathComponent:@"package.json"];
-        if ([fileManager fileExistsAtPath:packageJSONURL.path isDirectory:&isDir] && !isDir) {
-            NSString *jsonString = [[NSString alloc] initWithContentsOfFile:packageJSONURL.path encoding:NSUTF8StringEncoding error:nil];
+        NSString *jsonString = [[NSString alloc] initWithContentsOfFile:packageJSONURL.path encoding:NSUTF8StringEncoding error:nil];
+        if (jsonString != nil) {
             NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-            NSError *jsonError;
-            id packageJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:&jsonError];
+            id packageJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil];
             if (packageJSON != nil) {
                 // we have a package.json, so let's find the `main` key
                 NSString *main = [packageJSON objectForKey:@"main"];
