@@ -407,13 +407,13 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 
 # pragma mark - require
 
-// This aims to implement the require resolution algorithm from NodeJS.
-// Given a `module` string required by a given script at the `currentURL`
-// using `require('./path/to/module')`, this method returns a URL
-// corresponding to the `module`.
-// `module` could also be the name of a core module that we shipped with the app
-// (for example `util`), in which case, it will return the URL to that one
-// and set `isRequiringCore` to YES.
+/// This aims to implement the require resolution algorithm from NodeJS.
+/// Given a `module` string required by a given script at the `currentURL`
+/// using `require('./path/to/module')`, this method returns a URL
+/// corresponding to the `module`.
+/// `module` could also be the name of a core module that we shipped with the app
+/// (for example `util`), in which case, it will return the URL to that one
+/// and set `isRequiringCore` to YES.
 - (NSURL*)resolveModule:(NSString*)module currentURL:(NSURL*)currentURL isRequiringCoreModule: (BOOL*)isRequiringCore {
     if (![module hasPrefix: @"."] && ![module hasPrefix: @"/"] && ![module hasPrefix: @"~"]) {
         *isRequiringCore = YES;
@@ -426,6 +426,11 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     BOOL isRelative = [module hasPrefix: @"."];
     NSString *modulePath = [module stringByStandardizingPath];
     NSURL *moduleURL = isRelative ? [NSURL URLWithString:modulePath relativeToURL:currentURL] : [NSURL fileURLWithPath:modulePath];
+    
+    if (moduleURL == nil) {
+        return nil;
+    }
+    
     BOOL isDir;
     
     if ([fileManager fileExistsAtPath:moduleURL.path isDirectory:&isDir]) {
@@ -435,9 +440,8 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
         }
         // if it's a path to a directory, let's try to find a package.json
         NSURL *packageJSONURL = [moduleURL URLByAppendingPathComponent:@"package.json"];
-        NSString *jsonString = [[NSString alloc] initWithContentsOfFile:packageJSONURL.path encoding:NSUTF8StringEncoding error:nil];
-        if (jsonString != nil) {
-            NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *jsonData = [[NSData alloc] initWithContentsOfFile:packageJSONURL.path];
+        if (jsonData != nil) {
             id packageJSON = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil];
             if (packageJSON != nil) {
                 // we have a package.json, so let's find the `main` key
