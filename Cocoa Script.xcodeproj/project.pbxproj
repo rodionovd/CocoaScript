@@ -437,8 +437,8 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		384830E01832D48500B34168 /* COSTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSTarget.h; path = src/framework/COSTarget.h; sourceTree = "<group>"; };
 		384830E11832D48500B34168 /* COSTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSTarget.m; path = src/framework/COSTarget.m; sourceTree = "<group>"; };
-		5A88AD10225CB0A600635470 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = res/en.lproj/JSTDocument.xib; sourceTree = "<group>"; };
-		5A88AD11225CB0BE00635470 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = res/en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		5A6247AA225DE3390036F9F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = res/Base.lproj/JSTDocument.xib; sourceTree = "<group>"; };
+		5A6247AB225DE3390036F9F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = res/Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		5A88AD12225CB0D300635470 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = res/en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Cocoa Script Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cocoa Script Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FC343C71AF7D2FE00B53759 /* CocoaScriptTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoaScriptTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1466,6 +1466,7 @@
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* JSTalk */;
 			projectDirPath = "";
@@ -1773,7 +1774,7 @@
 		CCC5B8BA0F1EFA9700126722 /* JSTDocument.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				5A88AD10225CB0A600635470 /* en */,
+				5A6247AA225DE3390036F9F4 /* Base */,
 			);
 			name = JSTDocument.xib;
 			sourceTree = "<group>";
@@ -1781,7 +1782,7 @@
 		CCC5B8BE0F1EFA9700126722 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				5A88AD11225CB0BE00635470 /* en */,
+				5A6247AB225DE3390036F9F4 /* Base */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
