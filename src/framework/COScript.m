@@ -728,15 +728,39 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 # pragma mark - print
 
 - (void)printException:(NSException*)e {
-    // TODO: review this and print something nice
     NSMutableString *s = [NSMutableString string];
     
-    [s appendFormat:@"%@\n", e];
+    [s appendFormat:@"%@", e];
     
     NSDictionary *d = [e userInfo];
+
+    if ([d objectForKey:@"stack"] != nil) {
+        // this is the same algo as in skpm/util
+        // https://github.com/skpm/util/blob/5edb84f6d7983320ab064b7f2cf575fbedbf183b/index.js#L679-L695
+        // so that it's consistent when logging an error
+        NSArray* stacks = [[d objectForKey:@"stack"] componentsSeparatedByString:@"\n"];
+        for (NSString* stack in stacks) {
+            NSMutableArray* parts = [[stack componentsSeparatedByString:@"/"] mutableCopy];
+            if ([parts count] > 0) {
+                NSString* fn = [parts[0] stringByReplacingOccurrencesOfString:@"@" withString:@""];
+                [parts removeObjectAtIndex:0];
+                NSString* callsite = [NSString stringWithFormat:@"/%@", [parts componentsJoinedByString:@"/"]];
+                [s appendFormat:@"\n    at "];
+                if (fn != nil && ![fn isEqualToString:@""]) {
+                    [s appendFormat:@"%@ (", fn];
+                }
+                [s appendFormat:@"%@", callsite];
+                if (fn != nil && ![fn isEqualToString:@""]) {
+                    [s appendFormat:@")"];
+                }
+            }
+        }
+    }
     
     for (id o in [d allKeys]) {
-        [s appendFormat:@"%@: %@\n", o, [d objectForKey:o]];
+        if (![o isEqualToString:@"stack"] && ![o isEqualToString:@"line"] && ![o isEqualToString:@"column"] && ![o isEqualToString:@"sourceURL"]) {
+            [s appendFormat:@"\n  %@: %@", o, [d objectForKey:o]];
+        }
     }
     
     [self print:@{
