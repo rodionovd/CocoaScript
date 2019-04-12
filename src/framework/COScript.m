@@ -728,13 +728,17 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 # pragma mark - print
 
 - (void)printException:(NSException*)e {
+    if (_printController) {
+        [_printController scriptHadException:e];
+    }
+
     NSMutableString *s = [NSMutableString string];
     
     [s appendFormat:@"%@", e];
     
     NSDictionary *d = [e userInfo];
 
-    if ([d objectForKey:@"stack"] != nil) {
+    if ([d objectForKey:@"stack"] != nil && ![[d objectForKey:@"stack"] isEqualToString:@"undefined"]) {
         // this is the same algo as in skpm/util
         // https://github.com/skpm/util/blob/5edb84f6d7983320ab064b7f2cf575fbedbf183b/index.js#L679-L695
         // so that it's consistent when logging an error
@@ -754,6 +758,14 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
                     [s appendFormat:@")"];
                 }
             }
+        }
+    } else if ([d objectForKey:@"sourceURL"] != nil) {
+        [s appendFormat:@"\n    at %@", [d objectForKey:@"sourceURL"]];
+        if ([d objectForKey:@"line"] != nil) {
+            [s appendFormat:@":%@", [d objectForKey:@"line"]];
+        }
+        if ([d objectForKey:@"column"] != nil) {
+            [s appendFormat:@":%@", [d objectForKey:@"column"]];
         }
     }
     
