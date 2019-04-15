@@ -728,8 +728,14 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 # pragma mark - print
 
 - (void)printException:(NSException*)e {
+    NSMutableDictionary* errorToPrint = [@{
+                                          @"payload": @[e],
+                                          @"level": @"error"
+                                          } mutableCopy];
+
     if (_printController) {
         [_printController scriptHadException:e];
+        errorToPrint[@"command"] = _printController;
     }
 
     NSMutableString *s = [NSMutableString string];
@@ -774,13 +780,10 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
             [s appendFormat:@"\n  %@: %@", o, [d objectForKey:o]];
         }
     }
+
+    errorToPrint[@"stringValue"] = s;
     
-    [self print:@{
-                  @"command": _printController,
-                  @"payload": @[e],
-                  @"stringValue": s,
-                  @"level": @"error"
-                  }];
+    [self print:errorToPrint];
 }
 
 - (void)print:(id)s {
