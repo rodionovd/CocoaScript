@@ -13,7 +13,7 @@
 @class COScript;
 
 @protocol COPrintController
-- (void)scriptHadException:(NSException*)exception;
+- (void)scriptEncounteredException:(NSException*)exception;
 - (void)print:(id)s;
 @end
 

@@ -734,7 +734,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
                                           } mutableCopy];
 
     if (_printController) {
-        [_printController scriptHadException:e];
+        [_printController scriptEncounteredException:e];
         errorToPrint[@"command"] = _printController;
     }
 
