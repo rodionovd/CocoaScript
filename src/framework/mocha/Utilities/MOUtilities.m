@@ -24,6 +24,7 @@
 
 #import "MOBox.h"
 #import "MOAllocator.h"
+#import "CODebugController.h"
 
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -328,7 +329,7 @@ JSValueRef _MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount
         
         // Make sure autorelease is ignored, since we do our own reference counting.
         if (selector == NSSelectorFromString(@"autorelease")) {
-            NSLog(@"Ignoring autorelease call on %@", target);
+            [CODebugController output:@"Ignoring autorelease call on %@", target];
             return [runtime JSValueForObject:target];
         }
         

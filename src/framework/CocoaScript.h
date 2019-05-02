@@ -4,6 +4,7 @@
 //
 
 #import <CocoaScript/COScript.h>
+#import <CocoaScript/CODebugController.h>
 #import <CocoaScript/MOJavaScriptObject.h>
 #import <CocoaScript/MOUndefined.h>
 #import <CocoaScript/JSTTextView.h>
