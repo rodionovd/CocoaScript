@@ -922,7 +922,6 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 }
 
 - (void)shutdown {
-
     [self setNilValueForKey:@"framework"];
     [self setNilValueForKey:@"addFrameworkSearchPath"];
     [self setNilValueForKey:@"objc"];
@@ -1020,16 +1019,21 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 NSSet* JS_GLOBAL_OBJECTS;
+// there are some object that should bypass the resolution or it will crash Sketch
+NSSet* RESTRICTED_OBJECTS;
 
 JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef *exception) {
     
     if (JS_GLOBAL_OBJECTS == nil) {
         JS_GLOBAL_OBJECTS = [NSSet setWithObjects: @"Infinity", @"NaN", @"undefined", @"null", @"eval", @"isFinite", @"isNaN", @"parseFloat", @"parseInt", @"decodeURI", @"encodeURI", @"decodeURIComponent", @"encodeURIComponent", @"Object", @"Function", @"Boolean", @"Symbol", @"Error", @"EvalError", @"InternalError", @"RangeError", @"ReferenceError", @"SyntaxError", @"TypeError", @"URIError", @"Number", @"Math", @"Date", @"String", @"RegExp", @"Array", @"Int8Array", @"Uint8Array", @"Uint8ClampedArray", @"Int16Array", @"Uint16Array", @"Int32Array", @"Uint32Array", @"Float32Array", @"Float64Array", @"Map", @"Set", @"WeakMap", @"WeakSet", @"SIMD", @"ArrayBuffer", @"DataView", @"JSON", @"Promise", @"GeneratorFunction", @"AsyncFunction", @"Reflect", @"Proxy", @"Intl", @"WebAssembly", nil];
     }
+    if (RESTRICTED_OBJECTS == nil) {
+        RESTRICTED_OBJECTS = [NSSet setWithObjects:@"__mocha__", @"release", @"retain", @"copy", nil];
+    }
     
     NSString *propertyName = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, propertyNameJS));
 
-    if ([propertyName isEqualToString:@"__mocha__"] || [JS_GLOBAL_OBJECTS containsObject: propertyName]) {
+    if ([RESTRICTED_OBJECTS containsObject:propertyName] || [JS_GLOBAL_OBJECTS containsObject: propertyName]) {
         return NULL;
     }
 

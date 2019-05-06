@@ -26,9 +26,8 @@ extern char ***_NSGetArgv(void);
 
 static BOOL JSTalkShouldLoadJSTPlugins = YES;
 static NSMutableArray *JSTalkPluginList;
-static NSMutableDictionary* coreModuleScriptCache; // we are keeping the core modules' script in memory as they are required very often
+static NSMutableDictionary<NSString*, NSString*>* coreModuleScriptCache; // we are keeping the core modules' script in memory as they are required very often
 
-static id<CODebugController> CODebugController = nil;
 static id<COFlowDelegate> COFlowDelegate = nil;
 
 @interface Mocha (Private)
@@ -43,26 +42,8 @@ static id<COFlowDelegate> COFlowDelegate = nil;
 
 @end
 
-void COScriptDebug(NSString* format, ...) {
-    va_list args;
-    va_start(args, format);
-    if (CODebugController == nil) {
-        NSLogv(format, args);
-    } else {
-        [CODebugController output:format args:args];
-    }
-
-    va_end(args);
-}
-
 @implementation COScript {
     NSMutableDictionary<NSString*, COCacheBox*>* moduleCache;
-}
-
-+ (id)setDebugController:(id)debugController {
-    id oldController = CODebugController;
-    CODebugController = debugController;
-    return oldController;
 }
 
 + (id)setFlowDelegate:(id<COFlowDelegate>)flowDelegate {
@@ -106,6 +87,11 @@ void COScriptDebug(NSString* format, ...) {
     }
     
     return self;
+}
+
++ (void)resetCache {
+    coreModuleScriptCache = [NSMutableDictionary dictionary];
+    [[MOBridgeSupportController sharedController] reset];
 }
 
 - (void)dealloc {
@@ -538,7 +524,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
             script = coreModuleScriptCache[scriptURL.path];
         } else {
             script = [NSString stringWithContentsOfURL:scriptURL encoding:NSUTF8StringEncoding error:&error];
-            if ([[_env objectForKey:@"isRequiringCore"] isEqualToString:@"true"]) {
+            if (script && [[_env objectForKey:@"isRequiringCore"] isEqualToString:@"true"]) {
                 // cache the core module's so that we don't need to read it from disk again
                 [coreModuleScriptCache setObject:script forKey:scriptURL.path];
             }
