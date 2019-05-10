@@ -437,6 +437,7 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		384830E01832D48500B34168 /* COSTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSTarget.h; path = src/framework/COSTarget.h; sourceTree = "<group>"; };
 		384830E11832D48500B34168 /* COSTarget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSTarget.m; path = src/framework/COSTarget.m; sourceTree = "<group>"; };
+		433A13A52286288000B8F8F0 /* BCCodeSigning.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = BCCodeSigning.xcconfig; path = ../BCFoundation/Configs/BCCodeSigning.xcconfig; sourceTree = "<group>"; };
 		5A6247AA225DE3390036F9F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = res/Base.lproj/JSTDocument.xib; sourceTree = "<group>"; };
 		5A6247AB225DE3390036F9F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = res/Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		5A88AD12225CB0D300635470 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = res/en.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -802,6 +803,7 @@
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				433A13A52286288000B8F8F0 /* BCCodeSigning.xcconfig */,
 				CC66D826181A2A810039A0A5 /* CocoaScript_Prefix.pch */,
 				CC66D8D7181A2FC10039A0A5 /* cocoascript_tool.m */,
 				22E281E41A8BB99D006650D2 /* test.js */,
@@ -1455,12 +1457,22 @@
 			attributes = {
 				LastUpgradeCheck = 0930;
 				TargetAttributes = {
+					8D15AC270486D014006FF6A4 = {
+						DevelopmentTeam = WUGMZZ5K46;
+						ProvisioningStyle = Manual;
+					};
 					9FC343C61AF7D2FE00B53759 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = WUGMZZ5K46;
+						ProvisioningStyle = Manual;
 					};
 					CC4143190F25254200E46669 = {
 						DevelopmentTeam = WUGMZZ5K46;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
+					};
+					CC5FB7C10F1FDCCC00F4ECC2 = {
+						DevelopmentTeam = WUGMZZ5K46;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -1910,6 +1922,7 @@
 		};
 		C05733CC08A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 433A13A52286288000B8F8F0 /* BCCodeSigning.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1951,6 +1964,7 @@
 		};
 		C05733CD08A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 433A13A52286288000B8F8F0 /* BCCodeSigning.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -1992,12 +2006,9 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = WUGMZZ5K46;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
@@ -2025,7 +2036,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cocoascript.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = CocoaScript;
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -2035,12 +2045,9 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = NO;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = WUGMZZ5K46;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2067,7 +2074,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cocoascript.${PRODUCT_NAME:identifier}";
 				PRODUCT_NAME = CocoaScript;
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
