@@ -1458,21 +1458,17 @@
 				LastUpgradeCheck = 0930;
 				TargetAttributes = {
 					8D15AC270486D014006FF6A4 = {
-						DevelopmentTeam = WUGMZZ5K46;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					9FC343C61AF7D2FE00B53759 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = WUGMZZ5K46;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					CC4143190F25254200E46669 = {
-						DevelopmentTeam = WUGMZZ5K46;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 					CC5FB7C10F1FDCCC00F4ECC2 = {
-						DevelopmentTeam = WUGMZZ5K46;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
