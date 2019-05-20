@@ -16,6 +16,10 @@
 
 + (MOBridgeSupportController *)sharedController;
 
+/// Used by tests to reset the bridge support controller
+/// Shouldn't be used in the real world
+- (void)reset;
+
 - (BOOL)isBridgeSupportLoadedForURL:(NSURL *)aURL;
 - (BOOL)loadBridgeSupportAtURL:(NSURL *)aURL error:(NSError **)outError;
 

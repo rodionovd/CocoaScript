@@ -17,10 +17,6 @@
 - (void)print:(id)s;
 @end
 
-@protocol CODebugController
-- (void)output:(NSString*)format args:(va_list)args;
-@end
-
 @protocol COFlowDelegate
 - (void)didClearEventStack:(COScript*)coscript;
 @end
@@ -42,6 +38,11 @@
 @property (strong, nonatomic) NSDictionary* coreModuleMap;
 
 - (instancetype)initWithCoreModules:(NSDictionary*)coreModules andName:(NSString*)name;
+
+/// Used by tests to get a clean state
+// Shouldn't be used in the real world
++ (void)resetCache;
+
 - (void)cleanup;
 - (void)garbageCollect;
 - (id)executeString:(NSString*) str;
@@ -68,7 +69,6 @@
 + (id)app:(NSString*)app;
 + (COScript*)currentCOScript;
 
-+ (id)setDebugController:(id<CODebugController>)debugController;
 + (id)setFlowDelegate:(id<COFlowDelegate>)flowDelegate;
 
 - (void)fiberWasCleared;

@@ -41,6 +41,13 @@
     return self;
 }
 
+- (void)reset {
+    _loadedURLs = [[NSMutableArray alloc] init];
+    _loadedLibraries = [[NSMutableArray alloc] init];
+    _symbols = [[NSMutableDictionary alloc] init];
+    _parser = [[MOBridgeSupportParser alloc] init];
+}
+
 
 #pragma mark -
 #pragma mark Loading
