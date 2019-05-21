@@ -7,6 +7,7 @@
 //
 
 #import "MOBridgeSupportLibrary.h"
+#import "CODebugController.h"
 
 
 @implementation MOBridgeSupportLibrary {
@@ -68,7 +69,7 @@
 
 - (void)setSymbol:(MOBridgeSupportSymbol *)symbol forName:(NSString *)name {
     if ([_symbols objectForKey:name]) {
-        NSLog(@"[CocoaScript] Duplicate declaration for %@", name);
+        [CODebugController output:@"[CocoaScript] Duplicate declaration for %@", name];
     } else {
         [_symbols setObject:symbol forKey:name];
     }
