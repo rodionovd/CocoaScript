@@ -1300,6 +1300,20 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
         }
     }
 
+    //#24893 if object implements selector as-is
+    selector = NSSelectorFromString(propertyName);
+    methodSignature = [object methodSignatureForSelector:selector];
+    if (methodSignature != nil) {
+        if ([objectClass respondsToSelector:@selector(isSelectorExcludedFromMochaScript:)]) {
+            if (![objectClass isSelectorExcludedFromMochaScript:selector]) {
+                return YES;
+            }
+        }
+        else {
+            return YES;
+        }
+    }
+    
     // Indexed subscript
     if ([object respondsToSelector:@selector(objectForIndexedSubscript:)]) {
         NSScanner *scanner = [NSScanner scannerWithString:propertyName];
@@ -1396,6 +1410,13 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
             selector = MOSelectorFromPropertyName([propertyName stringByAppendingString:@"_"]);
             methodSignature = [object methodSignatureForSelector:selector];
         }
+        
+        //#24893 if object implements selector as-is
+        if (methodSignature == nil) {
+            selector = NSSelectorFromString(propertyName);
+            methodSignature = [object methodSignatureForSelector:selector];
+        }
+        
         if (methodSignature != nil) {
             BOOL implements = NO;
             if ([objectClass respondsToSelector:@selector(isSelectorExcludedFromMochaScript:)]) {
