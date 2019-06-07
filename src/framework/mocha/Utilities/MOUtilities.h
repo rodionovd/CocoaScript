@@ -15,6 +15,7 @@
 #import <ffi/ffi.h>
 #endif
 
+extern NSString * const MOReplacementKey;
 
 @class MOBridgeSupportFunction, MOFunctionArgument, MOJavaScriptObject;
 

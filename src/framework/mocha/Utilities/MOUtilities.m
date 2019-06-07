@@ -36,6 +36,8 @@
 #import <ffi/ffi.h>
 #endif
 
+NSString * const MOReplacementKey = @"_";
+
 @interface NSMethodSignature (Mocha)
 - (NSString *)typeEncoding;
 @end
@@ -899,7 +901,7 @@ void * MOInvocationGetObjCCallAddressForArguments(NSArray *arguments) {
 #pragma mark Selectors
 
 SEL MOSelectorFromPropertyName(NSString *propertyName) {
-    NSString *selectorString = [propertyName stringByReplacingOccurrencesOfString:@"_" withString:@":"];
+    NSString *selectorString = [propertyName stringByReplacingOccurrencesOfString:MOReplacementKey withString:@":"];
     SEL selector = NSSelectorFromString(selectorString);
     return selector;
 }
