@@ -32,10 +32,6 @@
 		27E6E3D9217B49A4004BD850 /* CocoaScript.h in Headers */ = {isa = PBXBuildFile; fileRef = 27E6E3D6217B4934004BD850 /* CocoaScript.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		384830E21832D48500B34168 /* COSTarget.h in Headers */ = {isa = PBXBuildFile; fileRef = 384830E01832D48500B34168 /* COSTarget.h */; };
 		384830E31832D48500B34168 /* COSTarget.m in Sources */ = {isa = PBXBuildFile; fileRef = 384830E11832D48500B34168 /* COSTarget.m */; };
-		670F7C5422AA6935007C3122 /* CSUnderscoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 670F7C5322AA6934007C3122 /* CSUnderscoreTests.m */; };
-		6715F62022AA9A1500227DB5 /* COSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6715F61E22AA998800227DB5 /* COSelector.m */; };
-		6715F62122AA9A1600227DB5 /* COSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6715F61E22AA998800227DB5 /* COSelector.m */; };
-		6715F62222AA9A1C00227DB5 /* COSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = 6715F61D22AA998800227DB5 /* COSelector.h */; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		9FC343CD1AF7D2FE00B53759 /* CocoaScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC41431A0F25254200E46669 /* CocoaScript.framework */; };
 		9FC343D51AF7D32B00B53759 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9FC343D31AF7D32B00B53759 /* Model.xcdatamodeld */; };
@@ -449,9 +445,6 @@
 		5A6247AA225DE3390036F9F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = res/Base.lproj/JSTDocument.xib; sourceTree = "<group>"; };
 		5A6247AB225DE3390036F9F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = res/Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		5A88AD12225CB0D300635470 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = res/en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		670F7C5322AA6934007C3122 /* CSUnderscoreTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSUnderscoreTests.m; sourceTree = "<group>"; };
-		6715F61D22AA998800227DB5 /* COSelector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = COSelector.h; path = src/framework/COSelector.h; sourceTree = "<group>"; };
-		6715F61E22AA998800227DB5 /* COSelector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = COSelector.m; path = src/framework/COSelector.m; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Cocoa Script Editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cocoa Script Editor.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FC343C71AF7D2FE00B53759 /* CocoaScriptTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoaScriptTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FC343CA1AF7D2FE00B53759 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -859,7 +852,6 @@
 			isa = PBXGroup;
 			children = (
 				9FC343D61AF7D33300B53759 /* CSPropertyTests.m */,
-				670F7C5322AA6934007C3122 /* CSUnderscoreTests.m */,
 				9FC343C91AF7D2FE00B53759 /* Supporting Files */,
 			);
 			path = CocoaScriptTests;
@@ -898,8 +890,6 @@
 				CC1C7D200F48BB2C007A2941 /* todparsekit */,
 				CC66D816181A2A710039A0A5 /* COScript.h */,
 				CC66D817181A2A710039A0A5 /* COScript.m */,
-				6715F61D22AA998800227DB5 /* COSelector.h */,
-				6715F61E22AA998800227DB5 /* COSelector.m */,
 				0337E57F227A482200AD6625 /* CODebugController.h */,
 				0337E580227A482200AD6625 /* CODebugController.m */,
 				03944989221760EE00C5B5FD /* COCacheBox.h */,
@@ -1378,7 +1368,6 @@
 				CC66D80A181A2A470039A0A5 /* TDTrackException.h in Headers */,
 				CC66D8A0181A2B0A0039A0A5 /* MOClassDescription.h in Headers */,
 				CC07AF4F1982C3F1001CCA93 /* libMultiMarkdown.h in Headers */,
-				6715F62222AA9A1C00227DB5 /* COSelector.h in Headers */,
 				CC66D7FC181A2A470039A0A5 /* TDTerminal.h in Headers */,
 				CC66D85E181A2ABF0039A0A5 /* NSOrderedSet+MochaAdditions.h in Headers */,
 				CC66D7C5181A2A470039A0A5 /* TDCollectionParser.h in Headers */,
@@ -1563,7 +1552,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				670F7C5422AA6935007C3122 /* CSUnderscoreTests.m in Sources */,
 				9FC343D71AF7D33300B53759 /* CSPropertyTests.m in Sources */,
 				9FC343D51AF7D32B00B53759 /* Model.xcdatamodeld in Sources */,
 			);
@@ -1574,7 +1562,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0337E583227A4D2500AD6625 /* CODebugController.m in Sources */,
-				6715F62022AA9A1500227DB5 /* COSelector.m in Sources */,
 				0394498C2217610600C5B5FD /* COCacheBox.m in Sources */,
 				03F86D8F20F8F1F9009AEB24 /* MOJSTypeChecker.m in Sources */,
 				0334150320B5E3640052CD7C /* MOJSBlock.m in Sources */,
@@ -1717,7 +1704,6 @@
 				CC9FEFC4182969D3009DB0F9 /* MOUndefined.m in Sources */,
 				CC9FEF9C182969CE009DB0F9 /* MOFunctionArgument.m in Sources */,
 				CCD38347195A454F00C436B9 /* COSDatabaseAdditions.m in Sources */,
-				6715F62122AA9A1600227DB5 /* COSelector.m in Sources */,
 				CC9FEF9E182969CE009DB0F9 /* MOMapTable.m in Sources */,
 				CC9FEFA0182969CE009DB0F9 /* MOUtilities.m in Sources */,
 				CC66D8D8181A2FC10039A0A5 /* cocoascript_tool.m in Sources */,
