@@ -1221,7 +1221,7 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
         return YES;
     }
 
-
+    
     if ([object isKindOfClass:[Mocha class]] && [propertyName isEqualToString:@"protect"]) {
         return YES;
     }
@@ -1396,6 +1396,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
             selector = MOSelectorFromPropertyName([propertyName stringByAppendingString:@"_"]);
             methodSignature = [object methodSignatureForSelector:selector];
         }
+
         if (methodSignature != nil) {
             BOOL implements = NO;
             if ([objectClass respondsToSelector:@selector(isSelectorExcludedFromMochaScript:)]) {
