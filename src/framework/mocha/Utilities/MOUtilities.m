@@ -36,6 +36,7 @@
 #import <ffi/ffi.h>
 #endif
 
+
 @interface NSMethodSignature (Mocha)
 - (NSString *)typeEncoding;
 @end
@@ -900,12 +901,14 @@ void * MOInvocationGetObjCCallAddressForArguments(NSArray *arguments) {
 
 SEL MOSelectorFromPropertyName(NSString *propertyName) {
     NSString *selectorString = [propertyName stringByReplacingOccurrencesOfString:@"_" withString:@":"];
+    selectorString = [selectorString stringByReplacingOccurrencesOfString:@"::" withString:@"_"];
     SEL selector = NSSelectorFromString(selectorString);
     return selector;
 }
 
 NSString * MOSelectorToPropertyName(SEL selector) {
     NSString *selectorString = NSStringFromSelector(selector);
+    selectorString = [selectorString stringByReplacingOccurrencesOfString:@"_" withString:@"__"];
     NSString *propertyString = [selectorString stringByReplacingOccurrencesOfString:@":" withString:@"_"];
     return propertyString;
 }
