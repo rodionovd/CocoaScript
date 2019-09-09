@@ -1376,7 +1376,6 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
             }
         }
 
-
         // Association object
         id value = objc_getAssociatedObject(object, (__bridge const void *)(propertyName));
         if (value != nil) {
@@ -1427,7 +1426,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
             }
 
             if ([object respondsToSelector:getterSelector] && ![objectClass isSelectorExcludedFromMochaScript:getterSelector]) {
-                MOMethod *method = [MOMethod methodWithTarget:object selector:selector];
+                MOMethod *method = [MOMethod methodWithTarget:object selector:getterSelector];
                 JSValueRef invocationValue = MOFunctionInvoke(method, ctx, 0, NULL, exception);
                 return invocationValue;
             }
