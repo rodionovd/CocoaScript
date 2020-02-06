@@ -107,9 +107,9 @@
 			<string>Cocoa Script Editor</string>
 			<key>NSReturnTypes</key>
 			<array>
-				<string>NSRTFDPboardType</string>
-				<string>NSRTFPboardType</string>
-				<string>NSStringPboardType</string>
+				<string>NSPasteboardTypeRTFD</string>
+				<string>NSPasteboardTypeRTF</string>
+				<string>NSPasteboardTypeString</string>
 			</array>
 			<key>NSSendTypes</key>
 			<array>
