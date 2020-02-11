@@ -519,8 +519,8 @@
     
     NSPasteboard *pb = [NSPasteboard generalPasteboard];
     
-    [pb declareTypes:[NSArray arrayWithObject:NSPasteboardTypeString] owner:nil];
-    [pb setString:bookmarklet forType:NSPasteboardTypeString];
+    [pb declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
+    [pb setString:bookmarklet forType:NSStringPboardType];
 }
 
 

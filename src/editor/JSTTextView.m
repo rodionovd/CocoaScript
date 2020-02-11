@@ -243,7 +243,7 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 }
 
 - (NSArray *)writablePasteboardTypes {
-    return [[super writablePasteboardTypes] arrayByAddingObject:NSPasteboardTypeRTF];
+    return [[super writablePasteboardTypes] arrayByAddingObject:NSRTFPboardType];
 }
 
 - (void)insertTab:(id)sender {
