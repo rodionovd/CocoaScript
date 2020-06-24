@@ -124,8 +124,6 @@
     return doc;
 }
 
-#pragma clang diagnostic pop
-
 - (void)activate {
     ProcessSerialNumber xpsn = { 0, kCurrentProcess };
     SetFrontProcess( &xpsn );
@@ -139,6 +137,8 @@
     
     return button;
 }
+
+#pragma clang diagnostic pop
 
 - (NSInteger)displayDialog:(NSString*)msg {
     
