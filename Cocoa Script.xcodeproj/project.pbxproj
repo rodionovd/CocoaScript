@@ -36,10 +36,6 @@
 		9FC343CD1AF7D2FE00B53759 /* CocoaScript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC41431A0F25254200E46669 /* CocoaScript.framework */; };
 		9FC343D51AF7D32B00B53759 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9FC343D31AF7D32B00B53759 /* Model.xcdatamodeld */; };
 		9FC343D71AF7D33300B53759 /* CSPropertyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FC343D61AF7D33300B53759 /* CSPropertyTests.m */; };
-		CC07AF481982C2BC001CCA93 /* libMultiMarkdown.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC07AF471982C2BC001CCA93 /* libMultiMarkdown.a */; };
-		CC07AF4C1982C310001CCA93 /* COSMarkdown.h in Headers */ = {isa = PBXBuildFile; fileRef = CC07AF4A1982C310001CCA93 /* COSMarkdown.h */; };
-		CC07AF4D1982C310001CCA93 /* COSMarkdown.m in Sources */ = {isa = PBXBuildFile; fileRef = CC07AF4B1982C310001CCA93 /* COSMarkdown.m */; };
-		CC07AF4F1982C3F1001CCA93 /* libMultiMarkdown.h in Headers */ = {isa = PBXBuildFile; fileRef = CC07AF4E1982C3F1001CCA93 /* libMultiMarkdown.h */; };
 		CC0EC3290F226F550094F69D /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0EC3280F226F550094F69D /* ScriptingBridge.framework */; };
 		CC0EC32A0F226F550094F69D /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0EC3280F226F550094F69D /* ScriptingBridge.framework */; };
 		CC1323850F24FF9D0032FEB8 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC1323840F24FF9D0032FEB8 /* Carbon.framework */; };
@@ -345,32 +341,12 @@
 		CCC5B8C90F1EFA9700126722 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = CCC5B8BE0F1EFA9700126722 /* MainMenu.xib */; };
 		CCC5B8CA0F1EFA9700126722 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = CCC5B8C00F1EFA9700126722 /* Credits.rtf */; };
 		CCC8338B19BE4D380074183E /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCC8338A19BE4D380074183E /* OSAKit.framework */; };
-		CCD38343195A454F00C436B9 /* COSDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = CCD38339195A454F00C436B9 /* COSDatabase.h */; };
-		CCD38344195A454F00C436B9 /* COSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3833A195A454F00C436B9 /* COSDatabase.m */; };
-		CCD38345195A454F00C436B9 /* COSDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3833A195A454F00C436B9 /* COSDatabase.m */; };
-		CCD38346195A454F00C436B9 /* COSDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = CCD3833B195A454F00C436B9 /* COSDatabaseAdditions.h */; };
-		CCD38347195A454F00C436B9 /* COSDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3833C195A454F00C436B9 /* COSDatabaseAdditions.m */; };
-		CCD38348195A454F00C436B9 /* COSDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3833C195A454F00C436B9 /* COSDatabaseAdditions.m */; };
-		CCD38349195A454F00C436B9 /* COSDatabaseQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = CCD3833D195A454F00C436B9 /* COSDatabaseQueue.h */; };
-		CCD3834A195A454F00C436B9 /* COSDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3833E195A454F00C436B9 /* COSDatabaseQueue.m */; };
-		CCD3834B195A454F00C436B9 /* COSDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3833E195A454F00C436B9 /* COSDatabaseQueue.m */; };
-		CCD3834C195A454F00C436B9 /* COSResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = CCD3833F195A454F00C436B9 /* COSResultSet.h */; };
-		CCD3834D195A454F00C436B9 /* COSResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD38340195A454F00C436B9 /* COSResultSet.m */; };
-		CCD3834E195A454F00C436B9 /* COSResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD38340195A454F00C436B9 /* COSResultSet.m */; };
-		CCD3834F195A454F00C436B9 /* FMDB.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = CCD38341195A454F00C436B9 /* FMDB.bridgesupport */; };
 		CCD38352195A457800C436B9 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CCD38351195A457800C436B9 /* libsqlite3.0.dylib */; };
-		CCD38353195A457800C436B9 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CCD38351195A457800C436B9 /* libsqlite3.0.dylib */; };
-		CCD38356195A458D00C436B9 /* COSR.h in Headers */ = {isa = PBXBuildFile; fileRef = CCD38354195A458D00C436B9 /* COSR.h */; };
-		CCD38357195A458D00C436B9 /* COSR.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD38355195A458D00C436B9 /* COSR.m */; };
-		CCD38358195A458D00C436B9 /* COSR.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD38355195A458D00C436B9 /* COSR.m */; };
 		CCD3835B195A45AB00C436B9 /* COSGifAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = CCD38359195A45AB00C436B9 /* COSGifAnimator.h */; };
 		CCD3835C195A45AB00C436B9 /* COSGifAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3835A195A45AB00C436B9 /* COSGifAnimator.m */; };
 		CCD3835D195A45AB00C436B9 /* COSGifAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3835A195A45AB00C436B9 /* COSGifAnimator.m */; };
 		CCE675E8182ED9C900DB1932 /* COSAlertWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = CCE675E6182ED9C900DB1932 /* COSAlertWindow.h */; };
 		CCE675E9182ED9C900DB1932 /* COSAlertWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE675E7182ED9C900DB1932 /* COSAlertWindow.m */; };
-		CCF056181849A23C000C56F7 /* COSScript+Spelunking.h in Headers */ = {isa = PBXBuildFile; fileRef = CCF056161849A23C000C56F7 /* COSScript+Spelunking.h */; };
-		CCF056191849A23C000C56F7 /* COSScript+Spelunking.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF056171849A23C000C56F7 /* COSScript+Spelunking.m */; };
-		CCF0561D184A884D000C56F7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCF0561C184A884D000C56F7 /* OpenGL.framework */; };
 		CCF4DBE118296AB800ACB9EC /* Mocha.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D861181A2AE10039A0A5 /* Mocha.m */; };
 		CCF4DBE218296AB800ACB9EC /* MochaRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D865181A2AE10039A0A5 /* MochaRuntime.m */; };
 		CCF68F1E0F4E3E4F00925FCA /* JSTalkDocument.icns in Resources */ = {isa = PBXBuildFile; fileRef = CCF68F1D0F4E3E4F00925FCA /* JSTalkDocument.icns */; };
@@ -452,9 +428,6 @@
 		9FC343D41AF7D32B00B53759 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		9FC343D61AF7D33300B53759 /* CSPropertyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPropertyTests.m; sourceTree = "<group>"; };
 		CC07AF471982C2BC001CCA93 /* libMultiMarkdown.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMultiMarkdown.a; path = lib/libMultiMarkdown.a; sourceTree = "<group>"; };
-		CC07AF4A1982C310001CCA93 /* COSMarkdown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSMarkdown.h; path = src/framework/COSMarkdown.h; sourceTree = "<group>"; };
-		CC07AF4B1982C310001CCA93 /* COSMarkdown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSMarkdown.m; path = src/framework/COSMarkdown.m; sourceTree = "<group>"; };
-		CC07AF4E1982C3F1001CCA93 /* libMultiMarkdown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libMultiMarkdown.h; path = lib/libMultiMarkdown.h; sourceTree = "<group>"; };
 		CC0EC3280F226F550094F69D /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = /System/Library/Frameworks/ScriptingBridge.framework; sourceTree = "<absolute>"; };
 		CC1323840F24FF9D0032FEB8 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		CC1C7E3F0F48C34D007A2941 /* Play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Play.tiff; path = res/images/Play.tiff; sourceTree = "<group>"; };
@@ -684,24 +657,11 @@
 		CCC5B8A40F1EFA6D00126722 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
 		CCC5B8B00F1EFA9700126722 /* Info.plist */ = {isa = PBXFileReference; explicitFileType = text.xml; fileEncoding = 4; name = Info.plist; path = res/Info.plist; sourceTree = "<group>"; };
 		CCC8338A19BE4D380074183E /* OSAKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSAKit.framework; path = ../../../../../../System/Library/Frameworks/OSAKit.framework; sourceTree = "<group>"; };
-		CCD38339195A454F00C436B9 /* COSDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COSDatabase.h; sourceTree = "<group>"; };
-		CCD3833A195A454F00C436B9 /* COSDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COSDatabase.m; sourceTree = "<group>"; };
-		CCD3833B195A454F00C436B9 /* COSDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COSDatabaseAdditions.h; sourceTree = "<group>"; };
-		CCD3833C195A454F00C436B9 /* COSDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COSDatabaseAdditions.m; sourceTree = "<group>"; };
-		CCD3833D195A454F00C436B9 /* COSDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COSDatabaseQueue.h; sourceTree = "<group>"; };
-		CCD3833E195A454F00C436B9 /* COSDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COSDatabaseQueue.m; sourceTree = "<group>"; };
-		CCD3833F195A454F00C436B9 /* COSResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = COSResultSet.h; sourceTree = "<group>"; };
-		CCD38340195A454F00C436B9 /* COSResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = COSResultSet.m; sourceTree = "<group>"; };
-		CCD38341195A454F00C436B9 /* FMDB.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FMDB.bridgesupport; sourceTree = "<group>"; };
 		CCD38351195A457800C436B9 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = ../../../../usr/lib/libsqlite3.0.dylib; sourceTree = "<group>"; };
-		CCD38354195A458D00C436B9 /* COSR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSR.h; path = src/framework/COSR.h; sourceTree = "<group>"; };
-		CCD38355195A458D00C436B9 /* COSR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSR.m; path = src/framework/COSR.m; sourceTree = "<group>"; };
 		CCD38359195A45AB00C436B9 /* COSGifAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSGifAnimator.h; path = src/framework/COSGifAnimator.h; sourceTree = SOURCE_ROOT; };
 		CCD3835A195A45AB00C436B9 /* COSGifAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSGifAnimator.m; path = src/framework/COSGifAnimator.m; sourceTree = SOURCE_ROOT; };
 		CCE675E6182ED9C900DB1932 /* COSAlertWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSAlertWindow.h; path = src/framework/COSAlertWindow.h; sourceTree = "<group>"; };
 		CCE675E7182ED9C900DB1932 /* COSAlertWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSAlertWindow.m; path = src/framework/COSAlertWindow.m; sourceTree = "<group>"; };
-		CCF056161849A23C000C56F7 /* COSScript+Spelunking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "COSScript+Spelunking.h"; path = "src/framework/COSScript+Spelunking.h"; sourceTree = "<group>"; };
-		CCF056171849A23C000C56F7 /* COSScript+Spelunking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "COSScript+Spelunking.m"; path = "src/framework/COSScript+Spelunking.m"; sourceTree = "<group>"; };
 		CCF0561C184A884D000C56F7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
 		CCF68F1D0F4E3E4F00925FCA /* JSTalkDocument.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = JSTalkDocument.icns; path = res/images/JSTalkDocument.icns; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -735,11 +695,8 @@
 				CC4143500F25261000E46669 /* Carbon.framework in Frameworks */,
 				CC4143510F25261100E46669 /* ScriptingBridge.framework in Frameworks */,
 				CC4143520F25261200E46669 /* JavaScriptCore.framework in Frameworks */,
-				CCF0561D184A884D000C56F7 /* OpenGL.framework in Frameworks */,
-				CC07AF481982C2BC001CCA93 /* libMultiMarkdown.a in Frameworks */,
 				CC4143530F25261300E46669 /* Cocoa.framework in Frameworks */,
 				CC86430D163B29E600908427 /* QuartzCore.framework in Frameworks */,
-				CCD38353195A457800C436B9 /* libsqlite3.0.dylib in Frameworks */,
 				CC86430F163B29F500908427 /* OpenCL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -868,23 +825,10 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		CC07AF491982C2FB001CCA93 /* Markdown */ = {
-			isa = PBXGroup;
-			children = (
-				CC07AF4E1982C3F1001CCA93 /* libMultiMarkdown.h */,
-				CC07AF4A1982C310001CCA93 /* COSMarkdown.h */,
-				CC07AF4B1982C310001CCA93 /* COSMarkdown.m */,
-			);
-			name = Markdown;
-			sourceTree = "<group>";
-		};
 		CC0EC3380F2274730094F69D /* Framework */ = {
 			isa = PBXGroup;
 			children = (
 				27E6E3D6217B4934004BD850 /* CocoaScript.h */,
-				CC07AF491982C2FB001CCA93 /* Markdown */,
-				CCD38338195A454F00C436B9 /* fmdb */,
-				CCF056151849A20A000C56F7 /* Spelunking */,
 				CCA1A532183EA838000159B3 /* helpers */,
 				CC99F0F7181A251F00F0D48E /* imagetools */,
 				CCEC369615BA5E44008D8460 /* mocha */,
@@ -1112,23 +1056,6 @@
 			name = helpers;
 			sourceTree = "<group>";
 		};
-		CCD38338195A454F00C436B9 /* fmdb */ = {
-			isa = PBXGroup;
-			children = (
-				CCD38339195A454F00C436B9 /* COSDatabase.h */,
-				CCD3833A195A454F00C436B9 /* COSDatabase.m */,
-				CCD3833B195A454F00C436B9 /* COSDatabaseAdditions.h */,
-				CCD3833C195A454F00C436B9 /* COSDatabaseAdditions.m */,
-				CCD3833D195A454F00C436B9 /* COSDatabaseQueue.h */,
-				CCD3833E195A454F00C436B9 /* COSDatabaseQueue.m */,
-				CCD3833F195A454F00C436B9 /* COSResultSet.h */,
-				CCD38340195A454F00C436B9 /* COSResultSet.m */,
-				CCD38341195A454F00C436B9 /* FMDB.bridgesupport */,
-			);
-			name = fmdb;
-			path = src/framework/fmdb;
-			sourceTree = "<group>";
-		};
 		CCEC369615BA5E44008D8460 /* mocha */ = {
 			isa = PBXGroup;
 			children = (
@@ -1240,17 +1167,6 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		CCF056151849A20A000C56F7 /* Spelunking */ = {
-			isa = PBXGroup;
-			children = (
-				CCF056161849A23C000C56F7 /* COSScript+Spelunking.h */,
-				CCF056171849A23C000C56F7 /* COSScript+Spelunking.m */,
-				CCD38354195A458D00C436B9 /* COSR.h */,
-				CCD38355195A458D00C436B9 /* COSR.m */,
-			);
-			name = Spelunking;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1271,7 +1187,6 @@
 				CC66D80E181A2A470039A0A5 /* TDWhitespaceState.h in Headers */,
 				CC66D812181A2A470039A0A5 /* TDWordOrReservedState.h in Headers */,
 				CC66D868181A2AE10039A0A5 /* MochaDefines.h in Headers */,
-				CCD38349195A454F00C436B9 /* COSDatabaseQueue.h in Headers */,
 				CC66D7F2181A2A470039A0A5 /* TDSpecificChar.h in Headers */,
 				CC66D8B5181A2B0A0039A0A5 /* MOPointerValue.h in Headers */,
 				CC66D820181A2A710039A0A5 /* COSExtras.h in Headers */,
@@ -1299,7 +1214,6 @@
 				CC66D85C181A2ABF0039A0A5 /* NSObject+MochaAdditions.h in Headers */,
 				CC66D7DB181A2A470039A0A5 /* TDNumberState.h in Headers */,
 				CC66D827181A2A810039A0A5 /* CocoaScript_Prefix.pch in Headers */,
-				CC07AF4C1982C310001CCA93 /* COSMarkdown.h in Headers */,
 				CC66D7E4181A2A470039A0A5 /* TDReader.h in Headers */,
 				CC66D7C1181A2A470039A0A5 /* TDChar.h in Headers */,
 				CC66D83A181A2A9B0039A0A5 /* COSOpenCLContext.h in Headers */,
@@ -1307,7 +1221,6 @@
 				CC66D7F8181A2A470039A0A5 /* TDSymbolRootNode.h in Headers */,
 				384830E21832D48500B34168 /* COSTarget.h in Headers */,
 				CC66D7EC181A2A470039A0A5 /* TDSequence.h in Headers */,
-				CCF056181849A23C000C56F7 /* COSScript+Spelunking.h in Headers */,
 				CC66D7D9181A2A470039A0A5 /* TDNum.h in Headers */,
 				CC66D8AD181A2B0A0039A0A5 /* MOMethodDescription_Private.h in Headers */,
 				CC66D7FE181A2A470039A0A5 /* TDToken.h in Headers */,
@@ -1334,9 +1247,7 @@
 				22FBD9951C47EA55004CF31E /* MOBoxManagerBoxContext.h in Headers */,
 				CC66D836181A2A9B0039A0A5 /* COSCodeSketcher.h in Headers */,
 				CC66D84E181A2AB10039A0A5 /* MOBridgeSupportSymbol.h in Headers */,
-				CCD38343195A454F00C436B9 /* COSDatabase.h in Headers */,
 				CC66D8B7181A2B0A0039A0A5 /* MOPropertyDescription.h in Headers */,
-				CCD38356195A458D00C436B9 /* COSR.h in Headers */,
 				CC66D75A181A2A210039A0A5 /* TETextUtils.h in Headers */,
 				CC66D7C9181A2A470039A0A5 /* TDCommentState.h in Headers */,
 				CC66D7CD181A2A470039A0A5 /* TDEmpty.h in Headers */,
@@ -1361,7 +1272,6 @@
 				CC66D814181A2A470039A0A5 /* TDWordState.h in Headers */,
 				CC66D80C181A2A470039A0A5 /* TDUppercaseWord.h in Headers */,
 				CC66D7BF181A2A470039A0A5 /* TDCaseInsensitiveLiteral.h in Headers */,
-				CCD3834C195A454F00C436B9 /* COSResultSet.h in Headers */,
 				CC66D8A5181A2B0A0039A0A5 /* MOInstanceVariableDescription_Private.h in Headers */,
 				CC66D84A181A2AB10039A0A5 /* MOBridgeSupportLibrary.h in Headers */,
 				CC66D876181A2AF30039A0A5 /* MOUtilities.h in Headers */,
@@ -1369,13 +1279,11 @@
 				CC66D7F6181A2A470039A0A5 /* TDSymbolNode.h in Headers */,
 				CC66D80A181A2A470039A0A5 /* TDTrackException.h in Headers */,
 				CC66D8A0181A2B0A0039A0A5 /* MOClassDescription.h in Headers */,
-				CC07AF4F1982C3F1001CCA93 /* libMultiMarkdown.h in Headers */,
 				CC66D7FC181A2A470039A0A5 /* TDTerminal.h in Headers */,
 				CC66D85E181A2ABF0039A0A5 /* NSOrderedSet+MochaAdditions.h in Headers */,
 				CC66D7C5181A2A470039A0A5 /* TDCollectionParser.h in Headers */,
 				CC66D7B9181A2A460039A0A5 /* TDAlternation.h in Headers */,
 				CC847AFC183EE02300436C38 /* COScript+Interval.h in Headers */,
-				CCD38346195A454F00C436B9 /* COSDatabaseAdditions.h in Headers */,
 				CC66D8AE181A2B0A0039A0A5 /* MOMethodDescription.h in Headers */,
 				CC66D7C7181A2A470039A0A5 /* TDComment.h in Headers */,
 			);
@@ -1466,16 +1374,20 @@
 				LastUpgradeCheck = 1200;
 				TargetAttributes = {
 					8D15AC270486D014006FF6A4 = {
+						DevelopmentTeam = WUGMZZ5K46;
 						ProvisioningStyle = Automatic;
 					};
 					9FC343C61AF7D2FE00B53759 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = WUGMZZ5K46;
 						ProvisioningStyle = Automatic;
 					};
 					CC4143190F25254200E46669 = {
+						DevelopmentTeam = WUGMZZ5K46;
 						ProvisioningStyle = Automatic;
 					};
 					CC5FB7C10F1FDCCC00F4ECC2 = {
+						DevelopmentTeam = WUGMZZ5K46;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1537,7 +1449,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CCD3834F195A454F00C436B9 /* FMDB.bridgesupport in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1604,7 +1515,6 @@
 				CC66D803181A2A470039A0A5 /* TDTokenAssembly.m in Sources */,
 				CC66D7BC181A2A470039A0A5 /* TDAny.m in Sources */,
 				CC66D8AC181A2B0A0039A0A5 /* MOMethod.m in Sources */,
-				CCD38358195A458D00C436B9 /* COSR.m in Sources */,
 				CC66D825181A2A710039A0A5 /* COSPreprocessor.m in Sources */,
 				CC66D7FD181A2A470039A0A5 /* TDTerminal.m in Sources */,
 				CC66D7C0181A2A470039A0A5 /* TDCaseInsensitiveLiteral.m in Sources */,
@@ -1629,7 +1539,6 @@
 				CC66D85F181A2ABF0039A0A5 /* NSOrderedSet+MochaAdditions.m in Sources */,
 				CC66D8BB181A2B0A0039A0A5 /* MOProtocolDescription.m in Sources */,
 				CC66D89F181A2B0A0039A0A5 /* MOBox.m in Sources */,
-				CCD38348195A454F00C436B9 /* COSDatabaseAdditions.m in Sources */,
 				CC66D7F7181A2A470039A0A5 /* TDSymbolNode.m in Sources */,
 				CC66D7F3181A2A470039A0A5 /* TDSpecificChar.m in Sources */,
 				CC66D7E1181A2A470039A0A5 /* TDQuotedString.m in Sources */,
@@ -1641,7 +1550,6 @@
 				CC66D7D4181A2A470039A0A5 /* TDLowercaseWord.m in Sources */,
 				CC66D7BE181A2A470039A0A5 /* TDAssembly.m in Sources */,
 				CC66D8A1181A2B0A0039A0A5 /* MOClassDescription.m in Sources */,
-				CCD3834B195A454F00C436B9 /* COSDatabaseQueue.m in Sources */,
 				CC66D813181A2A470039A0A5 /* TDWordOrReservedState.m in Sources */,
 				CC66D7CA181A2A470039A0A5 /* TDCommentState.m in Sources */,
 				CC66D7E9181A2A470039A0A5 /* TDReservedWord.m in Sources */,
@@ -1655,13 +1563,11 @@
 				CC66D7D6181A2A470039A0A5 /* TDMultiLineCommentState.m in Sources */,
 				CC66D8B1181A2B0A0039A0A5 /* MOObjCRuntime.m in Sources */,
 				220D93E71C92E69C001EF05C /* JSTTextView.m in Sources */,
-				CC07AF4D1982C310001CCA93 /* COSMarkdown.m in Sources */,
 				CC66D807181A2A470039A0A5 /* TDTokenizerState.m in Sources */,
 				CC66D84F181A2AB10039A0A5 /* MOBridgeSupportSymbol.m in Sources */,
 				CCD3835D195A45AB00C436B9 /* COSGifAnimator.m in Sources */,
 				CC66D7BA181A2A470039A0A5 /* TDAlternation.m in Sources */,
 				CC66D849181A2AB10039A0A5 /* MOBridgeSupportController.m in Sources */,
-				CCF056191849A23C000C56F7 /* COSScript+Spelunking.m in Sources */,
 				CC66D80B181A2A470039A0A5 /* TDTrackException.m in Sources */,
 				CC66D89D181A2B0A0039A0A5 /* MOAllocator.m in Sources */,
 				CC66D8B4181A2B0A0039A0A5 /* MOPointer.m in Sources */,
@@ -1674,12 +1580,10 @@
 				CC66D7E3181A2A470039A0A5 /* TDQuoteState.m in Sources */,
 				CC66D815181A2A470039A0A5 /* TDWordState.m in Sources */,
 				CC66D7E7181A2A470039A0A5 /* TDRepetition.m in Sources */,
-				CCD3834E195A454F00C436B9 /* COSResultSet.m in Sources */,
 				CC66D809181A2A470039A0A5 /* TDTrack.m in Sources */,
 				CC66D859181A2ABF0039A0A5 /* NSArray+MochaAdditions.m in Sources */,
 				CC66D84B181A2AB10039A0A5 /* MOBridgeSupportLibrary.m in Sources */,
 				CC66D839181A2A9B0039A0A5 /* COSImageTools.m in Sources */,
-				CCD38345195A454F00C436B9 /* COSDatabase.m in Sources */,
 				CC66D7C4181A2A470039A0A5 /* TDCharacterAssembly.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1691,7 +1595,6 @@
 				CCF4DBE118296AB800ACB9EC /* Mocha.m in Sources */,
 				CCF4DBE218296AB800ACB9EC /* MochaRuntime.m in Sources */,
 				CC9FEF94182969B9009DB0F9 /* MOBridgeSupportController.m in Sources */,
-				CCD3834D195A454F00C436B9 /* COSResultSet.m in Sources */,
 				CC9FEF96182969B9009DB0F9 /* MOBridgeSupportLibrary.m in Sources */,
 				CC9FEF98182969B9009DB0F9 /* MOBridgeSupportParser.m in Sources */,
 				CC9FEF9A182969B9009DB0F9 /* MOBridgeSupportSymbol.m in Sources */,
@@ -1715,7 +1618,6 @@
 				CC9FEFC2182969D3009DB0F9 /* MOStruct.m in Sources */,
 				CC9FEFC4182969D3009DB0F9 /* MOUndefined.m in Sources */,
 				CC9FEF9C182969CE009DB0F9 /* MOFunctionArgument.m in Sources */,
-				CCD38347195A454F00C436B9 /* COSDatabaseAdditions.m in Sources */,
 				CC9FEF9E182969CE009DB0F9 /* MOMapTable.m in Sources */,
 				CC9FEFA0182969CE009DB0F9 /* MOUtilities.m in Sources */,
 				CC66D8D8181A2FC10039A0A5 /* cocoascript_tool.m in Sources */,
@@ -1739,7 +1641,6 @@
 				22FBD9961C47EA55004CF31E /* MOBoxManagerBoxContext.m in Sources */,
 				CC9FEFE818296A2A009DB0F9 /* TDLowercaseWord.m in Sources */,
 				CC9FEFEA18296A2A009DB0F9 /* TDMultiLineCommentState.m in Sources */,
-				CCD38344195A454F00C436B9 /* COSDatabase.m in Sources */,
 				CC9FEFEC18296A2A009DB0F9 /* TDNonReservedWord.m in Sources */,
 				CC9FEFEE18296A2A009DB0F9 /* TDNum.m in Sources */,
 				CC9FEFF018296A2A009DB0F9 /* TDNumberState.m in Sources */,
@@ -1764,9 +1665,7 @@
 				CC9FF01518296A2B009DB0F9 /* TDTokenAssembly.m in Sources */,
 				229C1FF71C21B38D004C5B3B /* MOBoxManager.m in Sources */,
 				CC9FF01718296A2B009DB0F9 /* TDTokenizer.m in Sources */,
-				CCD3834A195A454F00C436B9 /* COSDatabaseQueue.m in Sources */,
 				CC9FF01918296A2B009DB0F9 /* TDTokenizerState.m in Sources */,
-				CCD38357195A458D00C436B9 /* COSR.m in Sources */,
 				CC9FF01B18296A2B009DB0F9 /* TDTrack.m in Sources */,
 				CC9FF01D18296A2B009DB0F9 /* TDTrackException.m in Sources */,
 				CC9FF01F18296A2B009DB0F9 /* TDUppercaseWord.m in Sources */,
