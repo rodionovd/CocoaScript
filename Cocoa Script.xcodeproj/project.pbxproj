@@ -38,12 +38,9 @@
 		9FC343D71AF7D33300B53759 /* CSPropertyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FC343D61AF7D33300B53759 /* CSPropertyTests.m */; };
 		CC0EC3290F226F550094F69D /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0EC3280F226F550094F69D /* ScriptingBridge.framework */; };
 		CC0EC32A0F226F550094F69D /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0EC3280F226F550094F69D /* ScriptingBridge.framework */; };
-		CC1323850F24FF9D0032FEB8 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC1323840F24FF9D0032FEB8 /* Carbon.framework */; };
-		CC1324300F2504F00032FEB8 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC1323840F24FF9D0032FEB8 /* Carbon.framework */; };
 		CC1C7E400F48C34D007A2941 /* Play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = CC1C7E3F0F48C34D007A2941 /* Play.tiff */; };
 		CC1C7E580F48C76B007A2941 /* Clear.tiff in Resources */ = {isa = PBXBuildFile; fileRef = CC1C7E570F48C76B007A2941 /* Clear.tiff */; };
 		CC239E9419BE64B0006F9837 /* CocoaScript.bridgesupport in CopyFiles */ = {isa = PBXBuildFile; fileRef = CC239E9319BE64AD006F9837 /* CocoaScript.bridgesupport */; };
-		CC4143500F25261000E46669 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC1323840F24FF9D0032FEB8 /* Carbon.framework */; };
 		CC4143510F25261100E46669 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC0EC3280F226F550094F69D /* ScriptingBridge.framework */; };
 		CC4143520F25261200E46669 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCC5B8A40F1EFA6D00126722 /* JavaScriptCore.framework */; };
 		CC4143530F25261300E46669 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
@@ -327,7 +324,6 @@
 		CCC5B8C90F1EFA9700126722 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = CCC5B8BE0F1EFA9700126722 /* MainMenu.xib */; };
 		CCC5B8CA0F1EFA9700126722 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = CCC5B8C00F1EFA9700126722 /* Credits.rtf */; };
 		CCC8338B19BE4D380074183E /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCC8338A19BE4D380074183E /* OSAKit.framework */; };
-		CCD38352195A457800C436B9 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CCD38351195A457800C436B9 /* libsqlite3.0.dylib */; };
 		CCE675E8182ED9C900DB1932 /* COSAlertWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = CCE675E6182ED9C900DB1932 /* COSAlertWindow.h */; };
 		CCE675E9182ED9C900DB1932 /* COSAlertWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE675E7182ED9C900DB1932 /* COSAlertWindow.m */; };
 		CCF4DBE118296AB800ACB9EC /* Mocha.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D861181A2AE10039A0A5 /* Mocha.m */; };
@@ -410,9 +406,7 @@
 		9FC343CA1AF7D2FE00B53759 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FC343D41AF7D32B00B53759 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		9FC343D61AF7D33300B53759 /* CSPropertyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPropertyTests.m; sourceTree = "<group>"; };
-		CC07AF471982C2BC001CCA93 /* libMultiMarkdown.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libMultiMarkdown.a; path = lib/libMultiMarkdown.a; sourceTree = "<group>"; };
 		CC0EC3280F226F550094F69D /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = /System/Library/Frameworks/ScriptingBridge.framework; sourceTree = "<absolute>"; };
-		CC1323840F24FF9D0032FEB8 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		CC1C7E3F0F48C34D007A2941 /* Play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Play.tiff; path = res/images/Play.tiff; sourceTree = "<group>"; };
 		CC1C7E570F48C76B007A2941 /* Clear.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Clear.tiff; path = res/images/Clear.tiff; sourceTree = "<group>"; };
 		CC239E9319BE64AD006F9837 /* CocoaScript.bridgesupport */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = CocoaScript.bridgesupport; path = lib/CocoaScript.bridgesupport; sourceTree = "<group>"; };
@@ -612,7 +606,6 @@
 		CC847AFA183EE02300436C38 /* COScript+Interval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "COScript+Interval.h"; path = "src/framework/COScript+Interval.h"; sourceTree = "<group>"; };
 		CC847AFB183EE02300436C38 /* COScript+Interval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "COScript+Interval.m"; path = "src/framework/COScript+Interval.m"; sourceTree = "<group>"; };
 		CC86430C163B29E600908427 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = ../../../../../../System/Library/Frameworks/QuartzCore.framework; sourceTree = "<group>"; };
-		CC86430E163B29F500908427 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = ../../../../../../System/Library/Frameworks/OpenCL.framework; sourceTree = "<group>"; };
 		CC94E0510F4A616300208BE0 /* JSTalk.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = JSTalk.icns; path = res/images/JSTalk.icns; sourceTree = "<group>"; };
 		CC99F0E5181A239200F0D48E /* ccgus.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ccgus.jpg; sourceTree = "<group>"; };
 		CC99F0E6181A239200F0D48E /* clouds.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = clouds.jpg; sourceTree = "<group>"; };
@@ -628,10 +621,8 @@
 		CCC5B8A40F1EFA6D00126722 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = /System/Library/Frameworks/JavaScriptCore.framework; sourceTree = "<absolute>"; };
 		CCC5B8B00F1EFA9700126722 /* Info.plist */ = {isa = PBXFileReference; explicitFileType = text.xml; fileEncoding = 4; name = Info.plist; path = res/Info.plist; sourceTree = "<group>"; };
 		CCC8338A19BE4D380074183E /* OSAKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSAKit.framework; path = ../../../../../../System/Library/Frameworks/OSAKit.framework; sourceTree = "<group>"; };
-		CCD38351195A457800C436B9 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = ../../../../usr/lib/libsqlite3.0.dylib; sourceTree = "<group>"; };
 		CCE675E6182ED9C900DB1932 /* COSAlertWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSAlertWindow.h; path = src/framework/COSAlertWindow.h; sourceTree = "<group>"; };
 		CCE675E7182ED9C900DB1932 /* COSAlertWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSAlertWindow.m; path = src/framework/COSAlertWindow.m; sourceTree = "<group>"; };
-		CCF0561C184A884D000C56F7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
 		CCF68F1D0F4E3E4F00925FCA /* JSTalkDocument.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = JSTalkDocument.icns; path = res/images/JSTalkDocument.icns; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -644,7 +635,6 @@
 				CCC8338B19BE4D380074183E /* OSAKit.framework in Frameworks */,
 				CCC5B8A50F1EFA6D00126722 /* JavaScriptCore.framework in Frameworks */,
 				CC0EC3290F226F550094F69D /* ScriptingBridge.framework in Frameworks */,
-				CC1323850F24FF9D0032FEB8 /* Carbon.framework in Frameworks */,
 				CC4143620F2527CD00E46669 /* CocoaScript.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -661,7 +651,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC4143500F25261000E46669 /* Carbon.framework in Frameworks */,
 				CC4143510F25261100E46669 /* ScriptingBridge.framework in Frameworks */,
 				CC4143520F25261200E46669 /* JavaScriptCore.framework in Frameworks */,
 				CC4143530F25261300E46669 /* Cocoa.framework in Frameworks */,
@@ -673,10 +662,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC5FB7DF0F1FDE3800F4ECC2 /* Cocoa.framework in Frameworks */,
-				CCD38352195A457800C436B9 /* libsqlite3.0.dylib in Frameworks */,
 				CC5FB7E00F1FDE3900F4ECC2 /* JavaScriptCore.framework in Frameworks */,
 				CC0EC32A0F226F550094F69D /* ScriptingBridge.framework in Frameworks */,
-				CC1324300F2504F00032FEB8 /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -759,12 +746,7 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CC07AF471982C2BC001CCA93 /* libMultiMarkdown.a */,
-				CCD38351195A457800C436B9 /* libsqlite3.0.dylib */,
-				CCF0561C184A884D000C56F7 /* OpenGL.framework */,
-				CC86430E163B29F500908427 /* OpenCL.framework */,
 				CC86430C163B29E600908427 /* QuartzCore.framework */,
-				CC1323840F24FF9D0032FEB8 /* Carbon.framework */,
 				CCC8338A19BE4D380074183E /* OSAKit.framework */,
 				CC0EC3280F226F550094F69D /* ScriptingBridge.framework */,
 				CCC5B8A40F1EFA6D00126722 /* JavaScriptCore.framework */,
