@@ -161,18 +161,6 @@
 		CC66D824181A2A710039A0A5 /* COSPreprocessor.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D81C181A2A710039A0A5 /* COSPreprocessor.h */; };
 		CC66D825181A2A710039A0A5 /* COSPreprocessor.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D81D181A2A710039A0A5 /* COSPreprocessor.m */; };
 		CC66D827181A2A810039A0A5 /* CocoaScript_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = CC66D826181A2A810039A0A5 /* CocoaScript_Prefix.pch */; };
-		CC66D834181A2A9B0039A0A5 /* COSCIImageAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D828181A2A9B0039A0A5 /* COSCIImageAdditions.h */; };
-		CC66D835181A2A9B0039A0A5 /* COSCIImageAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D829181A2A9B0039A0A5 /* COSCIImageAdditions.m */; };
-		CC66D836181A2A9B0039A0A5 /* COSCodeSketcher.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D82A181A2A9B0039A0A5 /* COSCodeSketcher.h */; };
-		CC66D837181A2A9B0039A0A5 /* COSCodeSketcher.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D82B181A2A9B0039A0A5 /* COSCodeSketcher.m */; };
-		CC66D838181A2A9B0039A0A5 /* COSImageTools.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D82C181A2A9B0039A0A5 /* COSImageTools.h */; };
-		CC66D839181A2A9B0039A0A5 /* COSImageTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D82D181A2A9B0039A0A5 /* COSImageTools.m */; };
-		CC66D83A181A2A9B0039A0A5 /* COSOpenCLContext.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D82E181A2A9B0039A0A5 /* COSOpenCLContext.h */; };
-		CC66D83B181A2A9B0039A0A5 /* COSOpenCLContext.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D82F181A2A9B0039A0A5 /* COSOpenCLContext.m */; };
-		CC66D83C181A2A9B0039A0A5 /* COSOpenCLProgram.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D830181A2A9B0039A0A5 /* COSOpenCLProgram.h */; };
-		CC66D83D181A2A9B0039A0A5 /* COSOpenCLProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D831181A2A9B0039A0A5 /* COSOpenCLProgram.m */; };
-		CC66D83E181A2A9B0039A0A5 /* COSQuickCIFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D832181A2A9B0039A0A5 /* COSQuickCIFilter.h */; };
-		CC66D83F181A2A9B0039A0A5 /* COSQuickCIFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D833181A2A9B0039A0A5 /* COSQuickCIFilter.m */; };
 		CC66D848181A2AB10039A0A5 /* MOBridgeSupportController.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D840181A2AB10039A0A5 /* MOBridgeSupportController.h */; };
 		CC66D849181A2AB10039A0A5 /* MOBridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D841181A2AB10039A0A5 /* MOBridgeSupportController.m */; };
 		CC66D84A181A2AB10039A0A5 /* MOBridgeSupportLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = CC66D842181A2AB10039A0A5 /* MOBridgeSupportLibrary.h */; };
@@ -247,8 +235,6 @@
 		CC66D8D8181A2FC10039A0A5 /* cocoascript_tool.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D8D7181A2FC10039A0A5 /* cocoascript_tool.m */; };
 		CC847AFC183EE02300436C38 /* COScript+Interval.h in Headers */ = {isa = PBXBuildFile; fileRef = CC847AFA183EE02300436C38 /* COScript+Interval.h */; };
 		CC847AFD183EE02300436C38 /* COScript+Interval.m in Sources */ = {isa = PBXBuildFile; fileRef = CC847AFB183EE02300436C38 /* COScript+Interval.m */; };
-		CC86430D163B29E600908427 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC86430C163B29E600908427 /* QuartzCore.framework */; };
-		CC86430F163B29F500908427 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC86430E163B29F500908427 /* OpenCL.framework */; };
 		CC94E0520F4A616300208BE0 /* JSTalk.icns in Resources */ = {isa = PBXBuildFile; fileRef = CC94E0510F4A616300208BE0 /* JSTalk.icns */; };
 		CC99F0EE181A239200F0D48E /* ccgus.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CC99F0E5181A239200F0D48E /* ccgus.jpg */; };
 		CC99F0EF181A239200F0D48E /* clouds.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CC99F0E6181A239200F0D48E /* clouds.jpg */; };
@@ -342,9 +328,6 @@
 		CCC5B8CA0F1EFA9700126722 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = CCC5B8C00F1EFA9700126722 /* Credits.rtf */; };
 		CCC8338B19BE4D380074183E /* OSAKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCC8338A19BE4D380074183E /* OSAKit.framework */; };
 		CCD38352195A457800C436B9 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CCD38351195A457800C436B9 /* libsqlite3.0.dylib */; };
-		CCD3835B195A45AB00C436B9 /* COSGifAnimator.h in Headers */ = {isa = PBXBuildFile; fileRef = CCD38359195A45AB00C436B9 /* COSGifAnimator.h */; };
-		CCD3835C195A45AB00C436B9 /* COSGifAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3835A195A45AB00C436B9 /* COSGifAnimator.m */; };
-		CCD3835D195A45AB00C436B9 /* COSGifAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD3835A195A45AB00C436B9 /* COSGifAnimator.m */; };
 		CCE675E8182ED9C900DB1932 /* COSAlertWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = CCE675E6182ED9C900DB1932 /* COSAlertWindow.h */; };
 		CCE675E9182ED9C900DB1932 /* COSAlertWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE675E7182ED9C900DB1932 /* COSAlertWindow.m */; };
 		CCF4DBE118296AB800ACB9EC /* Mocha.m in Sources */ = {isa = PBXBuildFile; fileRef = CC66D861181A2AE10039A0A5 /* Mocha.m */; };
@@ -548,18 +531,6 @@
 		CC66D81C181A2A710039A0A5 /* COSPreprocessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSPreprocessor.h; path = src/framework/COSPreprocessor.h; sourceTree = "<group>"; };
 		CC66D81D181A2A710039A0A5 /* COSPreprocessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSPreprocessor.m; path = src/framework/COSPreprocessor.m; sourceTree = "<group>"; };
 		CC66D826181A2A810039A0A5 /* CocoaScript_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CocoaScript_Prefix.pch; path = src/framework/CocoaScript_Prefix.pch; sourceTree = "<group>"; };
-		CC66D828181A2A9B0039A0A5 /* COSCIImageAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSCIImageAdditions.h; path = src/framework/imagetools/COSCIImageAdditions.h; sourceTree = SOURCE_ROOT; };
-		CC66D829181A2A9B0039A0A5 /* COSCIImageAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSCIImageAdditions.m; path = src/framework/imagetools/COSCIImageAdditions.m; sourceTree = SOURCE_ROOT; };
-		CC66D82A181A2A9B0039A0A5 /* COSCodeSketcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSCodeSketcher.h; path = src/framework/imagetools/COSCodeSketcher.h; sourceTree = SOURCE_ROOT; };
-		CC66D82B181A2A9B0039A0A5 /* COSCodeSketcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSCodeSketcher.m; path = src/framework/imagetools/COSCodeSketcher.m; sourceTree = SOURCE_ROOT; };
-		CC66D82C181A2A9B0039A0A5 /* COSImageTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSImageTools.h; path = src/framework/imagetools/COSImageTools.h; sourceTree = SOURCE_ROOT; };
-		CC66D82D181A2A9B0039A0A5 /* COSImageTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSImageTools.m; path = src/framework/imagetools/COSImageTools.m; sourceTree = SOURCE_ROOT; };
-		CC66D82E181A2A9B0039A0A5 /* COSOpenCLContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSOpenCLContext.h; path = src/framework/imagetools/COSOpenCLContext.h; sourceTree = SOURCE_ROOT; };
-		CC66D82F181A2A9B0039A0A5 /* COSOpenCLContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSOpenCLContext.m; path = src/framework/imagetools/COSOpenCLContext.m; sourceTree = SOURCE_ROOT; };
-		CC66D830181A2A9B0039A0A5 /* COSOpenCLProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSOpenCLProgram.h; path = src/framework/imagetools/COSOpenCLProgram.h; sourceTree = SOURCE_ROOT; };
-		CC66D831181A2A9B0039A0A5 /* COSOpenCLProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSOpenCLProgram.m; path = src/framework/imagetools/COSOpenCLProgram.m; sourceTree = SOURCE_ROOT; };
-		CC66D832181A2A9B0039A0A5 /* COSQuickCIFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSQuickCIFilter.h; path = src/framework/imagetools/COSQuickCIFilter.h; sourceTree = SOURCE_ROOT; };
-		CC66D833181A2A9B0039A0A5 /* COSQuickCIFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSQuickCIFilter.m; path = src/framework/imagetools/COSQuickCIFilter.m; sourceTree = SOURCE_ROOT; };
 		CC66D840181A2AB10039A0A5 /* MOBridgeSupportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOBridgeSupportController.h; path = src/framework/mocha/BridgeSupport/MOBridgeSupportController.h; sourceTree = SOURCE_ROOT; };
 		CC66D841181A2AB10039A0A5 /* MOBridgeSupportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MOBridgeSupportController.m; path = src/framework/mocha/BridgeSupport/MOBridgeSupportController.m; sourceTree = SOURCE_ROOT; };
 		CC66D842181A2AB10039A0A5 /* MOBridgeSupportLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOBridgeSupportLibrary.h; path = src/framework/mocha/BridgeSupport/MOBridgeSupportLibrary.h; sourceTree = SOURCE_ROOT; };
@@ -658,8 +629,6 @@
 		CCC5B8B00F1EFA9700126722 /* Info.plist */ = {isa = PBXFileReference; explicitFileType = text.xml; fileEncoding = 4; name = Info.plist; path = res/Info.plist; sourceTree = "<group>"; };
 		CCC8338A19BE4D380074183E /* OSAKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OSAKit.framework; path = ../../../../../../System/Library/Frameworks/OSAKit.framework; sourceTree = "<group>"; };
 		CCD38351195A457800C436B9 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = ../../../../usr/lib/libsqlite3.0.dylib; sourceTree = "<group>"; };
-		CCD38359195A45AB00C436B9 /* COSGifAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSGifAnimator.h; path = src/framework/COSGifAnimator.h; sourceTree = SOURCE_ROOT; };
-		CCD3835A195A45AB00C436B9 /* COSGifAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSGifAnimator.m; path = src/framework/COSGifAnimator.m; sourceTree = SOURCE_ROOT; };
 		CCE675E6182ED9C900DB1932 /* COSAlertWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COSAlertWindow.h; path = src/framework/COSAlertWindow.h; sourceTree = "<group>"; };
 		CCE675E7182ED9C900DB1932 /* COSAlertWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = COSAlertWindow.m; path = src/framework/COSAlertWindow.m; sourceTree = "<group>"; };
 		CCF0561C184A884D000C56F7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
@@ -696,8 +665,6 @@
 				CC4143510F25261100E46669 /* ScriptingBridge.framework in Frameworks */,
 				CC4143520F25261200E46669 /* JavaScriptCore.framework in Frameworks */,
 				CC4143530F25261300E46669 /* Cocoa.framework in Frameworks */,
-				CC86430D163B29E600908427 /* QuartzCore.framework in Frameworks */,
-				CC86430F163B29F500908427 /* OpenCL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -830,7 +797,6 @@
 			children = (
 				27E6E3D6217B4934004BD850 /* CocoaScript.h */,
 				CCA1A532183EA838000159B3 /* helpers */,
-				CC99F0F7181A251F00F0D48E /* imagetools */,
 				CCEC369615BA5E44008D8460 /* mocha */,
 				CC5064DE0F4A155000F4A952 /* UIWidgets */,
 				CC1C7D200F48BB2C007A2941 /* todparsekit */,
@@ -1019,28 +985,6 @@
 			path = res/images/scriptimages;
 			sourceTree = "<group>";
 		};
-		CC99F0F7181A251F00F0D48E /* imagetools */ = {
-			isa = PBXGroup;
-			children = (
-				CCD38359195A45AB00C436B9 /* COSGifAnimator.h */,
-				CCD3835A195A45AB00C436B9 /* COSGifAnimator.m */,
-				CC66D828181A2A9B0039A0A5 /* COSCIImageAdditions.h */,
-				CC66D829181A2A9B0039A0A5 /* COSCIImageAdditions.m */,
-				CC66D82A181A2A9B0039A0A5 /* COSCodeSketcher.h */,
-				CC66D82B181A2A9B0039A0A5 /* COSCodeSketcher.m */,
-				CC66D82C181A2A9B0039A0A5 /* COSImageTools.h */,
-				CC66D82D181A2A9B0039A0A5 /* COSImageTools.m */,
-				CC66D82E181A2A9B0039A0A5 /* COSOpenCLContext.h */,
-				CC66D82F181A2A9B0039A0A5 /* COSOpenCLContext.m */,
-				CC66D830181A2A9B0039A0A5 /* COSOpenCLProgram.h */,
-				CC66D831181A2A9B0039A0A5 /* COSOpenCLProgram.m */,
-				CC66D832181A2A9B0039A0A5 /* COSQuickCIFilter.h */,
-				CC66D833181A2A9B0039A0A5 /* COSQuickCIFilter.m */,
-			);
-			name = imagetools;
-			path = src/imagetools;
-			sourceTree = "<group>";
-		};
 		CCA1A532183EA838000159B3 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1216,7 +1160,6 @@
 				CC66D827181A2A810039A0A5 /* CocoaScript_Prefix.pch in Headers */,
 				CC66D7E4181A2A470039A0A5 /* TDReader.h in Headers */,
 				CC66D7C1181A2A470039A0A5 /* TDChar.h in Headers */,
-				CC66D83A181A2A9B0039A0A5 /* COSOpenCLContext.h in Headers */,
 				CC66D8B3181A2B0A0039A0A5 /* MOPointer.h in Headers */,
 				CC66D7F8181A2A470039A0A5 /* TDSymbolRootNode.h in Headers */,
 				384830E21832D48500B34168 /* COSTarget.h in Headers */,
@@ -1233,7 +1176,6 @@
 				CC66D7D5181A2A470039A0A5 /* TDMultiLineCommentState.h in Headers */,
 				CC66D7BD181A2A470039A0A5 /* TDAssembly.h in Headers */,
 				CCE675E8182ED9C900DB1932 /* COSAlertWindow.h in Headers */,
-				CC66D838181A2A9B0039A0A5 /* COSImageTools.h in Headers */,
 				CC66D874181A2AF30039A0A5 /* MOMapTable.h in Headers */,
 				CC66D85A181A2ABF0039A0A5 /* NSDictionary+MochaAdditions.h in Headers */,
 				CC66D808181A2A470039A0A5 /* TDTrack.h in Headers */,
@@ -1245,7 +1187,6 @@
 				CC66D8B9181A2B0A0039A0A5 /* MOProtocolDescription_Private.h in Headers */,
 				CC66D824181A2A710039A0A5 /* COSPreprocessor.h in Headers */,
 				22FBD9951C47EA55004CF31E /* MOBoxManagerBoxContext.h in Headers */,
-				CC66D836181A2A9B0039A0A5 /* COSCodeSketcher.h in Headers */,
 				CC66D84E181A2AB10039A0A5 /* MOBridgeSupportSymbol.h in Headers */,
 				CC66D8B7181A2B0A0039A0A5 /* MOPropertyDescription.h in Headers */,
 				CC66D75A181A2A210039A0A5 /* TETextUtils.h in Headers */,
@@ -1255,16 +1196,12 @@
 				CC66D7CF181A2A470039A0A5 /* TDLetter.h in Headers */,
 				229C1FF61C21B38D004C5B3B /* MOBoxManager.h in Headers */,
 				CC66D7E6181A2A470039A0A5 /* TDRepetition.h in Headers */,
-				CC66D834181A2A9B0039A0A5 /* COSCIImageAdditions.h in Headers */,
-				CC66D83E181A2A9B0039A0A5 /* COSQuickCIFilter.h in Headers */,
 				CC66D806181A2A470039A0A5 /* TDTokenizerState.h in Headers */,
-				CC66D83C181A2A9B0039A0A5 /* COSOpenCLProgram.h in Headers */,
 				CC66D872181A2AF30039A0A5 /* MOFunctionArgument.h in Headers */,
 				CC66D7DE181A2A470039A0A5 /* TDParser.h in Headers */,
 				CC66D8B0181A2B0A0039A0A5 /* MOObjCRuntime.h in Headers */,
 				CC66D7D3181A2A470039A0A5 /* TDLowercaseWord.h in Headers */,
 				CC66D7FA181A2A470039A0A5 /* TDSymbolState.h in Headers */,
-				CCD3835B195A45AB00C436B9 /* COSGifAnimator.h in Headers */,
 				CC66D7E2181A2A470039A0A5 /* TDQuoteState.h in Headers */,
 				CC66D7DD181A2A470039A0A5 /* TDParseKit.h in Headers */,
 				CC66D7F0181A2A470039A0A5 /* TDSingleLineCommentState.h in Headers */,
@@ -1490,11 +1427,9 @@
 				0334150320B5E3640052CD7C /* MOJSBlock.m in Sources */,
 				031EFEFA1FD590C0000B5798 /* COScript+Fiber.m in Sources */,
 				031EFEF91FD590B6000B5798 /* COSFiber.m in Sources */,
-				CC66D83D181A2A9B0039A0A5 /* COSOpenCLProgram.m in Sources */,
 				CC66D7DA181A2A470039A0A5 /* TDNum.m in Sources */,
 				CC66D7C8181A2A470039A0A5 /* TDComment.m in Sources */,
 				CC66D801181A2A470039A0A5 /* TDTokenArraySource.m in Sources */,
-				CC66D837181A2A9B0039A0A5 /* COSCodeSketcher.m in Sources */,
 				CC66D8BF181A2B0A0039A0A5 /* MOUndefined.m in Sources */,
 				CC66D7F9181A2A470039A0A5 /* TDSymbolRootNode.m in Sources */,
 				CC66D873181A2AF30039A0A5 /* MOFunctionArgument.m in Sources */,
@@ -1505,13 +1440,10 @@
 				CC66D86B181A2AE10039A0A5 /* MochaRuntime.m in Sources */,
 				229C1FF81C21B38D004C5B3B /* MOBoxManager.m in Sources */,
 				CC66D821181A2A710039A0A5 /* COSExtras.m in Sources */,
-				CC66D83F181A2A9B0039A0A5 /* COSQuickCIFilter.m in Sources */,
 				CC66D81F181A2A710039A0A5 /* COScript.m in Sources */,
 				CC66D7D2181A2A470039A0A5 /* TDLiteral.m in Sources */,
 				CC66D8A9181A2B0A0039A0A5 /* MOJavaScriptObject.m in Sources */,
 				CC66D7FF181A2A470039A0A5 /* TDToken.m in Sources */,
-				CC66D835181A2A9B0039A0A5 /* COSCIImageAdditions.m in Sources */,
-				CC66D83B181A2A9B0039A0A5 /* COSOpenCLContext.m in Sources */,
 				CC66D803181A2A470039A0A5 /* TDTokenAssembly.m in Sources */,
 				CC66D7BC181A2A470039A0A5 /* TDAny.m in Sources */,
 				CC66D8AC181A2B0A0039A0A5 /* MOMethod.m in Sources */,
@@ -1565,7 +1497,6 @@
 				220D93E71C92E69C001EF05C /* JSTTextView.m in Sources */,
 				CC66D807181A2A470039A0A5 /* TDTokenizerState.m in Sources */,
 				CC66D84F181A2AB10039A0A5 /* MOBridgeSupportSymbol.m in Sources */,
-				CCD3835D195A45AB00C436B9 /* COSGifAnimator.m in Sources */,
 				CC66D7BA181A2A470039A0A5 /* TDAlternation.m in Sources */,
 				CC66D849181A2AB10039A0A5 /* MOBridgeSupportController.m in Sources */,
 				CC66D80B181A2A470039A0A5 /* TDTrackException.m in Sources */,
@@ -1583,7 +1514,6 @@
 				CC66D809181A2A470039A0A5 /* TDTrack.m in Sources */,
 				CC66D859181A2ABF0039A0A5 /* NSArray+MochaAdditions.m in Sources */,
 				CC66D84B181A2AB10039A0A5 /* MOBridgeSupportLibrary.m in Sources */,
-				CC66D839181A2A9B0039A0A5 /* COSImageTools.m in Sources */,
 				CC66D7C4181A2A470039A0A5 /* TDCharacterAssembly.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1651,7 +1581,6 @@
 				CC9FEFFB18296A2A009DB0F9 /* TDRepetition.m in Sources */,
 				CC9FEFFD18296A2A009DB0F9 /* TDReservedWord.m in Sources */,
 				CC9FEFFF18296A2B009DB0F9 /* TDScientificNumberState.m in Sources */,
-				CCD3835C195A45AB00C436B9 /* COSGifAnimator.m in Sources */,
 				CC9FF00118296A2B009DB0F9 /* TDSequence.m in Sources */,
 				CC9FF00318296A2B009DB0F9 /* TDSingleLineCommentState.m in Sources */,
 				CC9FF00518296A2B009DB0F9 /* TDSpecificChar.m in Sources */,
