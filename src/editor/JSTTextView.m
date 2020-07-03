@@ -11,7 +11,6 @@
 #import "TDParseKit.h"
 #import "NoodleLineNumberView.h"
 #import "TETextUtils.h"
-#import <Carbon/Carbon.h>
 
 static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 
@@ -794,7 +793,7 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 - (void)mouseMoved:(NSEvent *)theEvent {
     
     // only do this if only the command key is down.
-    if ((GetCurrentKeyModifiers() != cmdKey)) {
+    if ((NSCommandKeyMask & theEvent.modifierFlags) == false) {
         [super mouseMoved:theEvent];
         return;
     }
@@ -828,7 +827,7 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
         return;
     }
     
-    if ((GetCurrentKeyModifiers() != cmdKey)) {
+    if ((NSCommandKeyMask & theEvent.modifierFlags) == false) {
         [super mouseDown:theEvent];
         return;
     }
@@ -855,7 +854,7 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
     }
     
     
-    if ((GetCurrentKeyModifiers() != cmdKey)) {
+    if ((NSCommandKeyMask & theEvent.modifierFlags) == false) {
         [super mouseDragged:theEvent];
         return;
     }
@@ -900,7 +899,7 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
         return;
     }
     
-    if ((GetCurrentKeyModifiers() != cmdKey)) {
+    if ((NSCommandKeyMask & theEvent.modifierFlags) == false) {
         [super mouseUp:theEvent];
         return;
     }

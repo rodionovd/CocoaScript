@@ -827,6 +827,8 @@ NSArray<MOFunctionArgument *> * MOParseObjCMethodEncoding(const char *typeEncodi
 #   define SMALL_STRUCT_LIMIT     8
 #elif defined(__x86_64__) 
 #   define SMALL_STRUCT_LIMIT    16
+#elif defined(__arm64)
+#   define SMALL_STRUCT_LIMIT    16
 #elif TARGET_OS_IPHONE
 // TOCHECK
 #   define SMALL_STRUCT_LIMIT    4
@@ -874,6 +876,10 @@ BOOL MOInvocationShouldUseStret(NSArray *arguments) {
 }
 
 void * MOInvocationGetObjCCallAddressForArguments(NSArray *arguments) {
+    
+#if __arm64__
+    void *callAddress = objc_msgSend;
+#else
     BOOL usingStret    = MOInvocationShouldUseStret(arguments);
     void *callAddress = NULL;
     if (usingStret)    {
@@ -882,6 +888,7 @@ void * MOInvocationGetObjCCallAddressForArguments(NSArray *arguments) {
     else {
         callAddress = objc_msgSend;
     }
+#endif
     
 #if __i386__
     // If i386 and the return type is float/double, use objc_msgSend_fpret
