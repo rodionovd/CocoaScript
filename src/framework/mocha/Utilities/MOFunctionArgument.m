@@ -1111,8 +1111,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
 }
 
 + (BOOL)isHighSierraOrHigher {
-    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
-    return (version.minorVersion >= 13);
+    return [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){10,13,0}];
 }
 
 /**
