@@ -290,6 +290,7 @@ JSValueRef _MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount
     void* callAddress = NULL;
     NSUInteger callAddressArgumentCount = 0;
     BOOL variadic = NO;
+    unsigned int fixedArgumentCount = 0;
     
     id target = nil;
     SEL selector = NULL;
@@ -385,6 +386,10 @@ JSValueRef _MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount
                 // add an argument for NULL
                 argumentCount++;
             }
+            
+            // For variadic methods, we need to get the number of fixed arguments, before the first
+            // variadic one since that number needs to be passed to ffi_prep_cif_var below.
+            fixedArgumentCount = method_getNumberOfArguments(method);
         }
         
         if ((variadic && (callAddressArgumentCount > argumentCount))
@@ -590,7 +595,26 @@ JSValueRef _MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount
     MOFunctionArgument *returnValue = [argumentEncodings objectAtIndex:0];
     
     // Prep
-    ffi_status prep_status = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, (unsigned int)effectiveArgumentCount, [returnValue ffiType], args);
+    ffi_status prep_status;
+
+    // If the method is variadic AND we could determine the number of fixed arguments, we need to
+    // take a special approach to prepare libffi to pass the arguments correctly.
+    // See https://github.com/sketch-hq/sketch/issues/35513
+    if (variadic && fixedArgumentCount > 0) {
+        if (@available(macOS 10.15, *)) {
+            // This is especially important on ARM Macs, since they require the variadic arguments to be
+            // passed on the stack, not in registers.
+            prep_status = ffi_prep_cif_var(&cif, FFI_DEFAULT_ABI, fixedArgumentCount, (unsigned int)effectiveArgumentCount, returnValue.ffiType, args);
+        } else {
+            // We should be safe to fall back to ffi_pref_cif here, because this only occurs on 10.14,
+            // which only runs on Intel, and on Intel we're using registers for variadic arguments.
+            prep_status = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, (unsigned int)effectiveArgumentCount, [returnValue ffiType], args);
+        }
+    } else {
+        // If a function is not variadic, libffi will do the correct thing in any case regardless
+        // of architecture.
+        prep_status = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, (unsigned int)effectiveArgumentCount, [returnValue ffiType], args);
+    }
     
     // Call
     if (prep_status == FFI_OK) {
