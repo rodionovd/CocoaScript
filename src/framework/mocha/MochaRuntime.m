@@ -217,6 +217,7 @@ NSString * const MOAlreadyProtectedKey = @"moAlreadyProtectedKey";
         // Load base frameworks
 #if !TARGET_OS_IPHONE
         [self loadFrameworkWithName:@"Foundation"];
+        [self loadFrameworkWithName:@"CoreFoundation"];  //#44857 CGRect and friends have moved to CoreFoundation
         if (![self loadFrameworkWithName:@"CoreGraphics"]) {
             [self loadFrameworkWithName:@"CoreGraphics" inDirectory:@"/System/Library/Frameworks/ApplicationServices.framework/Frameworks"];
         }
