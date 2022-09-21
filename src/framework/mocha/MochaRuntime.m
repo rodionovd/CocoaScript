@@ -1388,10 +1388,13 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
 
         // Method
         SEL selector = MOSelectorFromPropertyName(propertyName);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         if (([object class] == [NSDistantObject class]) && ![object respondsToSelector:selector] && [object respondsToSelector:MOSelectorFromPropertyName([propertyName stringByAppendingString:@"_"])]) {
             propertyName = [propertyName stringByAppendingString:@"_"];
             selector = MOSelectorFromPropertyName(propertyName);
         }
+#pragma clangd diagnostic pop
 
         NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
         if (!methodSignature) {
