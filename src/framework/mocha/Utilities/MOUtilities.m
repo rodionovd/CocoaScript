@@ -309,12 +309,15 @@ JSValueRef _MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount
         target = [function target];
         selector = [function selector];
         Class klass = [target class];
-        
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         // Override for Distributed Objects
         if ([klass isSubclassOfClass:[NSDistantObject class]]) {
             return MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
         }
-        
+#pragma clangd diagnostic pop
+
         // Override for Allocators
         if (selector == @selector(alloc)
             || selector == @selector(allocWithZone:))

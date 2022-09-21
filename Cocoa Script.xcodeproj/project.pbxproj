@@ -1293,16 +1293,20 @@
 				LastUpgradeCheck = 1400;
 				TargetAttributes = {
 					8D15AC270486D014006FF6A4 = {
+						DevelopmentTeam = WUGMZZ5K46;
 						ProvisioningStyle = Automatic;
 					};
 					9FC343C61AF7D2FE00B53759 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = WUGMZZ5K46;
 						ProvisioningStyle = Automatic;
 					};
 					CC4143190F25254200E46669 = {
+						DevelopmentTeam = WUGMZZ5K46;
 						ProvisioningStyle = Automatic;
 					};
 					CC5FB7C10F1FDCCC00F4ECC2 = {
+						DevelopmentTeam = WUGMZZ5K46;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1762,7 +1766,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -1802,7 +1806,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;

@@ -787,6 +787,9 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
 
 # pragma mark - proxy
 
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 + (id)applicationOnPort:(NSString*)port {
     
     NSConnection *conn  = nil;
@@ -860,6 +863,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     return [self application:app];
 }
 
+#pragma clangd diagnostic pop
 
 @end
 

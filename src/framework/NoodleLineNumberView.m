@@ -79,7 +79,10 @@
 {
 	if (font == nil)
 	{
-		return [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        return [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]];
+#pragma clangd diagnostic pop
 	}
     return font;
 }

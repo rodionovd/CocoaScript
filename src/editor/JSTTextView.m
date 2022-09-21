@@ -12,6 +12,9 @@
 #import "NoodleLineNumberView.h"
 #import "TETextUtils.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 
 @interface JSTTextView ()
@@ -997,3 +1000,5 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
     return YES;
 }
 @end
+
+#pragma clangd diagnostic pop
