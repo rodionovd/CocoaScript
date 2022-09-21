@@ -79,7 +79,10 @@
 {
 	if (font == nil)
 	{
-		return [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        return [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]];
+#pragma clang diagnostic pop
 	}
     return font;
 }
@@ -440,8 +443,10 @@
 						// Marker is flush right and centered vertically within the line.
 						markerRect.origin.x = NSWidth(bounds) - [markerImage size].width - 1.0;
 						markerRect.origin.y = ypos + NSHeight(rects[0]) / 2.0 - [marker imageOrigin].y;
-
-						[markerImage drawInRect:markerRect fromRect:NSMakeRect(0, 0, markerSize.width, markerSize.height) operation:NSCompositeSourceOver fraction:1.0];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+                        [markerImage drawInRect:markerRect fromRect:NSMakeRect(0, 0, markerSize.width, markerSize.height) operation:NSCompositeSourceOver fraction:1.0];
+#pragma clangd diagnostic pop
 					}
                     
                     // Line numbers are internally stored starting at 0

@@ -13,8 +13,11 @@
     
     CFMessagePortRef messagePort;
     
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     NSConnection *_conn;
-    
+#pragma clang diagnostic pop
+
 }
 
 @property (weak) id rootObject;

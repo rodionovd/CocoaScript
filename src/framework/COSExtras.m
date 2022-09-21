@@ -198,6 +198,8 @@
 
 @implementation SBApplication (JSTExtras)
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 + (id)application:(NSString*)appName {
     
     NSString *appPath = [[NSWorkspace sharedWorkspace] fullPathForApplication:appName];
@@ -213,6 +215,7 @@
     return [SBApplication applicationWithBundleIdentifier:bundleId];
 }
 
+#pragma clang diagnostic pop
 
 @end
 
