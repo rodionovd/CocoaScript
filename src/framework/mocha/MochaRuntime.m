@@ -1285,7 +1285,7 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
     if ([object class] == [NSDistantObject class]) {
         return [object respondsToSelector:selector] || [object respondsToSelector:MOSelectorFromPropertyName([propertyName stringByAppendingString:@"_"])];
     }
-#pragma clangd diagnostic pop
+#pragma clang diagnostic pop
 
     NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
     if (!methodSignature) {

@@ -82,7 +82,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         return [NSFont labelFontOfSize:[NSFont systemFontSizeForControlSize:NSMiniControlSize]];
-#pragma clangd diagnostic pop
+#pragma clang diagnostic pop
 	}
     return font;
 }

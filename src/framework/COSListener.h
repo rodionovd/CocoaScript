@@ -16,7 +16,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     NSConnection *_conn;
-#pragma clangd diagnostic pop
+#pragma clang diagnostic pop
 
 }
 

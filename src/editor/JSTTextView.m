@@ -1001,4 +1001,4 @@ static NSString *JSTQuotedStringAttributeName = @"JSTQuotedString";
 }
 @end
 
-#pragma clangd diagnostic pop
+#pragma clang diagnostic pop

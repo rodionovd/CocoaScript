@@ -41,7 +41,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     _conn = [[NSConnection alloc] init];
-#pragma clangd diagnostic pop
+#pragma clang diagnostic pop
 
     // Pick your poision:
     // "Without Independent Conversation Queueing, your app will be re-entered during upon a 2nd remote DO call if you return to the run loop"

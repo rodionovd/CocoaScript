@@ -863,7 +863,7 @@ NSString *currentCOScriptThreadIdentifier = @"org.jstalk.currentCOScriptHack";
     return [self application:app];
 }
 
-#pragma clangd diagnostic pop
+#pragma clang diagnostic pop
 
 @end
 

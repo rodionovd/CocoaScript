@@ -316,7 +316,7 @@ JSValueRef _MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount
         if ([klass isSubclassOfClass:[NSDistantObject class]]) {
             return MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
         }
-#pragma clangd diagnostic pop
+#pragma clang diagnostic pop
 
         // Override for Allocators
         if (selector == @selector(alloc)

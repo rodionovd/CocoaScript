@@ -215,7 +215,7 @@
     return [SBApplication applicationWithBundleIdentifier:bundleId];
 }
 
-#pragma clangd diagnostic pop
+#pragma clang diagnostic pop
 
 @end
 
