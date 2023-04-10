@@ -306,7 +306,7 @@ static NSString *closingBraces = nil;
 
 #define NUM_BRACE_PAIRS ([openingBraces length])
 
-static void initBraces() {
+static void initBraces(void) {
     if (!openingBraces) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString *defStr;
