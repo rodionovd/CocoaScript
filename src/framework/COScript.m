@@ -232,7 +232,7 @@ static id<COFlowDelegate> COFlowDelegate = nil;
         
         NSError *err = nil;
         [pluginBundle loadAndReturnError:&err];
-        
+#ifndef __clang_analyzer__
         if (err) {
             NSLog(@"Error loading plugin at %@", fullPath);
             NSLog(@"%@", err);
@@ -256,7 +256,7 @@ static id<COFlowDelegate> COFlowDelegate = nil;
             //debug(@"Could not load the principal class of %@", fullPath);
             //debug(@"infoDictionary: %@", [pluginBundle infoDictionary]);
         }
-        
+#endif
     }
     @catch (NSException * e) {
         NSLog(@"EXCEPTION: %@: %@", [e name], e);
