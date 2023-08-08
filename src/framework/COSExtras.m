@@ -124,10 +124,14 @@
     return doc;
 }
 
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 - (void)activate {
     ProcessSerialNumber xpsn = { 0, kCurrentProcess };
     SetFrontProcess( &xpsn );
 }
+#pragma clang diagnostic pop
 
 - (NSInteger)displayDialog:(NSString*)msg withTitle:(NSString*)title {
     
