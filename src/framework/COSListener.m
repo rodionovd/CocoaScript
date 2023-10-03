@@ -35,7 +35,8 @@
 
 
 - (void)setupListener {
-    NSString *myBundleId    = [[NSBundle mainBundle] bundleIdentifier];
+    // Hardcode the port to listen on because of sandboxing
+    NSString *myBundleId = @"WUGMZZ5K46.com.bohemiancoding";
     NSString *port          = [NSString stringWithFormat:@"%@.JSTalk", myBundleId];
 
 #pragma clang diagnostic push
