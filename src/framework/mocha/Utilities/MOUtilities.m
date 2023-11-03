@@ -369,7 +369,87 @@ JSValueRef _MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount
             encoding = [[[target methodSignatureForSelector: selector] typeEncoding] cStringUsingEncoding: NSASCIIStringEncoding];
         if (encoding)
             argumentEncodings = [MOParseObjCMethodEncoding(encoding) mutableCopy];
-        
+
+        // method_getTypeEncoding() / -methodSignatureForSelector: call above might return an incomplete/bogus
+        // type encoding for a C struct argument / return value for some methods: while the struct
+        // fields themselves are encoded correctly, the name of the struct type is replaced with a "?" symbol.
+        //
+        // This missing name in the type encoding prevents routines like -[MOFunctionArgument getValueAsJSValueInContext:]
+        // and -[MOFunctionArgument setValueAsJSValue:context:] from converting this struct from/to a JS value,
+        // because it fails to look up this struct's bridge support definition by its bogus name.
+        //
+        // As a result, it's impossible to call such methods from CocoaScript as it leads to
+        // the following runtime exception: "No structure encoding found for ?".
+        //
+        // Here's a few examples of such "uncallable" methods with incomplete struct type encoding
+        // from frameworks we load by default:
+        //
+        // -[NSProcessInfo operatingSystemVersion]'s return value type is reported as "{?=qqq}" instead of "{NSOperatingSystemVersion=qqq}"
+        // -[NSProcessInfo isOperatingSystemAtLeastVersion:]'s argument type is reported as "{?=qqq}" instead of "{NSOperatingSystemVersion=qqq}"
+        // -[NSAffineTransform transformStruct]'s return value type is reported as "{?=dddddd}" instead of "{NSAffineTransformStruct=dddddd}"
+        //
+        // The workaround is to compare the type declarations we get from method_getTypeEncoding() / -methodSignatureForSelector:
+        // with what's in the bridge support definitions for this method and replace bogus struct names
+        // with their actual names from the latter if found.
+        MOBridgeSupportMethod *_Nullable bridgeSupportMethod = ^MOBridgeSupportMethod *(void) {
+            MOBridgeSupportController *bridgeController = [MOBridgeSupportController sharedController];
+            MOBridgeSupportClass *_Nullable bridgeSupportClass = [bridgeController performQueryForSymbolName:NSStringFromClass(klass)
+                                                                                                      ofType:MOBridgeSupportClass.class];
+            return [bridgeSupportClass methodWithSelector:selector];
+        }();
+
+        if (bridgeSupportMethod != nil) {
+            [argumentEncodings enumerateObjectsUsingBlock:^(MOFunctionArgument *argument, NSUInteger idx, BOOL *stop) {
+                if (idx == 1 || idx == 2) {
+                    // these are the implicit `self` and `sel` arguments; skip them
+                    return;
+                }
+                if (argument.typeEncoding != _C_STRUCT_B) {
+                    // this is not a C struct; skip it
+                    return;
+                }
+
+                NSString *runtimeStructName = [MOFunctionArgument structureNameFromStructureTypeEncoding:argument.structureTypeEncoding];
+                if (![runtimeStructName isEqualToString:@"?"]) {
+                    // not a bogus struct type name, so nothing to fix; skip it
+                    return;
+                }
+
+                MOBridgeSupportArgument *_Nullable bridgeSupportArgument = ^MOBridgeSupportArgument *(void) {
+                    if (idx == 0) {
+                        return bridgeSupportMethod.returnValue;
+                    }
+                    // As bridge support files may not contain definitions for all arguments of a method,
+                    // we rely on the `index` property here to find the one we need
+                    NSInteger explicitArgumentIndex = idx - 3;
+                    NSUInteger bridgeSupportArgumentIndex = [bridgeSupportMethod.arguments indexOfObjectPassingTest:^BOOL(MOBridgeSupportArgument *bridgeArgument, NSUInteger _, BOOL *__) {
+                        return bridgeArgument.index == explicitArgumentIndex;
+                    }];
+                    if (bridgeSupportArgumentIndex == NSNotFound) {
+                        // the required argument definition was not in the bridge support file
+                        return nil;
+                    }
+                    return bridgeSupportMethod.arguments[bridgeSupportArgumentIndex];
+                }();
+                NSString *_Nullable bridgeSupportArgumentType = (bridgeSupportArgument.type64 ?: bridgeSupportArgument.type);
+                if (bridgeSupportArgument == nil || bridgeSupportArgumentType.length == 0) {
+                    return;
+                }
+
+                // The code below only replaces the top-level struct name if bogus.
+                // It is safe to only go this far because the actual definition of the struct type
+                // is then fetched from a bridge support file where all the nested struct fields are
+                // expected to be already well-defined.
+                NSString *structNameFromBridgeSupport = [MOFunctionArgument structureNameFromStructureTypeEncoding:bridgeSupportArgumentType];
+                NSRange replacementRange = [argument.structureTypeEncoding rangeOfString:@"?"];
+                if (structNameFromBridgeSupport.length == 0 || replacementRange.location == NSNotFound) {
+                    return;
+                }
+                NSString *monkeyPatchedTypeEncoding = [argument.structureTypeEncoding stringByReplacingCharactersInRange:replacementRange withString:structNameFromBridgeSupport];
+                [argument setStructureTypeEncoding:monkeyPatchedTypeEncoding];
+            }];
+        }
+
         if (argumentEncodings == nil) {
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), klass] userInfo:nil];
             if (exception != NULL) {
